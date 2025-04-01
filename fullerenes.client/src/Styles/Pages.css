@@ -1,0 +1,91 @@
+.Outer-Page {
+    background-color: gray;
+
+    display: flex;
+    justify-content: center;
+
+    min-height: 100vh;
+}
+
+.Inner-Page {
+    background-color: white;
+
+    max-width: 1280px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.Nav-Menu {
+    border: solid 1px;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.Nav-Menu Link{
+    color: black;
+    font-weight: bolder;
+}
+
+.Content-Page {
+    padding: 10px;
+     
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.Content-Page h2 {
+    color: rebeccapurple;
+}
+
+.Input-Form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.Input-Form-Block{
+    display: flex;
+    gap: 5px;
+}
+
+.Input-Form-Block input {
+    max-width: 100px;
+    width: 100%;
+}
+
+.Input-Form button {
+    align-self: center;
+
+    padding: 5px 20px;
+
+    border-radius: 15px;
+}
+
+.Sub-Text {
+
+}
+
+.List-Ids {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    font-size: 20px;
+}
+
+.List-Ids li {
+    cursor: pointer;
+}
+
+.Controll-Panel {
+
+}

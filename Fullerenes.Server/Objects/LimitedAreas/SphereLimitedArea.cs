@@ -1,0 +1,77 @@
+﻿using Fullerenes.Server.CustomLogger;
+using Fullerenes.Server.Geometry;
+using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.Fullerenes;
+
+namespace Fullerenes.Server.Objects.LimitedAreas
+{
+    public class SphereLimitedArea : LimitedArea
+    {
+        public float Radius { get; set; }
+        public SphereLimitedArea() : base(0, 0, 0, 0, null) => Radius = 0;
+        public SphereLimitedArea(float x, float y, float z, float r, int numberOfFullerene, Func<int, int, Fullerene> produceFullerene)
+            : base(x, y, z, numberOfFullerene, produceFullerene) => Radius = r;
+        public SphereLimitedArea(float x, float y, float z, float r, IEnumerable<Fullerene> fullerenes)
+            : base(x, y, z, 0, null) => (Radius, Fullerenes) = (r, fullerenes.ToList());
+        public override float GenerateOuterRadius() => Radius;
+        public override IEnumerable<Fullerene> GenerateFullerenes(int seriesFs, Octree<Parallelepiped, Fullerene> octree)
+        {
+            ArgumentNullException.ThrowIfNull(octree);
+            try
+            {
+                int reTryCount = 0;
+
+                int count = 0;
+
+                List<Fullerene> fullerenes = [];
+
+                while (true)
+                {
+                    if (reTryCount == RetryCountMax)
+                        yield break;
+
+                    var fullerene = TryToGenerateFullerene(seriesFs, octree, fullerenes);
+
+                    if (fullerene != null)
+                    {
+                        reTryCount = 0;
+
+                        fullerenes.Add(fullerene);
+
+                        Print.PrintToConsole($"Current thread - {Thread.CurrentThread.Name} number of fullerenes is: {++count};");
+
+                        yield return fullerene;
+
+                    }
+                    else
+                    {
+                        reTryCount++;
+                    }
+                }
+            }
+            finally
+            {
+                octree.ClearSpecificThread(seriesFs);
+            }
+        }
+
+        public override bool Contains(Fullerene fullerene)
+        {
+            ArgumentNullException.ThrowIfNull(fullerene);
+
+            return FigureCollision.SpheresInside(fullerene.Center, fullerene.GenerateOuterSphereRadius(), Center, Radius);
+        }
+
+        private Fullerene? TryToGenerateFullerene(int series, Octree<Parallelepiped, Fullerene> octree, IReadOnlyCollection<Fullerene> fullerenes)
+        {
+            var fullerene = ProduceFullerene?.Invoke(Id, series) ?? null;
+
+            return fullerene != null
+                && Contains(fullerene)
+                && !fullerene.Intersect(fullerenes)
+                //&& octree.AddData(fullerene, series, fullerene.Intersect, fullerene.Inside, fullerene.PartInside)
+                ? fullerene
+                : null;
+        }
+    }
+}

@@ -1,0 +1,6 @@
+@Fullerenes.Server_HostAddress = http://localhost:5128
+
+GET {{Fullerenes.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
