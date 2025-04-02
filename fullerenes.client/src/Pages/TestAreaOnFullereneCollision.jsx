@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
-import { FullereneServer } from "../APIs/FullereneServer";
-
-const api = new FullereneServer();
-
 export default function TestAreaOnFullereneCollisionPage() {
     const { series } = useParams();
     const [result, setResult] = useState(null);
@@ -15,7 +11,7 @@ export default function TestAreaOnFullereneCollisionPage() {
     const transformData = (data) => {
         return {
             center: data.center,
-            parameters: [data.radius], // Используем radius как параметр
+            parameters: [data.radius],
             fullerenes: data.fullerenes
                 .filter(f => f.series == series)
                 .map(f => ({
@@ -31,7 +27,13 @@ export default function TestAreaOnFullereneCollisionPage() {
         console.log(limitedArea);
         const requestData = transformData(limitedArea);
         console.log(requestData);
-        const hasCollision = await api.runTestsOnFullerenesCollision("Sphere", "Icosaider", requestData);
+
+        const hasCollision = await fetch(`/api/Main/run-tests-on-fullerenes-collision-in-limited-area/Sphere/Icosaider`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestData)
+        });
         setResult(hasCollision);
         setLoading(false);
     };

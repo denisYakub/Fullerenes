@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { FullereneServer } from "../APIs/FullereneServer";
-
-const api = new FullereneServer();
 
 export default function InputPage() {
     const [formData, setFormData] = useState({
@@ -20,21 +17,10 @@ export default function InputPage() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    async function GetMessageFromServer() {
-        const response = await fetch("/api/Main/get-message-from-server", {
-            method: 'GET',
-            credentials: 'include'
-        })
-            .then(response => response.text())
-            .then(data => console.log(data))
-            .catch(error => console.error("Ошибка запроса:", error));
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        await GetMessageFromServer();
         const requestData = {
             //...formData,
             AreaX: parseFloat(formData["Area center X"]),
@@ -53,7 +39,12 @@ export default function InputPage() {
         };
 
         try {
-            const response = await api.createFullerenesAndLimitedArea("Sphere", "Icosahedron", requestData);
+            const response = await fetch(`/api/Main/create-fullerenes-and-limited-area/Sphere/Icosahedron`, {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                redirect: "follow",
+                body: JSON.stringify(requestData)
+            });
 
             const storedIds = JSON.parse(localStorage.getItem("ids")) || [];
             storedIds.push(response);
@@ -70,7 +61,6 @@ export default function InputPage() {
 
     return (
         <div className="Content-Page">
-            <button onClick={GetMessageFromServer}>M</button>
             <h2>Create Limited Area with Fullerenes</h2>
             <form onSubmit={handleSubmit} className="Input-Form">
                 {Object.keys(formData).map((key) => (

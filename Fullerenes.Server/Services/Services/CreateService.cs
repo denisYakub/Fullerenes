@@ -1,10 +1,12 @@
 ﻿using System.Numerics;
+using Fullerenes.Server.CustomLogger;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using Fullerenes.Server.Services.IServices;
+using StackExchange.Profiling;
 
 namespace Fullerenes.Server.Services.Services
 {
@@ -12,28 +14,27 @@ namespace Fullerenes.Server.Services.Services
     {
         public async Task<int> GenerateAreaAsync(FullereneAndLimitedAreaFactory factory)
         {
+            LimitedArea limitedArea = factory.CreateLimitedArea();
+
+            int savedAreaId = 0 /*= await dataBaseService.SaveAreaAsync(limitedArea).ConfigureAwait(false)*/;
+
             ArgumentNullException.ThrowIfNull(factory);
 
-            var limitedArea = factory.CreateLimitedArea();
-
-            var savedAreaId = await dataBaseService.SaveAreaAsync(limitedArea).ConfigureAwait(false);
-
-            var octree = GenerateOctree(limitedArea, factory.Request.NumberOfSeries);
-
+            Octree<Parallelepiped, Fullerene> octree = GenerateOctree(limitedArea, factory.Request.NumberOfSeries);
             octree.GenerateRegions(Parallelepiped.Split8Parts, p => p.Width > 3 * factory.Request.MaxSizeF);
 
             Parallel.For(0, factory.Request.NumberOfSeries, (i, state) =>
             {
-                Thread.CurrentThread.Name = $"Series-{i}";
+                Thread.CurrentThread.Name = $"Thread-{i}";
 
                 var fullerenes = limitedArea.GenerateFullerenes(i, octree).Take(factory.Request.NumberOfF).ToList();
 
-                dataBaseService.SaveFullerenes(fullerenes);
+                //dataBaseService.SaveFullerenes(fullerenes);
             });
 
             return savedAreaId;
         }
-
+        
         public async Task<(float[], float)> GenerateDensityAsync(int areaId, int seriesFs, int numberOfLayers, int numberOfPoints)
         {
             var limitedArea = await dataBaseService.GetAreaWithFullerenesAsync(areaId, seriesFs).ConfigureAwait(false);
@@ -143,7 +144,7 @@ namespace Fullerenes.Server.Services.Services
         }
         private static bool CrossesRegion(Vector3 centerRegion, float startRegion, float endRegion, Fullerene fullerene)
         {
-            foreach (var vertex in fullerene.GenerateVerticesPositions())
+            foreach (var vertex in fullerene.Vertices)
             {
                 var distance = Vector3.Distance(centerRegion, vertex);
 

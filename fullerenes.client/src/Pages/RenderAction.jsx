@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { FullereneServer } from "../APIs/FullereneServer";
 
 import RenderLimitedArea from "./RenderLimitedArea";
 import RenderFullerene from "./RenderFullerene";
-
-const api = new FullereneServer();
 
 export default function RenderAction() {
     const { id } = useParams();
@@ -19,7 +16,10 @@ export default function RenderAction() {
             let data = JSON.parse(sessionStorage.getItem(id));
 
             if (!data) {
-                data = await api.getFullerenesAndLimitedArea(id);
+                const data = await fetch(`/api/Main/get-fullerenes-and-limited-area/${id}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
                 sessionStorage.setItem(id, JSON.stringify(data));
             }
             

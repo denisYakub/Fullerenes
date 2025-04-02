@@ -4,7 +4,9 @@ using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Profiling;
 
 namespace Fullerenes.Server.Controllers
 {
@@ -16,33 +18,29 @@ namespace Fullerenes.Server.Controllers
         IMapper mapper
         ) : ControllerBase
     {
-        /*[HttpGet("get-message-from-server")]
+        [HttpGet("get-message-from-server")]
         public IActionResult Get()
         {
-            var user = HttpContext.User.Identity;
-
-            if ( user is not null)
-            {
-                return new OkObjectResult(user.Name);
-
-            } else
-            {
-                return Unauthorized();
-            }
-        }*/
+            return new OkObjectResult("user.Name");
+        }
+        [AllowAnonymous]
         [HttpPost("create-fullerenes-and-limited-area/{areaType}/{fullereneType}")]
         public IActionResult CreateFullerenesAndLimitedArea([FromRoute] AreaTypes areaType, [FromRoute] FullereneTypes fullereneType,
             [FromBody] CreateFullerenesAndLimitedAreaRequest request)
         {
-            if (!request.IsCorrectRequest())
-                return new BadRequestObjectResult("Something wrong with your request!");
+            using(MiniProfiler.Current.Step("Общий процесс запроса"))
+            {
+                if (!request.IsCorrectRequest())
+                    return new BadRequestObjectResult("Something wrong with your request!");
 
-            var factory = factoryService.GetFactory(areaType, fullereneType, request);
+                var factory = factoryService.GetFactory(areaType, fullereneType, request);
 
-            var result = createService.GenerateAreaAsync(factory);
+                Task<int> result = createService.GenerateAreaAsync(factory);
 
-            return new OkObjectResult(result.Result);
+                return new OkObjectResult(result.Result);
+            }
         }
+        [AllowAnonymous]
         [HttpPost("create-density-of-fullerenes-in-layers/{areaId}/{seriesFs}/{numberOfLayers}/{numberOfDots}/{excess}")]
         public IActionResult CreateDensityOfFullerenesInLayers([FromRoute] int areaId, [FromRoute] int seriesFs,
             [FromRoute] int numberOfLayers, [FromRoute] int numberOfDots, [FromRoute] double excess)
@@ -51,6 +49,7 @@ namespace Fullerenes.Server.Controllers
 
             return new OkObjectResult(result.Result);
         }
+        [AllowAnonymous]
         [HttpPost("run-tests-on-fullerenes-collision-in-limited-area/{areaType}/{fullereneType}")]
         public IActionResult RunTestsOnFullerenesCollision([FromRoute] AreaTypes areaType, [FromRoute] FullereneTypes fullereneType,
             [FromBody] LimitedAreaWithFullerenesRequest request)
@@ -65,6 +64,7 @@ namespace Fullerenes.Server.Controllers
 
             return new OkObjectResult(result.Result);
         }
+        [AllowAnonymous]
         [HttpGet("get-fullerenes-and-limited-area/{areaId}")]
         public IActionResult GetFullerenesAndLimitedArea([FromRoute] int areaId)
         {

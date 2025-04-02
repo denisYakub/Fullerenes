@@ -2,10 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-import { FullereneServer } from "../APIs/FullereneServer";
-
-const api = new FullereneServer();
-
 export default function DotsHitsDependencyPage() {
     const { id, series } = useParams();
     const [numberOfLayers, setNumberOfLayers] = useState(5);
@@ -22,7 +18,12 @@ export default function DotsHitsDependencyPage() {
     const handleSubmit = async () => {
         setLoading(true);
 
-        const data = await api.createDensityOfFullerenesInLayers(id, series, numberOfLayers, numberOfDots, excess);
+        const data = await fetch(`/api/Main/create-density-of-fullerenes-in-layers/${id}/${series}/${numberOfLayers}/${numberOfDots}/${excess}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { "Content-Type": "application/json" },
+            body: {}
+        });
         console.log(data);
 
         const densityData = Object.entries(data.item1).map(([key, value]) => ({

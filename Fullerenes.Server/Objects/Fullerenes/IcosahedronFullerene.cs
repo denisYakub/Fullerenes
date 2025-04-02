@@ -30,48 +30,42 @@ namespace Fullerenes.Server.Objects.Fullerenes
             => (LimitedAreaId, Series) = (limitedAreaId, series);
 
         private static readonly float Phi = (1 + MathF.Sqrt(5)) / 2;
-
+        private ICollection<Vector3> _vertices;
+        private ICollection<int[]> _faces;
+        public override ICollection<Vector3> Vertices
+        {
+            get
+            {
+                return _vertices ??=
+                    [.. GenerateStartVerticesPositions()
+                    .Rotate(EulerAngles)
+                    .Shift(Center)];
+            }
+        }
+        public override ICollection<int[]> Faces
+        {
+            get
+            {
+                return _faces ??= Formulas.IcosahedronFacesIndices;
+            }
+        }
         public override float GenerateInnerSphereRadius()
             => MathF.Pow(Phi, 2) * GenerateOuterSphereRadius() / MathF.Sqrt(12);
 
-        public override ICollection<int[]> GenerateFacesIndices()
-            => [
-                [0, 11, 5],
-                [0, 5, 1],
-                [0, 1, 7],
-                [0, 7, 10],
-                [0, 10, 11],
-                [1, 5, 9],
-                [5, 11, 4],
-                [11, 10, 2],
-                [10, 7, 6],
-                [7, 1, 8],
-                [3, 9, 4],
-                [3, 4, 2],
-                [3, 2, 6],
-                [3, 6, 8],
-                [3, 8, 9],
-                [4, 9, 5],
-                [2, 4, 11],
-                [6, 2, 10],
-                [8, 6, 7],
-                [9, 8, 1],
-            ];
-
         public override ICollection<Vector3> GenerateStartVerticesPositions() =>
             [
-                new Vector3(-1,  Phi, 0) * Size,
-                new Vector3( 1,  Phi, 0) * Size,
+                new Vector3(-1, Phi, 0) * Size,
+                new Vector3( 1, Phi, 0) * Size,
                 new Vector3(-1, -Phi, 0) * Size,
                 new Vector3( 1, -Phi, 0) * Size,
 
-                new Vector3(0, -1,  Phi) * Size,
-                new Vector3(0,  1,  Phi) * Size,
+                new Vector3(0, -1, Phi) * Size,
+                new Vector3(0,  1, Phi) * Size,
                 new Vector3(0, -1, -Phi) * Size,
                 new Vector3(0,  1, -Phi) * Size,
 
-                new Vector3( Phi, 0, -1) * Size,
-                new Vector3( Phi, 0,  1) * Size,
+                new Vector3(Phi, 0, -1) * Size,
+                new Vector3(Phi, 0,  1) * Size,
                 new Vector3(-Phi, 0, -1) * Size,
                 new Vector3(-Phi, 0,  1) * Size
             ];

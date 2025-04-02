@@ -17,13 +17,11 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public override IEnumerable<Fullerene> GenerateFullerenes(int seriesFs, Octree<Parallelepiped, Fullerene> octree)
         {
             ArgumentNullException.ThrowIfNull(octree);
+            List<Fullerene> fullerenes = [];
+
             try
             {
                 int reTryCount = 0;
-
-                int count = 0;
-
-                List<Fullerene> fullerenes = [];
 
                 while (true)
                 {
@@ -36,9 +34,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                     {
                         reTryCount = 0;
 
-                        fullerenes.Add(fullerene);
-
-                        Print.PrintToConsole($"Current thread - {Thread.CurrentThread.Name} number of fullerenes is: {++count};");
+                        //fullerenes.Add(fullerene);
 
                         yield return fullerene;
 
@@ -49,9 +45,10 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                     }
                 }
             }
-            finally
+            finally  
             {
-                octree.ClearSpecificThread(seriesFs);
+                //octree.ClearSpecificThread(seriesFs);
+                //fullerenes.Clear();
             }
         }
 
@@ -68,8 +65,8 @@ namespace Fullerenes.Server.Objects.LimitedAreas
 
             return fullerene != null
                 && Contains(fullerene)
-                && !fullerene.Intersect(fullerenes)
-                //&& octree.AddData(fullerene, series, fullerene.Intersect, fullerene.Inside, fullerene.PartInside)
+                //&& !fullerene.Intersect(fullerenes)
+                && octree.AddData(fullerene, series, fullerene.Intersect, fullerene.Inside, fullerene.PartInside)
                 ? fullerene
                 : null;
         }

@@ -16,24 +16,19 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public Vector3 Center { get; init; } = new(x, y, z);
         public EulerAngles EulerAngles { get; init; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
         public float Size { get; init; } = size;
+        public abstract ICollection<Vector3> Vertices { get; }
+        public abstract ICollection<int[]> Faces { get; }
         public float GenerateOuterSphereRadius() => Size;
         public abstract float GenerateInnerSphereRadius();
-        public abstract ICollection<int[]> GenerateFacesIndices();
         public abstract ICollection<Vector3> GenerateStartVerticesPositions();
         public abstract bool Inside(Parallelepiped parallelepiped);
         public abstract bool PartInside(Parallelepiped parallelepiped);
-        public virtual ICollection<Vector3> GenerateVerticesPositions() =>
-            GenerateStartVerticesPositions()
-            .Rotate(EulerAngles)
-            .Shift(Center);
         public virtual bool Intersect(IReadOnlyCollection<Fullerene> fullerenes) =>
             fullerenes.Any() &&
             fullerenes.AsParallel().Any(Intersect);
         public virtual bool Intersect(Fullerene fullerene)
         {
             ArgumentNullException.ThrowIfNull(fullerene);
-
-            var dist = Vector3.Distance(Center, fullerene.Center);
 
             var outerRadiusF1 = GenerateOuterSphereRadius();
             var outerRadiusF2 = fullerene.GenerateOuterSphereRadius();
@@ -47,20 +42,8 @@ namespace Fullerenes.Server.Objects.Fullerenes
             if (!FigureCollision.SpheresIntersect(Center, outerRadiusF1, fullerene.Center, outerRadiusF2))
                 return false;
 
-            var dotsF1 = GenerateStartVerticesPositions();
-            var innerRadiusF1 = GenerateInnerSphereRadius();
-
-            var dotsF2 = fullerene
-                .GenerateStartVerticesPositions()
-                .AddMidPoints(fullerene.GenerateFacesIndices())
-                .Shift(new Vector3(0, 0, dist))
-                .Rotate(fullerene.EulerAngles)
-                .RotateRev(EulerAngles);
-
-            var faces = GenerateFacesIndices();
-
-            return GenerateVerticesPositions()
-                    .AddMidPoints(faces)
+            return Vertices
+                    .AddMidPoints(Faces)
                     .Any(fullerene.Contains);
         }
 
@@ -72,9 +55,9 @@ namespace Fullerenes.Server.Objects.Fullerenes
             if (!FigureCollision.SpheresInside(point, 0, Center, GenerateOuterSphereRadius()))
                 return false;
 
-            var vertices = GenerateVerticesPositions();
+            var vertices = Vertices;
 
-            foreach (var face in GenerateFacesIndices())
+            foreach (var face in Faces)
             {
                 Vector3 a = vertices.ElementAt(face[0]);
                 Vector3 b = vertices.ElementAt(face[1]);
