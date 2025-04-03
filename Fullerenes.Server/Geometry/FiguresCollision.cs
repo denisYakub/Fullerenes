@@ -3,7 +3,7 @@ using Fullerenes.Server.Objects.CustomStructures;
 
 namespace Fullerenes.Server.Geometry
 {
-    public static class FigureCollision
+    public static class FiguresCollision
     {
         /// <summary>
         /// Checks if at least one sphere is 

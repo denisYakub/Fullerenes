@@ -1,6 +1,9 @@
-﻿namespace Fullerenes.Server.Objects.CustomStructures
+﻿using System.Drawing;
+using System.Threading;
+
+namespace Fullerenes.Server.Objects.CustomStructures
 {
-    public class Octree<TRegion, TData>(TRegion startRegion, int threadsNumber)
+    public class Octree<TRegion, TData>(TRegion startRegion, int threadsNumber = 1)
     {
         private class Node(Guid id, TRegion region, int threadsNumber)
         {
@@ -8,8 +11,11 @@
             public TRegion Region { get; } = region;
             public ICollection<TData>?[] DataCollections { get; } = new ICollection<TData>[threadsNumber];
             public Node?[] Children { get; } = new Node[8];
-            public void AddChildRegion(Node child, int id) => Children[id] = child;
-
+            public void AddChildRegion(Node child, int id)
+            {
+                if (child is not null)
+                    Children[id] = child;
+            }
             public (Guid id, string? region, Guid?[] children) GetRegionInfo()
             {
                 ArgumentNullException.ThrowIfNull(Region);
@@ -18,60 +24,68 @@
             }
         }
 
+        private readonly int _threadsNumber = threadsNumber;
         private readonly Node _head = new(Guid.NewGuid(), startRegion, threadsNumber);
         //private readonly ICollection<(Guid id, string dataJson, Guid[] children)> _regions = [];
-        public int TreeSize { get; private set; }
-        public void GenerateRegions(Func<TRegion, TRegion[]> splitRegion, Func<TRegion, bool> generateCondition)
+        public int CountNodes { get; private set; }
+        public int CountElements { get; private set; }
+
+        public void GenerateRegions(
+            Func<TRegion, TRegion[]> splitRegion, 
+            Func<TRegion, bool> generateRegionCondition)
         {
             ArgumentNullException.ThrowIfNull(splitRegion);
-            ArgumentNullException.ThrowIfNull(generateCondition);
+            ArgumentNullException.ThrowIfNull(generateRegionCondition);
 
             var queue = new Queue<Node>();
-
             queue.Enqueue(_head);
-            TreeSize++;
+
+            CountNodes++;
 
             while (queue.Any())
             {
                 var nextInQueue = queue.Dequeue();
 
-                if (generateCondition(nextInQueue.Region))
+                if (generateRegionCondition(nextInQueue.Region))
                 {
-                    Node[] children = new Node[8];
-                    TRegion[] childrenValues = splitRegion(nextInQueue.Region);
+                    TRegion[] newRegions = splitRegion(nextInQueue.Region);
 
-                    for (int i = 0; i < childrenValues.Length; i++)
+                    for (int i = 0; i < newRegions.Length; i++)
                     {
-                        children[i] = new Node(Guid.NewGuid(), childrenValues[i], threadsNumber);
+                        var newNode = new Node(Guid.NewGuid(), newRegions[i], _threadsNumber);
 
-                        nextInQueue.AddChildRegion(children[i], i);
+                        nextInQueue.AddChildRegion(newNode, i); 
+                        CountNodes++;
 
-                        TreeSize++;
-
-                        queue.Enqueue(children[i]);
+                        queue.Enqueue(newNode);
                     }
-
-                    //_regions.Add(nextInQueue.GetRegionInfo());
                 }
             }
         }
-        public bool AddData(TData inputData, int thread, Func<TData, bool> check, Func<TRegion, bool> inside, Func<TRegion, bool> partInside)
+        public bool AddData(
+            TData inputData,
+            int thread,
+            Func<TData, bool> checkIfDataCannotBeAdded,
+            Func<TRegion, bool> checkIfDataInsideRegion,
+            Func<TRegion, bool> checkIfDatasPartInsideRegion)
         {
             ArgumentNullException.ThrowIfNull(inputData);
-            ArgumentNullException.ThrowIfNull(check);
-            ArgumentNullException.ThrowIfNull(inside);
-            ArgumentNullException.ThrowIfNull(partInside);
+            ArgumentNullException.ThrowIfNull(checkIfDataCannotBeAdded);
+            ArgumentNullException.ThrowIfNull(checkIfDataInsideRegion);
+            ArgumentNullException.ThrowIfNull(checkIfDatasPartInsideRegion);
 
             var regionThatContainsData = _head;
 
             while (true)
             {
-                var innerRegionThatContainsData = regionThatContainsData
-                    .Children.FirstOrDefault(child => child != null && inside(child.Region));
+                var nextRegionThatContainsData = regionThatContainsData
+                    .Children.FirstOrDefault(child => 
+                    child != null && 
+                    checkIfDataInsideRegion(child.Region));
 
-                if (innerRegionThatContainsData == null) break;
+                if (nextRegionThatContainsData is null) break;
 
-                regionThatContainsData = innerRegionThatContainsData;
+                regionThatContainsData = nextRegionThatContainsData;
             }
 
             var queue = new Queue<Node>();
@@ -81,17 +95,26 @@
             {
                 var region = queue.Dequeue();
 
-                if (partInside(region.Region))
+                if (checkIfDatasPartInsideRegion(region.Region))
                 {
-                    region.DataCollections[thread] ??= [];
+                    var threadDataCollection = region.DataCollections[thread];
 
-                    if (region.DataCollections[thread] is not null && region.DataCollections[thread]!.Any(check))
+                    if (threadDataCollection == null)
+                    {
+                        threadDataCollection = [ inputData ];
+                        CountElements++;
+
+                    } else if (threadDataCollection.Any(checkIfDataCannotBeAdded))
+                    {
                         return false;
 
-                    region.DataCollections[thread]?.Add(inputData);
+                    } else
+                    {
+                        threadDataCollection.Add(inputData);
+                    }
 
                     foreach (var child in region.Children)
-                        if (child != null)
+                        if (child is not null)
                             queue.Enqueue(child);
                 }
             }
@@ -101,7 +124,6 @@
         public void ClearAllThread()
         {
             var queue = new Queue<Node>();
-
             queue.Enqueue(_head);
 
             while (queue.Any())
@@ -115,20 +137,27 @@
                     if (child is not null)
                         queue.Enqueue(child);
             }
+
+            CountElements = 0;
         }
-        public void ClearSpecificThread(int thread)
+        public void ClearCurrentThreadCollection(int thread)
         {
             var queue = new Queue<Node>();
-
             queue.Enqueue(_head);
 
             while (queue.Any())
             {
-                var nextInQueue = queue.Dequeue();
+                var region = queue.Dequeue();
 
-                nextInQueue.DataCollections[thread]?.Clear();
+                var threadDataCollection = region.DataCollections[thread];
 
-                foreach (var child in nextInQueue.Children)
+                if (threadDataCollection is not null)
+                {
+                    CountElements -= threadDataCollection.Count;
+                    threadDataCollection.Clear();
+                }
+
+                foreach (var child in region.Children)
                     if (child != null)
                         queue.Enqueue(child);
             }

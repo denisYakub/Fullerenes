@@ -17,8 +17,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public override IEnumerable<Fullerene> GenerateFullerenes(int seriesFs, Octree<Parallelepiped, Fullerene> octree)
         {
             ArgumentNullException.ThrowIfNull(octree);
-            List<Fullerene> fullerenes = [];
-
+            //List<Fullerene> fullerenes = [];
             try
             {
                 int reTryCount = 0;
@@ -28,7 +27,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                     if (reTryCount == RetryCountMax)
                         yield break;
 
-                    var fullerene = TryToGenerateFullerene(seriesFs, octree, fullerenes);
+                    var fullerene = TryToGenerateFullerene(seriesFs, octree/*, fullerenes*/);
 
                     if (fullerene != null)
                     {
@@ -56,10 +55,10 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         {
             ArgumentNullException.ThrowIfNull(fullerene);
 
-            return FigureCollision.SpheresInside(fullerene.Center, fullerene.GenerateOuterSphereRadius(), Center, Radius);
+            return FiguresCollision.SpheresInside(fullerene.Center, fullerene.GenerateOuterSphereRadius(), Center, Radius);
         }
 
-        private Fullerene? TryToGenerateFullerene(int series, Octree<Parallelepiped, Fullerene> octree, IReadOnlyCollection<Fullerene> fullerenes)
+        private Fullerene? TryToGenerateFullerene(int series, Octree<Parallelepiped, Fullerene> octree/*, IReadOnlyCollection<Fullerene> fullerenes*/)
         {
             var fullerene = ProduceFullerene?.Invoke(Id, series) ?? null;
 

@@ -37,16 +37,17 @@ namespace Fullerenes.Server.Objects.Fullerenes
             get
             {
                 return _vertices ??=
-                    [.. GenerateStartVerticesPositions()
+                    GenerateStartVerticesPositions()
                     .Rotate(EulerAngles)
-                    .Shift(Center)];
+                    .Shift(Center)
+                    .ToList();
             }
         }
         public override ICollection<int[]> Faces
         {
             get
             {
-                return _faces ??= Formulas.IcosahedronFacesIndices;
+                return _faces ??= FiguresFaces.IcosahedronFacesIndices;
             }
         }
         public override float GenerateInnerSphereRadius()
@@ -89,7 +90,7 @@ namespace Fullerenes.Server.Objects.Fullerenes
         {
             ArgumentNullException.ThrowIfNull(parallelepiped);
 
-            return FigureCollision.Intersects(parallelepiped, Center, GenerateOuterSphereRadius());
+            return FiguresCollision.Intersects(parallelepiped, Center, GenerateOuterSphereRadius());
         }
     }
 }
