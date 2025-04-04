@@ -16,17 +16,10 @@ namespace Fullerenes.Server.Objects.CustomStructures
                 if (child is not null)
                     Children[id] = child;
             }
-            public (Guid id, string? region, Guid?[] children) GetRegionInfo()
-            {
-                ArgumentNullException.ThrowIfNull(Region);
-
-                return (Id, Region.ToString(), Children.Select(child => child?.Id).ToArray());
-            }
         }
 
         private readonly int _threadsNumber = threadsNumber;
         private readonly Node _head = new(Guid.NewGuid(), startRegion, threadsNumber);
-        //private readonly ICollection<(Guid id, string dataJson, Guid[] children)> _regions = [];
         public int CountNodes { get; private set; }
         public int CountElements { get; private set; }
 
@@ -121,25 +114,6 @@ namespace Fullerenes.Server.Objects.CustomStructures
 
             return true;
         }
-        public void ClearAllThread()
-        {
-            var queue = new Queue<Node>();
-            queue.Enqueue(_head);
-
-            while (queue.Any())
-            {
-                var nextInQueue = queue.Dequeue();
-
-                foreach (var dataCollection in nextInQueue.DataCollections)
-                    dataCollection?.Clear();
-
-                foreach (var child in nextInQueue.Children)
-                    if (child is not null)
-                        queue.Enqueue(child);
-            }
-
-            CountElements = 0;
-        }
         public void ClearCurrentThreadCollection(int thread)
         {
             var queue = new Queue<Node>();
@@ -161,6 +135,25 @@ namespace Fullerenes.Server.Objects.CustomStructures
                     if (child != null)
                         queue.Enqueue(child);
             }
+        }
+        ~Octree()
+        {
+            var queue = new Queue<Node>();
+            queue.Enqueue(_head);
+
+            while (queue.Any())
+            {
+                var nextInQueue = queue.Dequeue();
+
+                foreach (var dataCollection in nextInQueue.DataCollections)
+                    dataCollection?.Clear();
+
+                foreach (var child in nextInQueue.Children)
+                    if (child is not null)
+                        queue.Enqueue(child);
+            }
+
+            CountElements = 0;
         }
     }
 }

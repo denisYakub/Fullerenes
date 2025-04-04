@@ -17,7 +17,6 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public override IEnumerable<Fullerene> GenerateFullerenes(int seriesFs, Octree<Parallelepiped, Fullerene> octree)
         {
             ArgumentNullException.ThrowIfNull(octree);
-            //List<Fullerene> fullerenes = [];
             try
             {
                 int reTryCount = 0;
@@ -27,13 +26,11 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                     if (reTryCount == RetryCountMax)
                         yield break;
 
-                    var fullerene = TryToGenerateFullerene(seriesFs, octree/*, fullerenes*/);
+                    var fullerene = TryToGenerateFullerene(seriesFs, octree);
 
                     if (fullerene != null)
                     {
                         reTryCount = 0;
-
-                        //fullerenes.Add(fullerene);
 
                         yield return fullerene;
 
@@ -47,7 +44,6 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             finally  
             {
                 //octree.ClearSpecificThread(seriesFs);
-                //fullerenes.Clear();
             }
         }
 
@@ -58,13 +54,12 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             return FiguresCollision.SpheresInside(fullerene.Center, fullerene.GenerateOuterSphereRadius(), Center, Radius);
         }
 
-        private Fullerene? TryToGenerateFullerene(int series, Octree<Parallelepiped, Fullerene> octree/*, IReadOnlyCollection<Fullerene> fullerenes*/)
+        private Fullerene? TryToGenerateFullerene(int series, Octree<Parallelepiped, Fullerene> octree)
         {
             var fullerene = ProduceFullerene?.Invoke(Id, series) ?? null;
 
             return fullerene != null
                 && Contains(fullerene)
-                //&& !fullerene.Intersect(fullerenes)
                 && octree.AddData(fullerene, series, fullerene.Intersect, fullerene.Inside, fullerene.PartInside)
                 ? fullerene
                 : null;
