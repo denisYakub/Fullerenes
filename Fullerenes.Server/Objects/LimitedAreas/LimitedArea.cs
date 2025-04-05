@@ -13,7 +13,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public int RequestedNumberOfFullerenes { get; set; } = numberOfFullerene;
         public ICollection<Fullerene>? Fullerenes { get; init; }
         [NotMapped]
-        public int RetryCountMax { get; } = 100;
+        protected static readonly int RetryCountMax = 100;
         [NotMapped]
         public Func<int, int, Fullerene>? ProduceFullerene { get; set; } = produceFullerene;
         public abstract float GenerateOuterRadius();

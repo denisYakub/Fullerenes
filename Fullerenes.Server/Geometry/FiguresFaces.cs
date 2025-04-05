@@ -2,7 +2,7 @@
 {
     public static class FiguresFaces
     {
-        public static readonly ICollection<int[]> IcosahedronFacesIndices =
+        public static readonly IReadOnlyCollection<int[]> IcosahedronFacesIndices =
             [
                 [0, 11, 5],
                 [0, 5, 1],

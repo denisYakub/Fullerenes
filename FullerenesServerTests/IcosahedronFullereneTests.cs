@@ -34,6 +34,9 @@ namespace FullerenesServerTests
                 0, 0, 0,
                 5);
 
+            var f = fullerene.Faces;
+            var v = fullerene.Vertices;
+
             var point = new Vector3(1.82f, -0.39f, -3.64f);
 
             Assert.IsTrue(fullerene.Contains(point));

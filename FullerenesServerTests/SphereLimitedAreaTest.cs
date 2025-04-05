@@ -1,13 +1,6 @@
 ﻿using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
-using MathNet.Numerics;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FullerenesServerTests
 {
@@ -54,10 +47,7 @@ namespace FullerenesServerTests
             var timeBefore = DateTime.Now;
 
             Parallel.For(0, fullerenesArr.Length, i => {
-
                 fullerenesArr[i] = _limitedArea.GenerateFullerenes(i, _octree).Take(1_000_000).ToList();
-
-                _octree.ClearCurrentThreadCollection(i);
             });
             
             var timeAfter = DateTime.Now;

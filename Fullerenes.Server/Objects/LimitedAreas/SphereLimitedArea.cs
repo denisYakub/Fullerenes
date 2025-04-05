@@ -1,5 +1,4 @@
-﻿using Fullerenes.Server.CustomLogger;
-using Fullerenes.Server.Geometry;
+﻿using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Fullerenes;
 
@@ -43,7 +42,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             }
             finally  
             {
-                //octree.ClearSpecificThread(seriesFs);
+                octree.ClearCurrentThreadCollection(seriesFs);
             }
         }
 
@@ -58,9 +57,10 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         {
             var fullerene = ProduceFullerene?.Invoke(Id, series) ?? null;
 
-            return fullerene != null
-                && Contains(fullerene)
-                && octree.AddData(fullerene, series, fullerene.Intersect, fullerene.Inside, fullerene.PartInside)
+            return 
+                fullerene is not null && 
+                Contains(fullerene) && 
+                octree.AddData(fullerene, series, fullerene.Intersect, fullerene.Inside, fullerene.PartInside)
                 ? fullerene
                 : null;
         }

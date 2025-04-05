@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
@@ -6,10 +7,11 @@ using MathNet.Numerics.Distributions;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
-    public class IcosahedronFullerene(float x, float y, float z, float alpha, float beta, float gamma, float size)
+    public class IcosahedronFullerene(float x, float y, float z, float alpha, float beta, float gamma, float size) 
         : Fullerene(x, y, z, alpha, beta, gamma, size)
     {
-        public IcosahedronFullerene() : this(0, 0, 0, 0, 0, 0, 0) { }
+        public IcosahedronFullerene() 
+            : this(0, 0, 0, 0, 0, 0, 0) { }
 
         public IcosahedronFullerene(
             float minX, float maxX, float minY,
@@ -19,63 +21,67 @@ namespace Fullerenes.Server.Objects.Fullerenes
             float shape, float scale,
             int limitedAreaId, int series)
             : this(
-                  new Random().GetEvenlyRandoms(minX, maxX).First(),
-                  new Random().GetEvenlyRandoms(minY, maxY).First(),
-                  new Random().GetEvenlyRandoms(minZ, maxZ).First(),
-                  new Random().GetEvenlyRandoms(-maxAlpha, maxAlpha).First(),
-                  new Random().GetEvenlyRandoms(-maxBeta, maxBeta).First(),
-                  new Random().GetEvenlyRandoms(-maxGamma, maxGamma).First(),
-                  new Gamma(shape, scale).GetGammaRandoms(minSize, maxSize).First()
-            )
+                  Random.GetEvenlyRandoms(minX, maxX).First(),
+                  Random.GetEvenlyRandoms(minY, maxY).First(),
+                  Random.GetEvenlyRandoms(minZ, maxZ).First(),
+                  Random.GetEvenlyRandoms(-maxAlpha, maxAlpha).First(),
+                  Random.GetEvenlyRandoms(-maxBeta, maxBeta).First(),
+                  Random.GetEvenlyRandoms(-maxGamma, maxGamma).First(),
+                  new Gamma(shape, scale).GetGammaRandoms(minSize, maxSize).First())
             => (LimitedAreaId, Series) = (limitedAreaId, series);
 
         private static readonly float Phi = (1 + MathF.Sqrt(5)) / 2;
-        private ICollection<Vector3> _vertices;
-        private ICollection<int[]> _faces;
+
+        private readonly Lazy<IReadOnlyCollection<int[]>> _faces = new(() => FiguresFaces.IcosahedronFacesIndices);
+        private ICollection<Vector3>? _vertices;
+
         public override ICollection<Vector3> Vertices
         {
             get
             {
-                return _vertices ??=
-                    GenerateStartVerticesPositions()
-                    .Rotate(EulerAngles)
-                    .Shift(Center)
-                    .ToList();
+                lock (Lock)
+                {
+                    return _vertices ??=
+                        GenerateDefaultVerticesPositions(Size)
+                        .Rotate(EulerAngles)
+                        .Shift(Center);
+                }
             }
         }
-        public override ICollection<int[]> Faces
-        {
-            get
-            {
-                return _faces ??= FiguresFaces.IcosahedronFacesIndices;
-            }
-        }
+
+        public override IReadOnlyCollection<int[]> Faces => _faces.Value;
+
+        public override float GenerateOuterSphereRadius() => Size;
+
         public override float GenerateInnerSphereRadius()
-            => MathF.Pow(Phi, 2) * GenerateOuterSphereRadius() / MathF.Sqrt(12);
+            => MathF.Pow(Phi, 2) * Size / MathF.Sqrt(12);
 
-        public override ICollection<Vector3> GenerateStartVerticesPositions() =>
+        private static ICollection<Vector3> GenerateDefaultVerticesPositions(float size)
+        {
+            return
             [
-                new Vector3(-1, Phi, 0) * Size,
-                new Vector3( 1, Phi, 0) * Size,
-                new Vector3(-1, -Phi, 0) * Size,
-                new Vector3( 1, -Phi, 0) * Size,
+                new Vector3(-1, Phi, 0) * size,
+                new Vector3( 1, Phi, 0) * size,
+                new Vector3(-1, -Phi, 0) * size,
+                new Vector3( 1, -Phi, 0) * size,
 
-                new Vector3(0, -1, Phi) * Size,
-                new Vector3(0,  1, Phi) * Size,
-                new Vector3(0, -1, -Phi) * Size,
-                new Vector3(0,  1, -Phi) * Size,
+                new Vector3(0, -1, Phi) * size,
+                new Vector3(0,  1, Phi) * size,
+                new Vector3(0, -1, -Phi) * size,
+                new Vector3(0,  1, -Phi) * size,
 
-                new Vector3(Phi, 0, -1) * Size,
-                new Vector3(Phi, 0,  1) * Size,
-                new Vector3(-Phi, 0, -1) * Size,
-                new Vector3(-Phi, 0,  1) * Size
+                new Vector3(Phi, 0, -1) * size,
+                new Vector3(Phi, 0,  1) * size,
+                new Vector3(-Phi, 0, -1) * size,
+                new Vector3(-Phi, 0,  1) * size
             ];
+        }
 
         public override bool Inside(Parallelepiped parallelepiped)
         {
             ArgumentNullException.ThrowIfNull(parallelepiped);
 
-            var outerSphereRadius = GenerateOuterSphereRadius();
+            var outerSphereRadius = Size;
 
             var result = parallelepiped.Center.X - parallelepiped.Length / 2 <= Center.X - outerSphereRadius &&
                 Center.X + outerSphereRadius <= parallelepiped.Center.X + parallelepiped.Length / 2 &&
@@ -86,6 +92,7 @@ namespace Fullerenes.Server.Objects.Fullerenes
 
             return result;
         }
+
         public override bool PartInside(Parallelepiped parallelepiped)
         {
             ArgumentNullException.ThrowIfNull(parallelepiped);
