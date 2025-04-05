@@ -97,7 +97,7 @@ namespace Fullerenes.Server.Objects.CustomStructures
                         threadDataCollection = [ inputData ];
                         CountElements++;
 
-                    } else if (threadDataCollection.AsParallel().Any(checkIfDataCannotBeAdded))
+                    } else if (threadDataCollection.Any(checkIfDataCannotBeAdded))
                     {
                         return false;
 
