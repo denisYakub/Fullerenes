@@ -45,6 +45,21 @@ namespace Fullerenes.Server.Geometry
             return Vector3.Distance(center2, center1) < r1 + r2;
         }
         /// <summary>
+        /// Checks if point is inside parallelepiped
+        /// </summary>
+        /// <param name="parallelepiped"></param>
+        /// <param name="point"></param>
+        /// <returns>true if point inside</returns>
+        public static bool Pointinside(Parallelepiped parallelepiped, Vector3 point)
+        {
+            ArgumentNullException.ThrowIfNull(parallelepiped);
+
+            return
+                MathF.Abs(point.X - parallelepiped.Center.X) <= parallelepiped.Length / 2 &&
+                MathF.Abs(point.Y - parallelepiped.Center.Y) <= parallelepiped.Width / 2 &&
+                MathF.Abs(point.Z - parallelepiped.Center.Z) <= parallelepiped.Height / 2;
+        }
+        /// <summary>
         /// Checks two figures intersection using Separating Axis Theorem
         /// </summary>
         /// <param name="vertices1">Vertices of the first figure</param>

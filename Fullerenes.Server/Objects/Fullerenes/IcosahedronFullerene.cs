@@ -97,7 +97,16 @@ namespace Fullerenes.Server.Objects.Fullerenes
         {
             ArgumentNullException.ThrowIfNull(parallelepiped);
 
-            return FiguresCollision.Intersects(parallelepiped, Center, GenerateOuterSphereRadius());
+            if (!FiguresCollision.Intersects(parallelepiped, Center, GenerateOuterSphereRadius()))
+                return false;
+
+            if (FiguresCollision.Intersects(parallelepiped, Center, GenerateInnerSphereRadius()))
+                return true;
+
+            return
+                Vertices
+                .AddMidPoints(Faces)
+                .Any(vertex => FiguresCollision.Pointinside(parallelepiped, vertex));
         }
     }
 }

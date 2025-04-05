@@ -12,6 +12,80 @@
       },
       "results": [
         {
+          "ruleId": "CS8618",
+          "level": "warning",
+          "message": "свойство \"LimitedAreas\", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Рассмотрите возможность добавления модификатора \"required\" или объявления значения свойство, допускающего значение NULL.",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "region": {
+                  "startLine": 11,
+                  "startColumn": 18,
+                  "endLine": 11,
+                  "endColumn": 38
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 35,
+                  "endLine": 13,
+                  "endColumn": 47
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8618",
+          "level": "warning",
+          "message": "свойство \"Fullerenes\", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Рассмотрите возможность добавления модификатора \"required\" или объявления значения свойство, допускающего значение NULL.",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "region": {
+                  "startLine": 11,
+                  "startColumn": 18,
+                  "endLine": 11,
+                  "endColumn": 38
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "region": {
+                  "startLine": 14,
+                  "startColumn": 33,
+                  "endLine": 14,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
           "ruleId": "CS1998",
           "level": "warning",
           "message": "В данном асинхронном методе отсутствуют операторы await, поэтому метод будет выполняться синхронно. Воспользуйтесь оператором await для ожидания неблокирующих вызовов API или оператором await Task.Run(...) для выполнения связанных с ЦП заданий в фоновом потоке.",
@@ -31,14 +105,589 @@
           "properties": {
             "warningLevel": 1
           }
+        },
+        {
+          "ruleId": "CA1819",
+          "level": "warning",
+          "message": "Свойства не должны возвращать массивы",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 56,
+                  "endLine": 7,
+                  "endColumn": 76
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1819",
+          "level": "warning",
+          "message": "Свойства не должны возвращать массивы",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
+                "region": {
+                  "startLine": 18,
+                  "startColumn": 17,
+                  "endLine": 18,
+                  "endColumn": 27
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1051",
+          "level": "warning",
+          "message": "Не объявляйте видимые поля экземпляров",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Fullerenes/Fullerene.cs",
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 35,
+                  "endLine": 26,
+                  "endColumn": 39
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA5394",
+          "level": "warning",
+          "message": "Random является небезопасным генератором случайных чисел. Если случайные числа требуются для обеспечения безопасности, используйте криптографически безопасные генераторы случайных чисел.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Extensions/RandomExtensions.cs",
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 42,
+                  "endLine": 13,
+                  "endColumn": 61
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1031",
+          "level": "warning",
+          "message": "Измените \"InvokeAsync\", чтобы перехватывать исключение более конкретного типа или выдать исключение повторно.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
+                "region": {
+                  "startLine": 11,
+                  "startColumn": 13,
+                  "endLine": 11,
+                  "endColumn": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA5394",
+          "level": "warning",
+          "message": "Random является небезопасным генератором случайных чисел. Если случайные числа требуются для обеспечения безопасности, используйте криптографически безопасные генераторы случайных чисел.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Controllers/WeatherForecastController.cs",
+                "region": {
+                  "startLine": 29,
+                  "startColumn": 32,
+                  "endLine": 29,
+                  "endColumn": 59
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA5394",
+          "level": "warning",
+          "message": "Random является небезопасным генератором случайных чисел. Если случайные числа требуются для обеспечения безопасности, используйте криптографически безопасные генераторы случайных чисел.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Controllers/WeatherForecastController.cs",
+                "region": {
+                  "startLine": 30,
+                  "startColumn": 37,
+                  "endLine": 30,
+                  "endColumn": 73
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1062",
+          "level": "warning",
+          "message": "В видимом извне методе \"Task GlobalExceptionHandlingMiddleware.InvokeAsync(HttpContext context)\" перед использованием параметра \"context\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 44,
+                  "endLine": 13,
+                  "endColumn": 51
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1062",
+          "level": "warning",
+          "message": "В видимом извне методе \"Task<int> CreateService.GenerateAreaAsync(FullereneAndLimitedAreaFactory factory)\" перед использованием параметра \"factory\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 39,
+                  "endLine": 17,
+                  "endColumn": 46
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octree.cs",
+                "region": {
+                  "startLine": 38,
+                  "startColumn": 20,
+                  "endLine": 38,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Fullerenes/Fullerene.cs",
+                "region": {
+                  "startLine": 32,
+                  "startColumn": 13,
+                  "endLine": 32,
+                  "endColumn": 29
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octree.cs",
+                "region": {
+                  "startLine": 87,
+                  "startColumn": 20,
+                  "endLine": 87,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octree.cs",
+                "region": {
+                  "startLine": 122,
+                  "startColumn": 20,
+                  "endLine": 122,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1062",
+          "level": "warning",
+          "message": "В видимом извне методе \"Vector3 ApplicationDbContext.Convert(string value)\" перед использованием параметра \"value\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "region": {
+                  "startLine": 59,
+                  "startColumn": 31,
+                  "endLine": 59,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octree.cs",
+                "region": {
+                  "startLine": 144,
+                  "startColumn": 20,
+                  "endLine": 144,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1062",
+          "level": "warning",
+          "message": "В видимом извне методе \"void FinalDBModel.Down(MigrationBuilder migrationBuilder)\" перед использованием параметра \"migrationBuilder\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250401172415_FinalDBModel.cs",
+                "region": {
+                  "startLine": 246,
+                  "startColumn": 13,
+                  "endLine": 246,
+                  "endColumn": 29
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1859",
+          "level": "warning",
+          "message": "Измените тип возвращаемого значения метода \"GenerateAvgSize\" с \"Fullerenes.Server.Objects.Fullerenes.Fullerene\" на \"Fullerenes.Server.Objects.Fullerenes.IcosahedronFullerene\" для повышения производительности",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/TestService.cs",
+                "region": {
+                  "startLine": 82,
+                  "startColumn": 34,
+                  "endLine": 82,
+                  "endColumn": 49
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1062",
+          "level": "warning",
+          "message": "В видимом извне методе \"void FinalDBModel.Up(MigrationBuilder migrationBuilder)\" перед использованием параметра \"migrationBuilder\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250401172415_FinalDBModel.cs",
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 13,
+                  "endLine": 15,
+                  "endColumn": 29
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1852",
+          "level": "warning",
+          "message": "Тип \\\"DequeNode\\\" может быть запечатанным, так как у него нет подтипов в содержащей его сборке и он невидим извне",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Deques/Deque.cs",
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 23,
+                  "endLine": 9,
+                  "endColumn": 32
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1852",
+          "level": "warning",
+          "message": "Тип \\\"Node\\\" может быть запечатанным, так как у него нет подтипов в содержащей его сборке и он невидим извне",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octree.cs",
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 23,
+                  "endLine": 8,
+                  "endColumn": 27
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
         }
       ],
       "rules": {
+        "CA1031": {
+          "id": "CA1031",
+          "shortDescription": "Не перехватывать исключения общих типов",
+          "fullDescription": "Общее исключение, такое как System.Exception, System.SystemException или недопустимый тип исключения, перехватывается в выражении catch либо используется общее выражение catch. Общие и недопустимые исключения не должны перехватываться.",
+          "defaultLevel": "warning",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1031",
+          "properties": {
+            "category": "Design",
+            "isEnabledByDefault": false,
+            "tags": [
+              "PortedFromFxCop",
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1051": {
+          "id": "CA1051",
+          "shortDescription": "Не объявляйте видимые поля экземпляров",
+          "fullDescription": "Основной вид использования поля должен соответствовать сведениям о реализации. Поля должны быть частными или внутренними и предоставляться с помощью свойств.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1051",
+          "properties": {
+            "category": "Design",
+            "isEnabledByDefault": true,
+            "tags": [
+              "PortedFromFxCop",
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1062": {
+          "id": "CA1062",
+          "shortDescription": "Проверить аргументы или открытые методы",
+          "fullDescription": "Видимый извне метод разыменовывает один из своих аргументов ссылки, не проверяя, имеет ли этот аргумент значение NULL (Nothing в Visual Basic). Все аргументы ссылки, передаваемые в видимые извне методы, следует проверять на значение NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL. Если метод предназначен для вызова только известными сборками, следует сделать его внутренним.",
+          "defaultLevel": "warning",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1062",
+          "properties": {
+            "category": "Design",
+            "isEnabledByDefault": false,
+            "tags": [
+              "PortedFromFxCop",
+              "Dataflow",
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1819": {
+          "id": "CA1819",
+          "shortDescription": "Свойства не должны возвращать массивы",
+          "fullDescription": "Возвращаемый свойствами массивы не защищены от записи, даже если свойство доступно только для чтения. Чтобы предотвратить незаконное изменение массива, свойство должно возвращать копию массива. Обычно пользователи не осознают, какое негативное влияние на производительность оказывает вызов такого свойства.",
+          "defaultLevel": "warning",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1819",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": false,
+            "tags": [
+              "PortedFromFxCop",
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1852": {
+          "id": "CA1852",
+          "shortDescription": "Запечатать внутренние типы",
+          "fullDescription": "Если тип недоступен вне сборки и не имеет подтипов в содержащей его сборке, его можно безопасно запечатать. Запечатывание типов может повысить производительность.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1852",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode",
+              "CompilationEnd"
+            ]
+          }
+        },
+        "CA1859": {
+          "id": "CA1859",
+          "shortDescription": "Используйте конкретные типы, когда это возможно, для повышения производительности",
+          "fullDescription": "Использование конкретных типов позволяет избежать потребления ресурсов на виртуальные вызовы и вызовы интерфейса и включить встраивание.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1859",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1860": {
+          "id": "CA1860",
+          "shortDescription": "Не используйте метод расширения 'Enumerable.Any()'",
+          "fullDescription": "Старайтесь использовать свойства 'IsEmpty', 'Count' или 'Length' в зависимости от доступности вместо вызова 'Enumerable.Any()'. Намерение является более четким и более эффективным по сравнению с использованием метода расширения 'Enumerable.Any()'.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1860",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA5394": {
+          "id": "CA5394",
+          "shortDescription": "Не используйте небезопасные генераторы случайных чисел.",
+          "fullDescription": "Использование криптографически слабого генератора псевдослучайных чисел может позволить злоумышленнику предсказать, какое значение, важное для обеспечения безопасности, будет сформировано. Используйте криптографически надежный генератор случайных чисел, если требуется непрогнозируемое значение, или убедитесь, что слабые псевдослучайные числа не используются для обеспечения безопасности.",
+          "defaultLevel": "warning",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5394",
+          "properties": {
+            "category": "Security",
+            "isEnabledByDefault": false,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
         "CS1998": {
           "id": "CS1998",
           "shortDescription": "В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод",
           "defaultLevel": "warning",
           "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS1998)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        },
+        "CS8618": {
+          "id": "CS8618",
+          "shortDescription": "Поле, не допускающее значения NULL, должно содержать значение, отличное от NULL, при выходе из конструктора. Рассмотрите возможность добавления модификатора \"required\" или объявления значения, допускающего значение NULL.",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS8618)",
           "properties": {
             "category": "Compiler",
             "isEnabledByDefault": true,
