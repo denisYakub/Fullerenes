@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Numerics;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
@@ -9,6 +10,8 @@ namespace Fullerenes.Server.Objects.Fullerenes
     public abstract class Fullerene(float x, float y, float z,
         float praecessioAngle, float nutatioAngle, float properRotationAngle, float size)
     {
+        //private ICollection<Vector3>? _verticesWithMidPonts;
+
         public int Id { get; set; }
         public int Series { get; set; }
         public int LimitedAreaId { get; set; }
@@ -16,11 +19,28 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public Vector3 Center { get; init; } = new(x, y, z);
         public EulerAngles EulerAngles { get; init; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
         public float Size { get; init; } = size;
+        [NotMapped]
         public abstract ICollection<Vector3> Vertices { get; }
-        public abstract ICollection<int[]> Faces { get; }
-        public float GenerateOuterSphereRadius() => Size;
+        [NotMapped]
+        public abstract IReadOnlyCollection<int[]> Faces { get; }
+        /*[NotMapped]
+        public ICollection<Vector3> VerticesWithMidPoints
+        {
+            get
+            {
+                lock (Lock)
+                {
+                    return _verticesWithMidPonts ??=
+                        Vertices
+                        .AddMidPoints(Faces);
+                }
+            }
+        }*/
+
+        protected static readonly Random Random = new();
+        protected readonly object Lock = new();
+        public abstract float GenerateOuterSphereRadius();
         public abstract float GenerateInnerSphereRadius();
-        public abstract ICollection<Vector3> GenerateStartVerticesPositions();
         public abstract bool Inside(Parallelepiped parallelepiped);
         public abstract bool PartInside(Parallelepiped parallelepiped);
         public virtual bool Intersect(IReadOnlyCollection<Fullerene> fullerenes) =>
@@ -51,9 +71,10 @@ namespace Fullerenes.Server.Objects.Fullerenes
             if (!FiguresCollision.SpheresIntersect(Center, outerRadiusF1, fullerene.Center, outerRadiusF2))
                 return false;
 
-            return Vertices
-                    .AddMidPoints(Faces)
-                    .Any(fullerene.Contains);
+            return //VerticesWithMidPoints
+                Vertices
+                .AddMidPoints(Faces)
+                .Any(fullerene.Contains);
         }
 
         public virtual bool Contains(Vector3 point)

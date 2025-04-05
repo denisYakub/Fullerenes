@@ -6,7 +6,7 @@ namespace Fullerenes.Server.Extensions
 {
     public static class CollectionsExtensions
     {
-        public static ICollection<Vector3> AddMidPoints(this ICollection<Vector3> vertices, ICollection<int[]> facesIndices)
+        public static ICollection<Vector3> AddMidPoints(this ICollection<Vector3> vertices, IReadOnlyCollection<int[]> facesIndices)
         {
             ArgumentNullException.ThrowIfNull(vertices);
             ArgumentNullException.ThrowIfNull(facesIndices);
@@ -34,26 +34,33 @@ namespace Fullerenes.Server.Extensions
         {
             ArgumentNullException.ThrowIfNull(vertices);
 
-            return vertices.Select(vertex => vertex + dot).ToArray();
+            var result = new List<Vector3>(vertices.Count);
+
+            foreach (var vertex in vertices)
+            {
+                result.Add(vertex + dot);
+            }
+
+            return result;
         }
 
         public static ICollection<Vector3> Rotate(this ICollection<Vector3> vertices, EulerAngles angles)
         {
+            ArgumentNullException.ThrowIfNull(vertices);
+
             var rotationMatrix = Formulas.CreateRotationMatrix(
                 angles.PraecessioAngle,
                 angles.NutatioAngle,
                 angles.ProperRotationAngle);
 
-            return vertices.Select(vertex => Vector3.Transform(vertex, rotationMatrix)).ToArray();
-        }
-        public static ICollection<Vector3> RotateRev(this ICollection<Vector3> vertices, EulerAngles angles)
-        {
-            var rotationMatrix = Formulas.CreateRotationMatrixReverse(
-                angles.PraecessioAngle,
-                angles.NutatioAngle,
-                angles.ProperRotationAngle);
+            var result = new List<Vector3>(vertices.Count);
 
-            return vertices.Select(vertex => Vector3.Transform(vertex, rotationMatrix)).ToArray();
+            foreach (var vertex in vertices)
+            {
+                result.Add(Vector3.Transform(vertex, rotationMatrix));
+            }
+
+            return result;
         }
     }
 }

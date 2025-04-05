@@ -42,7 +42,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             }
             finally  
             {
-                octree.ClearCurrentThreadCollection(seriesFs);
+                //octree.ClearCurrentThreadCollection(seriesFs);
             }
         }
 
