@@ -28,6 +28,7 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public abstract float GenerateInnerSphereRadius();
         public abstract bool Inside(Parallelepiped parallelepiped);
         public abstract bool PartInside(Parallelepiped parallelepiped);
+        public abstract float GenerateVolume();
         public virtual bool Intersect(IReadOnlyCollection<Fullerene> fullerenes) =>
             fullerenes.Any() &&
             fullerenes.AsParallel().Any(Intersect);

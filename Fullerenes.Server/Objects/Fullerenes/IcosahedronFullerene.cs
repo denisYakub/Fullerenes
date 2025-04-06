@@ -108,6 +108,23 @@ namespace Fullerenes.Server.Objects.Fullerenes
                 .AddMidPoints(Faces)
                 .Any(vertex => FiguresCollision.Pointinside(parallelepiped, vertex));
         }
+
+        public override float GenerateVolume()
+        {
+            int numberOfDotsInsideFullerene = 0;
+            const int numberOfDots = 1_000_000;
+
+            var dots = Random.GetEvenlyRandoms(-Size, Size).Take(numberOfDots * 3).ToArray();
+
+
+            for (int i = 0; i < numberOfDots * 3; i += 3)
+            {
+                if (Contains(new Vector3(dots[i], dots[i + 1], dots[i + 2])))
+                    numberOfDotsInsideFullerene++;
+            }
+
+            return MathF.Pow(2 * Size, 3) * numberOfDotsInsideFullerene / numberOfDots;
+        }
     }
 }
 

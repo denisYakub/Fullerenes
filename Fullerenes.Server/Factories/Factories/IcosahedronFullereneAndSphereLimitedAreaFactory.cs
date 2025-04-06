@@ -5,22 +5,30 @@ using Fullerenes.Server.Objects.LimitedAreas;
 
 namespace Fullerenes.Server.Factories.Factories
 {
-    public class IcosahedronFullereneAndSphereLimitedAreaFactory(CreateFullerenesAndLimitedAreaRequest request) : FullereneAndLimitedAreaFactory(request)
+    public class IcosahedronFullereneAndSphereLimitedAreaFactory(
+        float areaX, float areaY, float areaZ, float areaR,
+        int numberOfSeries, int numberOfFullerenes,
+        float maxPracessioAngle, float maxNutationAngle, float maxProperRotationAngle,
+        float minFullereneSize, float maxFullereneSize,
+        float shape, float scale) 
+        : FullereneAndLimitedAreaFactory(
+            numberOfSeries, numberOfFullerenes,
+            minFullereneSize, maxFullereneSize)
     {
         public override LimitedArea CreateLimitedArea()
         {
-            return new SphereLimitedArea(Request.AreaX, Request.AreaY, Request.AreaZ, Request.AreaAdditionalParams[0], Request.NumberOfF, CreateFullerene);
+            return new SphereLimitedArea(areaX, areaY, areaZ, areaR, numberOfFullerenes, CreateFullerene);
         }
 
         public override Fullerene CreateFullerene(int limitedAreaId, int series)
         {
             return new IcosahedronFullerene(
-                Request.AreaX - Request.AreaAdditionalParams[0], Request.AreaX + Request.AreaAdditionalParams[0],
-                Request.AreaY - Request.AreaAdditionalParams[0], Request.AreaY + Request.AreaAdditionalParams[0],
-                Request.AreaZ - Request.AreaAdditionalParams[0], Request.AreaZ + Request.AreaAdditionalParams[0],
-                Request.MaxAlphaF, Request.MaxBetaF, Request.MaxGammaF,
-                Request.MinSizeF, Request.MaxSizeF,
-                Request.Shape, Request.Scale,
+                areaX - areaR, areaX + areaR,
+                areaY - areaR, areaY + areaR,
+                areaZ - areaR, areaZ + areaR,
+                maxPracessioAngle, maxNutationAngle, maxProperRotationAngle,
+                minFullereneSize, maxFullereneSize,
+                shape, scale,
                 limitedAreaId, series);
         }
     }

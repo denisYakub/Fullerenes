@@ -34,7 +34,7 @@ namespace Fullerenes.Server.Services.Services
 
             Fullerene avgFullerene = GenerateAvgSize(fullerenes);
 
-            double avgFullereneVolume = GenerateVolume(avgFullerene);
+            double avgFullereneVolume = avgFullerene.GenerateVolume();
 
             double sphereVolume = 4 * MathF.PI * MathF.Pow(sphereRadius, 3) / 3;
 
@@ -88,21 +88,6 @@ namespace Fullerenes.Server.Services.Services
                 IcosahedronFullerene => new IcosahedronFullerene(0, 0, 0, 0, 0, 0, avgSize),
                 _ => throw new NotImplementedException("We dont work with this kind of fullerene")
             };
-        }
-        private static float GenerateVolume(Fullerene fullerene)
-        {
-            int numberOfDotsInsideFullerene = 0;
-            const int numberOfDots = 1_000_000;
-
-            var dots = new Random().GetEvenlyRandoms(-fullerene.Size, fullerene.Size).Take(numberOfDots * 3).ToArray();
-
-            for (int i = 0; i < numberOfDots * 3; i += 3)
-            {
-                if (fullerene.Contains(new Vector3(dots[i], dots[i + 1], dots[i + 2])))
-                    numberOfDotsInsideFullerene++;
-            }
-
-            return MathF.Pow(2 * fullerene.Size, 3) * numberOfDotsInsideFullerene / numberOfDots;
         }
     }
 }

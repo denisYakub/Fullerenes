@@ -4,7 +4,7 @@ using Fullerenes.Server.Objects.CustomStructures;
 namespace Fullerenes.Server.Objects.Dtos
 {
     public record struct CreateFullerenesAndLimitedAreaRequest(
-        float AreaX, float AreaY, float AreaZ, float[] AreaAdditionalParams,
+        float AreaX, float AreaY, float AreaZ, (float[]? AreaParams, float? Nc) AreaAdditionalParams,
         int NumberOfF, float MinSizeF, float MaxSizeF, float MaxAlphaF, float MaxBetaF, float MaxGammaF,
         float Shape, float Scale, int NumberOfSeries) : IRequest
     {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Dtos;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
@@ -28,17 +29,14 @@ namespace Fullerenes.Server.Controllers
         public IActionResult CreateFullerenesAndLimitedArea([FromRoute] AreaTypes areaType, [FromRoute] FullereneTypes fullereneType,
             [FromBody] CreateFullerenesAndLimitedAreaRequest request)
         {
-            using(MiniProfiler.Current.Step("Общий процесс запроса"))
-            {
-                if (!request.IsCorrectRequest())
-                    return new BadRequestObjectResult("Something wrong with your request!");
+            if (!request.IsCorrectRequest())
+                return new BadRequestObjectResult("Something wrong with your request!");
 
-                var factory = factoryService.GetFactory(areaType, fullereneType, request);
+            FullereneAndLimitedAreaFactory factory = factoryService.GetFactory(areaType, fullereneType, request);
 
-                Task<int> result = createService.GenerateAreaAsync(factory);
+            Task<int> result = createService.GenerateAreaAsync(factory);
 
-                return new OkObjectResult(result.Result);
-            }
+            return new OkObjectResult(result.Result);
         }
         [AllowAnonymous]
         [HttpPost("create-density-of-fullerenes-in-layers/{areaId}/{seriesFs}/{numberOfLayers}/{numberOfDots}/{excess}")]

@@ -20,14 +20,14 @@ namespace Fullerenes.Server.Services.Services
 
             ArgumentNullException.ThrowIfNull(factory);
 
-            Octree<Parallelepiped, Fullerene> octree = GenerateOctree(limitedArea, factory.Request.NumberOfSeries);
-            octree.GenerateRegions(Parallelepiped.Split8Parts, p => p.Width > 3 * factory.Request.MaxSizeF);
+            Octree<Parallelepiped, Fullerene> octree = GenerateOctree(limitedArea, factory.NumberOfSeries);
+            octree.GenerateRegions(Parallelepiped.Split8Parts, p => p.Width > 3 * factory.FullereneSizeRange.MaxSizeFullerenes);
 
-            Parallel.For(0, factory.Request.NumberOfSeries, (i, state) =>
+            Parallel.For(0, factory.NumberOfSeries, (i, state) =>
             {
                 Thread.CurrentThread.Name = $"Thread-{i}";
 
-                var fullerenes = limitedArea.GenerateFullerenes(i, octree).Take(factory.Request.NumberOfF).ToList();
+                var fullerenes = limitedArea.GenerateFullerenes(i, octree).Take(factory.NumberOfFullerenes).ToList();
 
                 //dataBaseService.SaveFullerenes(fullerenes);
             });
