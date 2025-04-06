@@ -1,10 +1,5 @@
 ﻿using Fullerenes.Server.Objects.Fullerenes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FullerenesServerTests
 {
@@ -40,6 +35,20 @@ namespace FullerenesServerTests
             var point = new Vector3(1.82f, -0.39f, -3.64f);
 
             Assert.IsTrue(fullerene.Contains(point));
+        }
+        [TestMethod]
+        public void TestVolumeMethod()
+        {
+            var fullerene = new IcosahedronFullerene(
+                0, 0, 0,
+                0, 0, 0,
+                5);
+
+            var edgeLength = fullerene.GetEdgeSize();
+
+            var expectedVolume = (5 * (3 + Math.Sqrt(5)) / 12) * Math.Pow(edgeLength, 3);
+
+            Assert.IsTrue(expectedVolume - fullerene.GenerateVolume() <= 2);
         }
     }
 }

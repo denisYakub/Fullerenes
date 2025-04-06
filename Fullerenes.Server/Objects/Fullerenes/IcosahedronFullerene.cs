@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
@@ -51,10 +50,11 @@ namespace Fullerenes.Server.Objects.Fullerenes
 
         public override IReadOnlyCollection<int[]> Faces => _faces.Value;
 
-        public override float GenerateOuterSphereRadius() => Size;
+        public override float GenerateOuterSphereRadius() 
+            => 0.951f * GetEdgeSize();
 
         public override float GenerateInnerSphereRadius()
-            => MathF.Pow(Phi, 2) * Size / MathF.Sqrt(12);
+            => 0.7557f * GetEdgeSize();
 
         private static ICollection<Vector3> GenerateDefaultVerticesPositions(float size)
         {
@@ -112,18 +112,42 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public override float GenerateVolume()
         {
             int numberOfDotsInsideFullerene = 0;
-            const int numberOfDots = 1_000_000;
+            int samples = 1_000_000;
+            float radius = GenerateOuterSphereRadius();
 
-            var dots = Random.GetEvenlyRandoms(-Size, Size).Take(numberOfDots * 3).ToArray();
-
-
-            for (int i = 0; i < numberOfDots * 3; i += 3)
+            for (int i = 0; i < samples; i++)
             {
-                if (Contains(new Vector3(dots[i], dots[i + 1], dots[i + 2])))
+                Vector3 dot;
+
+                do
+                {
+                    float x = (float)(Random.NextDouble() * 2 - 1);
+                    float y = (float)(Random.NextDouble() * 2 - 1);
+                    float z = (float)(Random.NextDouble() * 2 - 1);
+
+                    dot = new Vector3(x, y, z);
+                }
+                while (dot.LengthSquared() > 1);
+
+                dot *= radius;
+
+                if(Contains(dot))
                     numberOfDotsInsideFullerene++;
             }
 
-            return MathF.Pow(2 * Size, 3) * numberOfDotsInsideFullerene / numberOfDots;
+            float outerSphereVolume = (4f / 3f) * MathF.PI * MathF.Pow(radius, 3);
+
+            return outerSphereVolume * numberOfDotsInsideFullerene / samples;
+        }
+
+        public override float GetEdgeSize()
+        {
+            var a = Vertices.ElementAt(Faces.ElementAt(0)[0]);
+            var b = Vertices.ElementAt(Faces.ElementAt(0)[1]);
+
+            return Vector3.Distance(
+                Vertices.ElementAt(Faces.ElementAt(0)[0]), 
+                Vertices.ElementAt(Faces.ElementAt(0)[1]));
         }
     }
 }
