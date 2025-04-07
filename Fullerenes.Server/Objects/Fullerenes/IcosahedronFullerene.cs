@@ -140,15 +140,10 @@ namespace Fullerenes.Server.Objects.Fullerenes
             return outerSphereVolume * numberOfDotsInsideFullerene / samples;
         }
 
-        public override float GetEdgeSize()
-        {
-            var a = Vertices.ElementAt(Faces.ElementAt(0)[0]);
-            var b = Vertices.ElementAt(Faces.ElementAt(0)[1]);
-
-            return Vector3.Distance(
-                Vertices.ElementAt(Faces.ElementAt(0)[0]), 
-                Vertices.ElementAt(Faces.ElementAt(0)[1]));
-        }
+        public override float GetEdgeSize() 
+            => Vector3.Distance(
+                new Vector3(-1, Phi, 0) * Size,
+                new Vector3(-Phi, 0, 1) * Size);
     }
 }
 
