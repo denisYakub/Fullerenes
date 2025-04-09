@@ -20,25 +20,51 @@ namespace Fullerenes.Server.Objects.Fullerenes
             float shape, float scale,
             int limitedAreaId, int series)
             : this(
-                  Random.GetEvenlyRandoms(minX, maxX).First(),
-                  Random.GetEvenlyRandoms(minY, maxY).First(),
-                  Random.GetEvenlyRandoms(minZ, maxZ).First(),
-                  Random.GetEvenlyRandoms(-maxAlpha, maxAlpha).First(),
-                  Random.GetEvenlyRandoms(-maxBeta, maxBeta).First(),
-                  Random.GetEvenlyRandoms(-maxGamma, maxGamma).First(),
+                  _random.GetEvenlyRandoms(minX, maxX).First(),
+                  _random.GetEvenlyRandoms(minY, maxY).First(),
+                  _random.GetEvenlyRandoms(minZ, maxZ).First(),
+                  _random.GetEvenlyRandoms(-maxAlpha, maxAlpha).First(),
+                  _random.GetEvenlyRandoms(-maxBeta, maxBeta).First(),
+                  _random.GetEvenlyRandoms(-maxGamma, maxGamma).First(),
                   new Gamma(shape, scale).GetGammaRandoms(minSize, maxSize).First())
             => (LimitedAreaId, Series) = (limitedAreaId, series);
 
+        private readonly object _lock = new();
+        private static readonly Random _random = new();
         private static readonly float Phi = (1 + MathF.Sqrt(5)) / 2;
 
-        private readonly Lazy<IReadOnlyCollection<int[]>> _faces = new(() => FiguresFaces.IcosahedronFacesIndices);
+        private static readonly IReadOnlyCollection<int[]> _faces = [
+            [0, 11, 5],
+            [0, 5, 1],
+            [0, 1, 7],
+            [0, 7, 10],
+            [0, 10, 11],
+            [1, 5, 9],
+            [5, 11, 4],
+            [11, 10, 2],
+            [10, 7, 6],
+            [7, 1, 8],
+            [3, 9, 4],
+            [3, 4, 2],
+            [3, 2, 6],
+            [3, 6, 8],
+            [3, 8, 9],
+            [4, 9, 5],
+            [2, 4, 11],
+            [6, 2, 10],
+            [8, 6, 7],
+            [9, 8, 1]
+        ];
+
         private ICollection<Vector3>? _vertices;
+
+        public override IReadOnlyCollection<int[]> Faces => _faces;
 
         public override ICollection<Vector3> Vertices
         {
             get
             {
-                lock (Lock)
+                lock (_lock)
                 {
                     return _vertices ??=
                         GenerateDefaultVerticesPositions(Size)
@@ -48,13 +74,16 @@ namespace Fullerenes.Server.Objects.Fullerenes
             }
         }
 
-        public override IReadOnlyCollection<int[]> Faces => _faces.Value;
-
         public override float GenerateOuterSphereRadius() 
             => 0.951f * GetEdgeSize();
 
         public override float GenerateInnerSphereRadius()
             => 0.7557f * GetEdgeSize();
+
+        public override float GetEdgeSize()
+            => Vector3.Distance(
+                new Vector3(-1, Phi, 0) * Size,
+                new Vector3(-Phi, 0, 1) * Size);
 
         private static ICollection<Vector3> GenerateDefaultVerticesPositions(float size)
         {
@@ -121,9 +150,9 @@ namespace Fullerenes.Server.Objects.Fullerenes
 
                 do
                 {
-                    float x = (float)(Random.NextDouble() * 2 - 1);
-                    float y = (float)(Random.NextDouble() * 2 - 1);
-                    float z = (float)(Random.NextDouble() * 2 - 1);
+                    float x = (float)(_random.NextDouble() * 2 - 1);
+                    float y = (float)(_random.NextDouble() * 2 - 1);
+                    float z = (float)(_random.NextDouble() * 2 - 1);
 
                     dot = new Vector3(x, y, z);
                 }
@@ -139,11 +168,6 @@ namespace Fullerenes.Server.Objects.Fullerenes
 
             return outerSphereVolume * numberOfDotsInsideFullerene / samples;
         }
-
-        public override float GetEdgeSize() 
-            => Vector3.Distance(
-                new Vector3(-1, Phi, 0) * Size,
-                new Vector3(-Phi, 0, 1) * Size);
     }
 }
 

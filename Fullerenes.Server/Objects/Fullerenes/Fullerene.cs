@@ -21,9 +21,6 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public abstract ICollection<Vector3> Vertices { get; }
         [NotMapped]
         public abstract IReadOnlyCollection<int[]> Faces { get; }
-
-        protected static readonly Random Random = new();
-        protected readonly object Lock = new();
         public abstract float GenerateOuterSphereRadius();
         public abstract float GenerateInnerSphereRadius();
         public abstract bool Inside(Parallelepiped parallelepiped);
