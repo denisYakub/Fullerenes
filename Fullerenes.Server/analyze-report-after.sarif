@@ -5,9 +5,9 @@
     {
       "tool": {
         "name": "Компилятор Microsoft (R) Visual C#",
-        "version": "4.12.0.0",
-        "fileVersion": "4.12.0-3.24572.7 (dfa7fc6b)",
-        "semanticVersion": "4.12.0",
+        "version": "4.11.0.0",
+        "fileVersion": "4.11.0-3.24460.3 (5649376e)",
+        "semanticVersion": "4.11.0",
         "language": "ru-RU"
       },
       "results": [
@@ -18,7 +18,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
                 "region": {
                   "startLine": 15,
                   "startColumn": 29,
@@ -39,7 +39,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
                 "region": {
                   "startLine": 16,
                   "startColumn": 13,
@@ -60,7 +60,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
                 "region": {
                   "startLine": 16,
                   "startColumn": 31,
@@ -81,7 +81,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
                 "region": {
                   "startLine": 15,
                   "startColumn": 32,

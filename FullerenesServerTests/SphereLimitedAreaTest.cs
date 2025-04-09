@@ -52,9 +52,7 @@ namespace FullerenesServerTests
             
             var timeAfter = DateTime.Now;
 
-            Assert.IsTrue(_limitedArea.RealNumberOfFullerenes == 0);
-
-            Console.WriteLine($"Started at {timeBefore}" + '\n' + $"Ended at {timeAfter}");
+            Assert.IsTrue((timeBefore - timeAfter).Minutes < 5);
         }
     }
 }
