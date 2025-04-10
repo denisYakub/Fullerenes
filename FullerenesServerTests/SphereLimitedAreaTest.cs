@@ -14,14 +14,13 @@ namespace FullerenesServerTests
         [TestMethod]
         public void TestGenerateFullerenesMethod()
         {
-            static IcosahedronFullerene CreateIcosaherdonFullerene(int limitedAreaId = default, int series = default)
+            static IcosahedronFullerene CreateIcosaherdonFullerene(int series = default)
             {
                 return new IcosahedronFullerene(
                     -3000, 3000, -3000, 3000, -3000, 3000,
                     360, 360, 360,
                     1, 10,
-                    3, 1.5f,
-                    limitedAreaId, series);
+                    3, 1.5f);
             }
 
             _limitedArea = new SphereLimitedArea(

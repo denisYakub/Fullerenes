@@ -6,14 +6,28 @@ namespace Fullerenes.Server.Objects.LimitedAreas
 {
     public class SphereLimitedArea : LimitedArea
     {
-        public float Radius { get; set; }
-        public SphereLimitedArea() : base(0, 0, 0, 0, null) => Radius = 0;
-        public SphereLimitedArea(float x, float y, float z, float r, int numberOfFullerene, Func<int, int, Fullerene> produceFullerene)
-            : base(x, y, z, numberOfFullerene, produceFullerene) => Radius = r;
-        public SphereLimitedArea(float x, float y, float z, float r, IEnumerable<Fullerene> fullerenes)
-            : base(x, y, z, 0, null) => (Radius, Fullerenes) = (r, fullerenes.ToList());
-        public override float GenerateOuterRadius() => Radius;
-        public override IEnumerable<Fullerene> GenerateFullerenes(int seriesFs, Octree<Parallelepiped, Fullerene> octree)
+        public SphereLimitedArea(
+            float x, float y, float z, float r, 
+            int numberOfFullerene, Func<int, Fullerene> produceFullerene)
+            : base(
+                  x, y, z, [("Radius", r)], 
+                  numberOfFullerene, produceFullerene) 
+        { }
+
+        public override float GenerateOuterRadius() => Params[0].param;
+
+        public override bool Contains(Fullerene fullerene)
+        {
+            ArgumentNullException.ThrowIfNull(fullerene);
+
+            return
+                FiguresCollision.SpheresInside(
+                    fullerene.Center, fullerene.GenerateOuterSphereRadius(),
+                    Center, Params[0].param);
+        }
+
+        public override IEnumerable<Fullerene> GenerateFullerenes(
+            int seriesFs, Octree<Parallelepiped, Fullerene> octree, bool clear = false)
         {
             ArgumentNullException.ThrowIfNull(octree);
             try
@@ -42,20 +56,21 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             }
             finally  
             {
-                //octree.ClearCurrentThreadCollection(seriesFs);
+                if(clear)
+                    octree.ClearCurrentThreadCollection(seriesFs);
             }
         }
 
-        public override bool Contains(Fullerene fullerene)
+        public override string ToString()
         {
-            ArgumentNullException.ThrowIfNull(fullerene);
-
-            return FiguresCollision.SpheresInside(fullerene.Center, fullerene.GenerateOuterSphereRadius(), Center, Radius);
+            return
+                "Center: " + Center + ", " +
+                "Parameters: " + string.Join(", ", Params.Select(val => val.name + ": " + val.param));
         }
 
         private Fullerene? TryToGenerateFullerene(int series, Octree<Parallelepiped, Fullerene> octree)
         {
-            var fullerene = ProduceFullerene?.Invoke(Id, series) ?? null;
+            var fullerene = ProduceFullerene?.Invoke(series) ?? null;
 
             return 
                 fullerene is not null && 

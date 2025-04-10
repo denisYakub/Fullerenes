@@ -20,9 +20,9 @@
               "resultFile": {
                 "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
                 "region": {
-                  "startLine": 15,
+                  "startLine": 16,
                   "startColumn": 29,
-                  "endLine": 15,
+                  "endLine": 16,
                   "endColumn": 47
                 }
               }
@@ -41,9 +41,9 @@
               "resultFile": {
                 "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
                 "region": {
-                  "startLine": 16,
+                  "startLine": 17,
                   "startColumn": 13,
-                  "endLine": 16,
+                  "endLine": 17,
                   "endColumn": 29
                 }
               }
@@ -62,9 +62,9 @@
               "resultFile": {
                 "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
                 "region": {
-                  "startLine": 16,
+                  "startLine": 17,
                   "startColumn": 31,
-                  "endLine": 16,
+                  "endLine": 17,
                   "endColumn": 47
                 }
               }
@@ -75,18 +75,60 @@
           }
         },
         {
-          "ruleId": "CS1998",
+          "ruleId": "CS9113",
           "level": "warning",
-          "message": "В данном асинхронном методе отсутствуют операторы await, поэтому метод будет выполняться синхронно. Воспользуйтесь оператором await для ожидания неблокирующих вызовов API или оператором await Task.Run(...) для выполнения связанных с ЦП заданий в фоновом потоке.",
+          "message": "Параметр \"testService\" не прочитан.",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Controllers/MainController.cs",
                 "region": {
-                  "startLine": 15,
-                  "startColumn": 32,
-                  "endLine": 15,
-                  "endColumn": 49
+                  "startLine": 18,
+                  "startColumn": 52,
+                  "endLine": 18,
+                  "endColumn": 63
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS9113",
+          "level": "warning",
+          "message": "Параметр \"dataBaseService\" не прочитан.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Controllers/MainController.cs",
+                "region": {
+                  "startLine": 19,
+                  "startColumn": 26,
+                  "endLine": 19,
+                  "endColumn": 41
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS9113",
+          "level": "warning",
+          "message": "Параметр \"mapper\" не прочитан.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Controllers/MainController.cs",
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 17,
+                  "endLine": 20,
+                  "endColumn": 23
                 }
               }
             }
@@ -97,11 +139,11 @@
         }
       ],
       "rules": {
-        "CS1998": {
-          "id": "CS1998",
-          "shortDescription": "В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод",
+        "CS9107": {
+          "id": "CS9107",
+          "shortDescription": "Параметр записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
           "defaultLevel": "warning",
-          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS1998)",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS9107)",
           "properties": {
             "category": "Compiler",
             "isEnabledByDefault": true,
@@ -111,11 +153,11 @@
             ]
           }
         },
-        "CS9107": {
-          "id": "CS9107",
-          "shortDescription": "Параметр записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
+        "CS9113": {
+          "id": "CS9113",
+          "shortDescription": "Параметр не прочитан.",
           "defaultLevel": "warning",
-          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS9107)",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS9113)",
           "properties": {
             "category": "Compiler",
             "isEnabledByDefault": true,

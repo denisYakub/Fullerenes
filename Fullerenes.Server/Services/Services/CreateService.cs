@@ -1,24 +1,23 @@
 ﻿using System.Numerics;
-using Fullerenes.Server.CustomLogger;
+using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using Fullerenes.Server.Services.IServices;
-using StackExchange.Profiling;
 
 namespace Fullerenes.Server.Services.Services
 {
     public class CreateService(IDataBaseService dataBaseService) : ICreateService
     {
-        public async Task<int> GenerateAreaAsync(FullereneAndLimitedAreaFactory factory)
+        public long GenerateArea(FullereneAndLimitedAreaFactory factory)
         {
+            ArgumentNullException.ThrowIfNull(factory);
+
             LimitedArea limitedArea = factory.CreateLimitedArea();
 
-            int savedAreaId = 0 /*= await dataBaseService.SaveAreaAsync(limitedArea).ConfigureAwait(false)*/;
-
-            ArgumentNullException.ThrowIfNull(factory);
+            long generationId = dataBaseService.GetGenerationId();
 
             Octree<Parallelepiped, Fullerene> octree = GenerateOctree(limitedArea, factory.NumberOfSeries);
             octree.GenerateRegions(Parallelepiped.Split8Parts, p => p.Width > 3 * factory.FullereneSizeRange.MaxSizeFullerenes);
@@ -27,15 +26,19 @@ namespace Fullerenes.Server.Services.Services
             {
                 Thread.CurrentThread.Name = $"Thread-{i}";
 
-                var fullerenes = limitedArea.GenerateFullerenes(i, octree).Take(factory.NumberOfFullerenes).ToList();
+                var fullerenes = limitedArea.GenerateFullerenes(i, octree).Take(factory.NumberOfFullerenes).ToArray();
 
-                //dataBaseService.SaveFullerenes(fullerenes);
+                SpData data = new(limitedArea, fullerenes, i, generationId);
+                dataBaseService.SaveData(data);
+
+                SpGen gen = new(factory.AreaType, factory.FullereneType, i, generationId, data.Id);
+                dataBaseService.SaveGen(gen);
             });
 
-            return savedAreaId;
+            return generationId;
         }
         
-        public async Task<(float[], float)> GenerateDensityAsync(int areaId, int seriesFs, int numberOfLayers, int numberOfPoints)
+        /*public async Task<(float[], float)> GenerateDensityAsync(int areaId, int seriesFs, int numberOfLayers, int numberOfPoints)
         {
             var limitedArea = await dataBaseService.GetAreaWithFullerenesAsync(areaId, seriesFs).ConfigureAwait(false);
 
@@ -71,13 +74,13 @@ namespace Fullerenes.Server.Services.Services
             excessResult /= numberOfLayers < 5 ? numberOfLayers : 5;
 
             return (densityResult, excessResult);
-        }
+        }*/
 
         private static Octree<Parallelepiped, Fullerene> GenerateOctree(LimitedArea limitedArea, int threadsNumber)
         {
             (float height, float width, float length) = limitedArea switch
             {
-                SphereLimitedArea sphere => (2 * sphere.Radius, 2 * sphere.Radius, 2 * sphere.Radius),
+                SphereLimitedArea sphere => (2 * sphere.GenerateOuterRadius(), 2 * sphere.GenerateOuterRadius(), 2 * sphere.GenerateOuterRadius()),
                 _ => throw new NotImplementedException("Cannot get (w, h, l) of limited area"),
             };
 

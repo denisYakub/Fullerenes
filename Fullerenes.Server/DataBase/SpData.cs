@@ -28,12 +28,12 @@ namespace Fullerenes.Server.DataBase
             ArgumentNullException.ThrowIfNull(fullerenes);
 
             FileName = "Generation_" + n + '_' + series + ".txt";
-            FilePath = GenerateDataFile(area, fullerenes).Result;
+            FilePath = GenerateDataFile(area, fullerenes);
         }
 
         public SpData() : this (null, [], -1, -1) { }
 
-        private async Task<string> GenerateDataFile(LimitedArea area, IEnumerable<Fullerene> fullerenes)
+        private string GenerateDataFile(LimitedArea area, IEnumerable<Fullerene> fullerenes)
         {
             string fullFolderPath = Path.Combine(
                 AppContext.BaseDirectory, 
@@ -46,20 +46,20 @@ namespace Fullerenes.Server.DataBase
 
             using (var stream = File.CreateText(fullPath))
             {
-                await stream.WriteLineAsync("Limited Area:").ConfigureAwait(true);
-                await stream.WriteLineAsync(area.ToString()).ConfigureAwait(true);
+                stream.WriteLine("Limited Area:");
+                stream.WriteLine(area.ToString());
             }
 
             using (var stream = File.AppendText(fullPath))
             {
-                await stream.WriteLineAsync("Fullerenes: [").ConfigureAwait(true);
+                stream.WriteLine("Fullerenes: [");
 
                 foreach (var fullerene in fullerenes)
                 {
-                    await stream.WriteLineAsync(fullerene.ToString()).ConfigureAwait(true);
+                    stream.WriteLine(fullerene.ToString());
                 }
 
-                await stream.WriteLineAsync(']').ConfigureAwait(true);
+                stream.WriteLine(']');
             }
 
             return fullPath;

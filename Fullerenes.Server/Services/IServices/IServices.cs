@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
+using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Dtos;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
-using Fullerenes.Server.Objects.LimitedAreas;
 
 namespace Fullerenes.Server.Services.IServices
 {
@@ -17,16 +17,12 @@ namespace Fullerenes.Server.Services.IServices
     }
     public interface IDataBaseService
     {
-        void SaveFullerenes(IEnumerable<Fullerene> fullerenes);
-        Task<int> SaveAreaAsync(LimitedArea limitedArea);
-        Task<LimitedArea> GetAreaWithFullerenesAsync(int areaId);
-        Task<float> GetFullereneMaxSizeAsync(int areaId);
-        Task<LimitedArea> GetAreaOnlyAsync(int areaId);
-        Task<LimitedArea> GetAreaWithFullerenesAsync(int areaId, int seriesFs);
+        long GetGenerationId();
+        void SaveData(SpData data);
+        void SaveGen(SpGen gen);
     }
     public interface ICreateService
     {
-        Task<int> GenerateAreaAsync(FullereneAndLimitedAreaFactory factory);
-        Task<(float[], float)> GenerateDensityAsync(int areaId, int seriesFs, int numberOfLayers, int numberOfPoints);
+        long GenerateArea(FullereneAndLimitedAreaFactory factory);
     }
 }

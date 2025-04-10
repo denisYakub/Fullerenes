@@ -7,29 +7,23 @@ using Fullerenes.Server.Objects.LimitedAreas;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
-    public abstract class Fullerene(float x, float y, float z,
-        float praecessioAngle, float nutatioAngle, float properRotationAngle, float size)
+    public abstract class Fullerene(
+        float x, float y, float z,
+        float praecessioAngle, float nutatioAngle, float properRotationAngle, 
+        float size)
     {
-        public int Id { get; set; }
-        public int Series { get; set; }
-        public int LimitedAreaId { get; set; }
-        public LimitedArea? LimitedArea { get; set; }
-        public Vector3 Center { get; init; } = new(x, y, z);
-        public EulerAngles EulerAngles { get; init; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
         public float Size { get; init; } = size;
-        [NotMapped]
+        public Vector3 Center { get; init; } = new(x, y, z);
         public abstract ICollection<Vector3> Vertices { get; }
-        [NotMapped]
         public abstract IReadOnlyCollection<int[]> Faces { get; }
+        public EulerAngles EulerAngles { get; init; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
+        public abstract bool PartInside(Parallelepiped parallelepiped);
+        public abstract bool Inside(Parallelepiped parallelepiped);
         public abstract float GenerateOuterSphereRadius();
         public abstract float GenerateInnerSphereRadius();
-        public abstract bool Inside(Parallelepiped parallelepiped);
-        public abstract bool PartInside(Parallelepiped parallelepiped);
         public abstract float GenerateVolume();
         public abstract float GetEdgeSize();
-        public virtual bool Intersect(IReadOnlyCollection<Fullerene> fullerenes) =>
-            fullerenes.Any() &&
-            fullerenes.AsParallel().Any(Intersect);
+
         public virtual bool Intersect(Fullerene fullerene)
         {
             ArgumentNullException.ThrowIfNull(fullerene);

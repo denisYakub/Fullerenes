@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Fullerenes.Server.CustomLogger;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Dtos;
 using Fullerenes.Server.Objects.Enums;
@@ -34,41 +35,15 @@ namespace Fullerenes.Server.Controllers
 
             FullereneAndLimitedAreaFactory factory = factoryService.GetFactory(areaType, fullereneType, request);
 
-            Task<int> result = createService.GenerateAreaAsync(factory);
+            var before = DateTime.Now;
 
-            return new OkObjectResult(result.Result);
-        }
-        [AllowAnonymous]
-        [HttpPost("create-density-of-fullerenes-in-layers/{areaId}/{seriesFs}/{numberOfLayers}/{numberOfDots}/{excess}")]
-        public IActionResult CreateDensityOfFullerenesInLayers([FromRoute] int areaId, [FromRoute] int seriesFs,
-            [FromRoute] int numberOfLayers, [FromRoute] int numberOfDots, [FromRoute] double excess)
-        {
-            var result = createService.GenerateDensityAsync(areaId, seriesFs, numberOfLayers, numberOfDots);
+            var result = createService.GenerateArea(factory);
 
-            return new OkObjectResult(result.Result);
-        }
-        [AllowAnonymous]
-        [HttpPost("run-tests-on-fullerenes-collision-in-limited-area/{areaType}/{fullereneType}")]
-        public IActionResult RunTestsOnFullerenesCollision([FromRoute] AreaTypes areaType, [FromRoute] FullereneTypes fullereneType,
-            [FromBody] LimitedAreaWithFullerenesRequest request)
-        {
-            if (!request.IsCorrectRequest())
-                return new BadRequestObjectResult("Something wrong with your request!");
+            var after = DateTime.Now;
 
-            var mappedFs = mapper.Map<List<Fullerene>>(request.Fullerenes);
+            Print.PrintToConsole((after - before).Minutes + " min");
 
-            var result = testService.CheckFullerenesIntersectionAsync(mappedFs, request.Center,
-                request.Parameters[0]);
-
-            return new OkObjectResult(result.Result);
-        }
-        [AllowAnonymous]
-        [HttpGet("get-fullerenes-and-limited-area/{areaId}")]
-        public IActionResult GetFullerenesAndLimitedArea([FromRoute] int areaId)
-        {
-            var result = dataBaseService.GetAreaWithFullerenesAsync(areaId);
-
-            return new OkObjectResult(result.Result);
+            return new OkObjectResult(result);
         }
     }
 }

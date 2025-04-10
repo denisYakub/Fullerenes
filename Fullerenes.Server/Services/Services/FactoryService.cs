@@ -14,17 +14,17 @@ namespace Fullerenes.Server.Services.Services
     {
         public FullereneAndLimitedAreaFactory GetFactory(AreaTypes areaType, FullereneTypes fullereneType, CreateFullerenesAndLimitedAreaRequest request)
         {
-            float areaRadius = 0;
+            float areaRadius;
 
             if (request.AreaAdditionalParams.Nc is not null)
             {
 
                 float nc = (float)request.AreaAdditionalParams.Nc;
 
-                float sumVFullerenes = 
+                float sumVFullerenes =
                     GenerateAvgSumOfFullerenes(
-                        request.NumberOfF, fullereneType, 
-                        request.MinSizeF, request.MaxSizeF, 
+                        request.NumberOfF, fullereneType,
+                        request.MinSizeF, request.MaxSizeF,
                         request.Shape, request.Scale);
 
                 switch (areaType)
@@ -36,7 +36,17 @@ namespace Fullerenes.Server.Services.Services
                         throw new NotImplementedException("We are not working with this type of limited area!");
                 }
             }
-
+            else
+            {
+                switch (areaType)
+                {
+                    case AreaTypes.Sphere:
+                        areaRadius = request.AreaAdditionalParams.AreaParams![0];
+                        break;
+                    default:
+                        throw new NotImplementedException("We are not working with this type of limited area!");
+                }
+            }
             return (typeLA: areaType, typeF: fullereneType) switch
             {
                 (AreaTypes.Sphere, FullereneTypes.Icosahedron) => new IcosahedronFullereneAndSphereLimitedAreaFactory(

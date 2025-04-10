@@ -6,8 +6,14 @@ using MathNet.Numerics.Distributions;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
-    public class IcosahedronFullerene(float x, float y, float z, float alpha, float beta, float gamma, float size) 
-        : Fullerene(x, y, z, alpha, beta, gamma, size)
+    public class IcosahedronFullerene(
+        float x, float y, float z, 
+        float alpha, float beta, float gamma, 
+        float size) 
+        : Fullerene(
+            x, y, z, 
+            alpha, beta, gamma, 
+            size)
     {
         public IcosahedronFullerene() 
             : this(0, 0, 0, 0, 0, 0, 0) { }
@@ -17,8 +23,7 @@ namespace Fullerenes.Server.Objects.Fullerenes
             float maxY, float minZ, float maxZ,
             float maxAlpha, float maxBeta, float maxGamma,
             float minSize, float maxSize,
-            float shape, float scale,
-            int limitedAreaId, int series)
+            float shape, float scale)
             : this(
                   _random.GetEvenlyRandoms(minX, maxX).First(),
                   _random.GetEvenlyRandoms(minY, maxY).First(),
@@ -27,12 +32,13 @@ namespace Fullerenes.Server.Objects.Fullerenes
                   _random.GetEvenlyRandoms(-maxBeta, maxBeta).First(),
                   _random.GetEvenlyRandoms(-maxGamma, maxGamma).First(),
                   new Gamma(shape, scale).GetGammaRandoms(minSize, maxSize).First())
-            => (LimitedAreaId, Series) = (limitedAreaId, series);
+        { }
 
         private readonly object _lock = new();
         private static readonly Random _random = new();
         private static readonly float Phi = (1 + MathF.Sqrt(5)) / 2;
 
+        public override IReadOnlyCollection<int[]> Faces => _faces;
         private static readonly IReadOnlyCollection<int[]> _faces = [
             [0, 11, 5],
             [0, 5, 1],
@@ -57,9 +63,6 @@ namespace Fullerenes.Server.Objects.Fullerenes
         ];
 
         private ICollection<Vector3>? _vertices;
-
-        public override IReadOnlyCollection<int[]> Faces => _faces;
-
         public override ICollection<Vector3> Vertices
         {
             get
@@ -167,6 +170,11 @@ namespace Fullerenes.Server.Objects.Fullerenes
             float outerSphereVolume = (4f / 3f) * MathF.PI * MathF.Pow(radius, 3);
 
             return outerSphereVolume * numberOfDotsInsideFullerene / samples;
+        }
+
+        public override string ToString()
+        {
+            return string.Join(", ", Vertices);
         }
     }
 }
