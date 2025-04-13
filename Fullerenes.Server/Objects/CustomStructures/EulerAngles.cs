@@ -59,5 +59,10 @@ namespace Fullerenes.Server.Objects.CustomStructures
                     Math.Abs(NutatioAngle - other.NutatioAngle) < 0.0001 &&
                     Math.Abs(ProperRotationAngle - other.ProperRotationAngle) < 0.0001;
         }
+
+        public override string ToString()
+        {
+            return $"<{PraecessioAngle}, {NutatioAngle}, {ProperRotationAngle}>";
+        }
     }
 }
