@@ -1,4 +1,5 @@
-﻿using Fullerenes.Server.Objects.Dtos;
+﻿using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.Dtos;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
@@ -15,7 +16,8 @@ namespace Fullerenes.Server.Factories.AbstractFactories
         public AreaTypes AreaType { get; init; } = areaType;
         public FullereneTypes FullereneType { get; init; } = fullereneType;
         public (float MinSizeFullerene, float MaxSizeFullerenes) FullereneSizeRange { get; init; } = new(minSizeFullerene, maxSizeFullerene);
-        public abstract LimitedArea CreateLimitedArea();
-        public abstract Fullerene CreateFullerene(int series);
+        public abstract LimitedArea CreateLimitedArea(int series);
+        public abstract Fullerene CreateFullerene();
+        public Octree<Parallelepiped, Fullerene> Octree { get; init; }
     }
 }

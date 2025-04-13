@@ -12,7 +12,9 @@ namespace Fullerenes.Server.Services.Services
 {
     public class FactoryService : IFactoryService
     {
-        public FullereneAndLimitedAreaFactory GetFactory(AreaTypes areaType, FullereneTypes fullereneType, CreateFullerenesAndLimitedAreaRequest request)
+        public FullereneAndLimitedAreaFactory GetFactory(
+            AreaTypes areaType, FullereneTypes fullereneType, 
+            CreateFullerenesAndLimitedAreaRequest request)
         {
             float areaRadius;
 

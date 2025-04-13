@@ -6,6 +6,7 @@ using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using Fullerenes.Server.Services.IServices;
+using static MessagePack.GeneratedMessagePackResolver.Fullerenes.Server.Objects;
 
 namespace Fullerenes.Server.Services.Services
 {
@@ -15,20 +16,18 @@ namespace Fullerenes.Server.Services.Services
         {
             ArgumentNullException.ThrowIfNull(factory);
 
-            LimitedArea limitedArea = factory.CreateLimitedArea();
-
             long generationId = dataBaseService.GetGenerationId();
-
-            Octree<Parallelepiped, Fullerene> octree = GenerateOctree(limitedArea, factory.NumberOfSeries);
-            octree.GenerateRegions(Parallelepiped.Split8Parts, p => p.Width > 3 * factory.FullereneSizeRange.MaxSizeFullerenes);
 
             Parallel.For(0, factory.NumberOfSeries, (i, state) =>
             {
-                Thread.CurrentThread.Name = $"Thread-{i}";
 
-                var fullerenes = limitedArea.GenerateFullerenes(i, octree).Take(factory.NumberOfFullerenes).ToArray();
+                LimitedArea limitedArea = factory.CreateLimitedArea(i);
 
-                SpData data = new(limitedArea, fullerenes, i, generationId);
+                limitedArea.StartGeneration(factory.NumberOfFullerenes);
+
+                ArgumentNullException.ThrowIfNull(limitedArea.Fullerenes);
+
+                SpData data = new(limitedArea, limitedArea.Fullerenes.ToArray(), i, generationId);
                 dataBaseService.SaveData(data);
 
                 SpGen gen = new(factory.AreaType, factory.FullereneType, i, generationId, data.Id);
@@ -71,26 +70,6 @@ namespace Fullerenes.Server.Services.Services
             }
             
             return phis;
-        }
-
-        private static Octree<Parallelepiped, Fullerene> GenerateOctree(LimitedArea limitedArea, int threadsNumber)
-        {
-            (float height, float width, float length) = limitedArea switch
-            {
-                SphereLimitedArea sphere => (2 * sphere.GenerateOuterRadius(), 2 * sphere.GenerateOuterRadius(), 2 * sphere.GenerateOuterRadius()),
-                _ => throw new NotImplementedException("Cannot get (w, h, l) of limited area"),
-            };
-
-            return new Octree<Parallelepiped, Fullerene>(
-                new Parallelepiped
-                {
-                    Center = limitedArea.Center,
-                    Height = height,
-                    Width = width,
-                    Length = length,
-                },
-                threadsNumber
-            );
         }
 
         private static IEnumerable<float> GenerateRadii(float mainRadius, int numberOfLayers)
