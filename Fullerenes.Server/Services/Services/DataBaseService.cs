@@ -40,5 +40,13 @@ namespace Fullerenes.Server.Services.Services
 
             _semaphore.Release();
         }
+
+        public string? GetDataPath(long superId)
+        {
+            return context
+                .SpData
+                .Find(superId)
+                ?.FilePath;
+       }
     }
 }

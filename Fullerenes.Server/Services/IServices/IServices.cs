@@ -20,9 +20,11 @@ namespace Fullerenes.Server.Services.IServices
         long GetGenerationId();
         void SaveData(SpData data);
         void SaveGen(SpGen gen);
+        string? GetDataPath(long superId);
     }
     public interface ICreateService
     {
         long GenerateArea(FullereneAndLimitedAreaFactory factory);
+        Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
     }
 }

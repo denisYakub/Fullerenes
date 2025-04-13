@@ -12,69 +12,6 @@
       },
       "results": [
         {
-          "ruleId": "CS9107",
-          "level": "warning",
-          "message": "Параметр \"int numberOfFullerenes\" записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
-                "region": {
-                  "startLine": 16,
-                  "startColumn": 29,
-                  "endLine": 16,
-                  "endColumn": 47
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CS9107",
-          "level": "warning",
-          "message": "Параметр \"float minFullereneSize\" записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
-                "region": {
-                  "startLine": 17,
-                  "startColumn": 13,
-                  "endLine": 17,
-                  "endColumn": 29
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CS9107",
-          "level": "warning",
-          "message": "Параметр \"float maxFullereneSize\" записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
-                "region": {
-                  "startLine": 17,
-                  "startColumn": 31,
-                  "endLine": 17,
-                  "endColumn": 47
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
           "ruleId": "CS9113",
           "level": "warning",
           "message": "Параметр \"testService\" не прочитан.",
@@ -129,6 +66,69 @@
                   "startColumn": 17,
                   "endLine": 20,
                   "endColumn": 23
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS9107",
+          "level": "warning",
+          "message": "Параметр \"int numberOfFullerenes\" записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
+                "region": {
+                  "startLine": 16,
+                  "startColumn": 29,
+                  "endLine": 16,
+                  "endColumn": 47
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS9107",
+          "level": "warning",
+          "message": "Параметр \"float minFullereneSize\" записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 13,
+                  "endLine": 17,
+                  "endColumn": 29
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS9107",
+          "level": "warning",
+          "message": "Параметр \"float maxFullereneSize\" записан в состоянии включающего типа, а его значение также передается базовому конструктору. Значение также может быть записано базовым классом.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Factories/Factories/IcosahedronFullereneAndSphereLimitedAreaFactory.cs",
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 31,
+                  "endLine": 17,
+                  "endColumn": 47
                 }
               }
             }

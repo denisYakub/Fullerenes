@@ -1,23 +1,26 @@
 ﻿using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
+using MessagePack;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Fullerenes.Server.DataBase
 {
     [Table("sp_data")]
     public class SpData
     {
-        [Key]
+        [System.ComponentModel.DataAnnotations.Key]
         [Column("super_id")]
         public long Id { get; set; }
         [Required]
         [Column("path_to_file")]
         public string FilePath { get; set; }
         [NotMapped]
-        public static string FolderName { get; private set; } = "OutPutFiles";
+        public static string FolderNameBin { get; private set; } = "OutPutFilesBin";
         [NotMapped]
         public string FileName {  get; init; }
 
@@ -28,41 +31,44 @@ namespace Fullerenes.Server.DataBase
             ArgumentNullException.ThrowIfNull(fullerenes);
 
             FileName = "Generation_" + n + '_' + series + ".txt";
-            FilePath = GenerateDataFile(area, fullerenes);
+            FilePath = GenerateDataFileBin(area, fullerenes, FileName);
         }
 
         public SpData() : this (null, [], -1, -1) { }
 
-        private string GenerateDataFile(LimitedArea area, IEnumerable<Fullerene> fullerenes)
+        public static string GenerateDataFileBin(LimitedArea area, IEnumerable<Fullerene> fullerenes, string fileName)
         {
+            ArgumentNullException.ThrowIfNull(area);
+            ArgumentNullException.ThrowIfNull(fullerenes);
+
             string fullFolderPath = Path.Combine(
-                AppContext.BaseDirectory, 
-                FolderName);
+                AppContext.BaseDirectory,
+                FolderNameBin);
 
             if (!Directory.Exists(fullFolderPath))
                 Directory.CreateDirectory(fullFolderPath);
 
-            string fullPath = Path.Combine(fullFolderPath, FileName);
+            string fullPath = Path.Combine(fullFolderPath, fileName);
 
-            using (var stream = File.CreateText(fullPath))
-            {
-                stream.WriteLine("Limited Area:");
-                stream.WriteLine(area.ToString());
-            }
+            area.Fullerenes = fullerenes.ToImmutableArray();
 
-            using (var stream = File.AppendText(fullPath))
-            {
-                stream.WriteLine("Fullerenes: [");
+            var areaBytes = MessagePackSerializer.Serialize(area);
 
-                foreach (var fullerene in fullerenes)
-                {
-                    stream.WriteLine(fullerene.ToString());
-                }
-
-                stream.WriteLine(']');
-            }
+            File.WriteAllBytes(fullPath, areaBytes);
 
             return fullPath;
+        }
+
+        public static LimitedArea GetDataFormFileBin(string fullFilePath)
+        {
+            if (!File.Exists(fullFilePath))
+                throw new FileNotFoundException();
+
+            var areaBytes = File.ReadAllBytes(fullFilePath);
+
+            LimitedArea area = MessagePackSerializer.Deserialize<LimitedArea>(areaBytes);
+
+            return area;
         }
     }
 }

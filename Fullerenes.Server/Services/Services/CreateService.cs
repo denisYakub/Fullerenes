@@ -38,43 +38,40 @@ namespace Fullerenes.Server.Services.Services
             return generationId;
         }
         
-        /*public async Task<(float[], float)> GenerateDensityAsync(int areaId, int seriesFs, int numberOfLayers, int numberOfPoints)
+        public async Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000)
         {
-            var limitedArea = await dataBaseService.GetAreaWithFullerenesAsync(areaId, seriesFs).ConfigureAwait(false);
+            string? genData = dataBaseService.GetDataPath(superId);
 
-            var limitedAreaR = limitedArea.GenerateOuterRadius();
+            ArgumentNullException.ThrowIfNull(genData);
 
-            var radii = GenerateRadii(limitedAreaR, numberOfLayers).ToArray();
-            var dots = GenerateDots(limitedArea.Center, limitedAreaR).Take(numberOfPoints);
+            var data = SpData.GetDataFormFileBin(genData);
+
+            var radii = GenerateRadii(data.GenerateOuterRadius(), numberOfLayers);
+
+            var points = GenerateDots(data.Center, data.GenerateOuterRadius()).Take(numberOfPoints);
 
             var tasks = new Task<(int dotsInFullerene, int dotsInLayer)>[numberOfLayers];
 
             for (int i = 0; i < numberOfLayers; i++)
             {
-                float rMin = radii[i], rMax = radii[i + 1];
+                float rMin = radii.ElementAt(i), rMax = radii.ElementAt(i + 1);
 
-                var task = new Task<(int dotsInFullerene, int dotsInLayer)>(() => CountDotsHit(dots, limitedArea.Fullerenes ?? [], limitedArea.Center, rMin, rMax));
+                var task = new Task<(int dotsInFullerene, int dotsInLayer)>(() => CountDotsHit(points, data.Fullerenes ?? [], data.Center, rMin, rMax));
                 tasks[i] = task;
                 task.Start();
             }
 
-            var results = await Task.WhenAll(tasks).ConfigureAwait(false);
+            var taskResults = await Task.WhenAll(tasks).ConfigureAwait(false);
 
-            var densityResult = new float[numberOfLayers];
-            float excessResult = 0;
+            var phis = new float[numberOfLayers];
 
             for (int i = 0; i < numberOfLayers; i++)
             {
-                densityResult[i] = results[i].dotsInFullerene / results[i].dotsInLayer;
-
-                if (i < 5)
-                    excessResult = results[i].dotsInFullerene / results[i].dotsInLayer;
+                phis[i] = taskResults[i].dotsInFullerene / taskResults[i].dotsInLayer;
             }
-
-            excessResult /= numberOfLayers < 5 ? numberOfLayers : 5;
-
-            return (densityResult, excessResult);
-        }*/
+            
+            return phis;
+        }
 
         private static Octree<Parallelepiped, Fullerene> GenerateOctree(LimitedArea limitedArea, int threadsNumber)
         {

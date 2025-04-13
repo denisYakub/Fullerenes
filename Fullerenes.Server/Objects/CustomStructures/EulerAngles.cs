@@ -1,9 +1,15 @@
-﻿namespace Fullerenes.Server.Objects.CustomStructures
+﻿using MessagePack;
+
+namespace Fullerenes.Server.Objects.CustomStructures
 {
+    [MessagePackObject]
     public readonly struct EulerAngles : IEquatable<EulerAngles>
     {
+        [Key(0)]
         public float PraecessioAngle { get; init; }
+        [Key(1)]
         public float NutatioAngle { get; init; }
+        [Key(2)]
         public float ProperRotationAngle { get; init; }
         public EulerAngles(float praecessioAngle, float nutatioAngle, float properRotationAngle)
         {

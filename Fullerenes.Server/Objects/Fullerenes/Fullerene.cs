@@ -4,18 +4,26 @@ using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.LimitedAreas;
+using MessagePack;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
+    [MessagePackObject]
+    [Union(0, typeof(IcosahedronFullerene))]
     public abstract class Fullerene(
         float x, float y, float z,
         float praecessioAngle, float nutatioAngle, float properRotationAngle, 
         float size)
     {
+        [Key(0)]
         public float Size { get; init; } = size;
+        [Key(1)]
         public Vector3 Center { get; init; } = new(x, y, z);
+        [Key(3)]
         public abstract ICollection<Vector3> Vertices { get; }
+        [IgnoreMember]
         public abstract IReadOnlyCollection<int[]> Faces { get; }
+        [Key(4)]
         public EulerAngles EulerAngles { get; init; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
         public abstract bool PartInside(Parallelepiped parallelepiped);
         public abstract bool Inside(Parallelepiped parallelepiped);

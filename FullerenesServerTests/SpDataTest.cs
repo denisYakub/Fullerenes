@@ -29,5 +29,28 @@ namespace FullerenesServerTests
 
             _spData = new(area, fullerenes, 0, 0);
         }
+
+        [TestMethod]
+        public void TestGenerateAndGetDataFileBin()
+        {
+            LimitedArea area = new SphereLimitedArea(
+                1, 2, 3, 10,
+                10, null);
+
+            Fullerene[] fullerenes = [
+                new IcosahedronFullerene(1, 1, 1, 0, 0, 0, 5),
+                new IcosahedronFullerene(2, 2, 2, 0, 0, 0, 10),
+                new IcosahedronFullerene(3, 3, 3, 0, 0, 0, 15),
+            ];
+
+            area.Fullerenes = fullerenes;
+
+            string path = SpData.GenerateDataFileBin(area, fullerenes, "TestBin.txt");
+
+            var data = SpData.GetDataFormFileBin(path);
+
+            Assert.IsNotNull(data.Fullerenes);
+            Assert.IsTrue(data.Params[0].param == 10);
+        }
     }
 }

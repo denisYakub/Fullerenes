@@ -1,19 +1,18 @@
 ﻿using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Fullerenes;
+using MessagePack;
 
 namespace Fullerenes.Server.Objects.LimitedAreas
 {
-    public class SphereLimitedArea : LimitedArea
+    [MessagePackObject]
+    public class SphereLimitedArea(
+        float x, float y, float z, float r,
+        int numberOfFullerene, Func<int, Fullerene> produceFullerene) : LimitedArea(
+              x, y, z, [("Radius", r)], 
+              numberOfFullerene, produceFullerene)
     {
-        public SphereLimitedArea(
-            float x, float y, float z, float r, 
-            int numberOfFullerene, Func<int, Fullerene> produceFullerene)
-            : base(
-                  x, y, z, [("Radius", r)], 
-                  numberOfFullerene, produceFullerene) 
-        { }
-
+        public SphereLimitedArea() : this(0, 0, 0, 0, 0, null) { }
         public override float GenerateOuterRadius() => Params[0].param;
 
         public override bool Contains(Fullerene fullerene)

@@ -3,9 +3,11 @@ using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
 using MathNet.Numerics.Distributions;
+using MessagePack;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
+    [MessagePackObject]
     public class IcosahedronFullerene(
         float x, float y, float z, 
         float alpha, float beta, float gamma, 
