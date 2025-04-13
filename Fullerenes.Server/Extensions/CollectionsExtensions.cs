@@ -12,6 +12,7 @@ namespace Fullerenes.Server.Extensions
             ArgumentNullException.ThrowIfNull(facesIndices);
 
             var edgeSet = new HashSet<(int, int)>();
+            var result = new List<Vector3>(vertices);
 
             foreach (var face in facesIndices)
             {
@@ -24,11 +25,11 @@ namespace Fullerenes.Server.Extensions
                     if (!edgeSet.Add(edge)) continue;
 
                     Vector3 midpoint = (vertices.ElementAt(v1) + vertices.ElementAt(v2)) / 2;
-                    vertices.Add(midpoint);
+                    result.Add(midpoint);
                 }
             }
 
-            return vertices;
+            return result;
         }
         public static ICollection<Vector3> Shift(this ICollection<Vector3> vertices, Vector3 dot)
         {
