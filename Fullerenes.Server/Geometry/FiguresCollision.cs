@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 
 namespace Fullerenes.Server.Geometry
 {

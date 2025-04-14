@@ -3,6 +3,7 @@ using System.Numerics;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.LimitedAreas;
 using MessagePack;
 
@@ -25,8 +26,6 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public abstract IReadOnlyCollection<int[]> Faces { get; }
         [Key(4)]
         public EulerAngles EulerAngles { get; init; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
-        public abstract bool PartInside(Parallelepiped parallelepiped);
-        public abstract bool Inside(Parallelepiped parallelepiped);
         public abstract float GenerateOuterSphereRadius();
         public abstract float GenerateInnerSphereRadius();
         public abstract float GenerateVolume();

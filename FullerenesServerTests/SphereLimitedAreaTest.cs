@@ -1,4 +1,5 @@
-﻿using Fullerenes.Server.Objects.CustomStructures;
+﻿using Fullerenes.Server.Objects.CustomStructures.Octree;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 
@@ -14,13 +15,13 @@ namespace FullerenesServerTests
         static float areaX = 0, areaY = 0, areaZ = 0, areaR = 300;
 
         private LimitedArea _limitedArea;
-        private Octree<Parallelepiped, Fullerene> _octree; 
+        private IOctree<Fullerene> _octree; 
 
         [TestMethod]
         public void TestGenerateFullerenesMethod()
         {
 
-            _octree = new Octree<Parallelepiped, Fullerene>(
+            _octree = new Octree<Fullerene>(
                 new Parallelepiped
                 {
                     Center = new(areaX, areaY, areaZ),
@@ -30,7 +31,7 @@ namespace FullerenesServerTests
                 },
                 numberOfSeries);
 
-            _octree.GenerateRegions(Parallelepiped.Split8Parts, p => p.Width > 3 * 10);
+            _octree.StartRegionGeneration(10);
 
             static IcosahedronFullerene CreateIcosaherdonFullerene()
             {
@@ -42,8 +43,6 @@ namespace FullerenesServerTests
             }
 
             List<Fullerene>[] areas = new List<Fullerene>[numberOfSeries];
-
-            LimitedArea.ClearOctreeCollection = true;
 
             var timeBefore = DateTime.Now;
 

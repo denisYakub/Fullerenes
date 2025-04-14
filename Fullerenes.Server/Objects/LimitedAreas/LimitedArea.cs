@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
-using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.CustomStructures.Octree;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using MessagePack;
 
@@ -9,11 +10,11 @@ namespace Fullerenes.Server.Objects.LimitedAreas
     [Union(0, typeof(SphereLimitedArea))]
     public abstract class LimitedArea(
         float x, float y, float z, (string name, float param)[] parameters,
-        Octree<Parallelepiped, Fullerene> octree, int series,
+        IOctree<Fullerene> octree, int series,
         Func<Fullerene>? produceFullerene)
     {
         protected static readonly int RetryCountMax = 100;
-        protected Octree<Parallelepiped, Fullerene> Octree = octree;
+        protected IOctree<Fullerene> Octree = octree;
         [Key(0)]
         public Vector3 Center { get; set; } = new(x, y, z);
         [Key(1)]
@@ -64,7 +65,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             finally
             {
                 if (ClearOctreeCollection)
-                    Octree.ClearCurrentThreadCollection(Series);
+                    Octree.ClearThreadCollection(Series);
             }
         }
         protected virtual Fullerene? TryToGenerateFullerene()
@@ -74,7 +75,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             return
                 fullerene is not null &&
                 Contains(fullerene) &&
-                Octree.AddData(fullerene, Series, fullerene.Intersect, fullerene.Inside, fullerene.PartInside)
+                Octree.AddData(fullerene, Series, fullerene.Intersect)
                 ? fullerene
                 : null;
         }

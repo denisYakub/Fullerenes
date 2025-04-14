@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
-using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using MathNet.Numerics.Distributions;
 using MessagePack;
 
@@ -109,38 +109,6 @@ namespace Fullerenes.Server.Objects.Fullerenes
                 new Vector3(-Phi, 0, -1) * size,
                 new Vector3(-Phi, 0,  1) * size
             ];
-        }
-
-        public override bool Inside(Parallelepiped parallelepiped)
-        {
-            ArgumentNullException.ThrowIfNull(parallelepiped);
-
-            var outerSphereRadius = Size;
-
-            var result = parallelepiped.Center.X - parallelepiped.Length / 2 <= Center.X - outerSphereRadius &&
-                Center.X + outerSphereRadius <= parallelepiped.Center.X + parallelepiped.Length / 2 &&
-                parallelepiped.Center.Y - parallelepiped.Height / 2 <= Center.Y - outerSphereRadius &&
-                Center.Y + outerSphereRadius <= parallelepiped.Center.Y + parallelepiped.Height / 2 &&
-                parallelepiped.Center.Z - parallelepiped.Width / 2 <= Center.Z - outerSphereRadius &&
-                Center.Z + outerSphereRadius <= parallelepiped.Center.Z + parallelepiped.Width / 2;
-
-            return result;
-        }
-
-        public override bool PartInside(Parallelepiped parallelepiped)
-        {
-            ArgumentNullException.ThrowIfNull(parallelepiped);
-
-            if (!FiguresCollision.Intersects(parallelepiped, Center, GenerateOuterSphereRadius()))
-                return false;
-
-            if (FiguresCollision.Intersects(parallelepiped, Center, GenerateInnerSphereRadius()))
-                return true;
-
-            return
-                Vertices
-                .AddMidPoints(Faces)
-                .Any(vertex => FiguresCollision.Pointinside(parallelepiped, vertex));
         }
 
         public override float GenerateVolume()

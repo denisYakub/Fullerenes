@@ -1,14 +1,15 @@
-﻿using System.Drawing;
-using System.Threading;
+﻿using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
+using Fullerenes.Server.Objects.Fullerenes;
 
-namespace Fullerenes.Server.Objects.CustomStructures
+namespace Fullerenes.Server.Objects.CustomStructures.Octree
 {
-    public class Octree<TRegion, TData>(TRegion startRegion, int threadsNumber = 1)
+    public class Octree<TData>(IRegion startRegion, int threadsNumber = 1) : IOctree<TData>
+        where TData : Fullerene
     {
-        private class Node(Guid id, TRegion region, int threadsNumber)
+        private class Node(Guid id, IRegion region, int threadsNumber)
         {
             private Guid Id { get; } = id;
-            public TRegion Region { get; } = region;
+            public IRegion Region { get; } = region;
             public ICollection<TData>?[] DataCollections { get; } = new ICollection<TData>[threadsNumber];
             public Node?[] Children { get; } = new Node[8];
             public void AddChildRegion(Node child, int id)
@@ -23,13 +24,8 @@ namespace Fullerenes.Server.Objects.CustomStructures
         public int CountNodes { get; private set; }
         public int CountElements { get; private set; }
 
-        public void GenerateRegions(
-            Func<TRegion, TRegion[]> splitRegion, 
-            Func<TRegion, bool> generateRegionCondition)
+        public void StartRegionGeneration(float maxFigureSize)
         {
-            ArgumentNullException.ThrowIfNull(splitRegion);
-            ArgumentNullException.ThrowIfNull(generateRegionCondition);
-
             var queue = new Queue<Node>();
             queue.Enqueue(_head);
 
@@ -39,15 +35,15 @@ namespace Fullerenes.Server.Objects.CustomStructures
             {
                 var nextInQueue = queue.Dequeue();
 
-                if (generateRegionCondition(nextInQueue.Region))
+                if (nextInQueue.Region.CreateCondition(maxFigureSize))
                 {
-                    TRegion[] newRegions = splitRegion(nextInQueue.Region);
+                    IRegion[] newRegions = nextInQueue.Region.Split8Parts();
 
                     for (int i = 0; i < newRegions.Length; i++)
                     {
                         var newNode = new Node(Guid.NewGuid(), newRegions[i], _threadsNumber);
 
-                        nextInQueue.AddChildRegion(newNode, i); 
+                        nextInQueue.AddChildRegion(newNode, i);
                         CountNodes++;
 
                         queue.Enqueue(newNode);
@@ -56,25 +52,20 @@ namespace Fullerenes.Server.Objects.CustomStructures
             }
         }
         public bool AddData(
-            TData inputData,
-            int thread,
-            Func<TData, bool> checkIfDataCannotBeAdded,
-            Func<TRegion, bool> checkIfDataInsideRegion,
-            Func<TRegion, bool> checkIfDatasPartInsideRegion)
+            TData inputData, int thread,
+            Func<TData, bool> checkIfDataCannotBeAdded)
         {
             ArgumentNullException.ThrowIfNull(inputData);
             ArgumentNullException.ThrowIfNull(checkIfDataCannotBeAdded);
-            ArgumentNullException.ThrowIfNull(checkIfDataInsideRegion);
-            ArgumentNullException.ThrowIfNull(checkIfDatasPartInsideRegion);
 
             var regionThatContainsData = _head;
 
             while (true)
             {
                 var nextRegionThatContainsData = regionThatContainsData
-                    .Children.FirstOrDefault(child => 
-                    child != null && 
-                    checkIfDataInsideRegion(child.Region));
+                    .Children.FirstOrDefault(child =>
+                    child != null &&
+                    child.Region.Contains(inputData));
 
                 if (nextRegionThatContainsData is null) break;
 
@@ -88,20 +79,22 @@ namespace Fullerenes.Server.Objects.CustomStructures
             {
                 var region = queue.Dequeue();
 
-                if (checkIfDatasPartInsideRegion(region.Region))
+                if (region.Region.ContainsPart(inputData))
                 {
                     var threadDataCollection = region.DataCollections[thread];
 
                     if (threadDataCollection == null)
                     {
-                        threadDataCollection = [ inputData ];
+                        threadDataCollection = [inputData];
                         CountElements++;
 
-                    } else if (threadDataCollection.Any(checkIfDataCannotBeAdded))
+                    }
+                    else if (threadDataCollection.Any(checkIfDataCannotBeAdded))
                     {
                         return false;
 
-                    } else
+                    }
+                    else
                     {
                         threadDataCollection.Add(inputData);
                     }
@@ -114,7 +107,7 @@ namespace Fullerenes.Server.Objects.CustomStructures
 
             return true;
         }
-        public void ClearCurrentThreadCollection(int thread)
+        public void ClearThreadCollection(int thread)
         {
             var queue = new Queue<Node>();
             queue.Enqueue(_head);

@@ -1,71 +1,73 @@
-﻿using System.Numerics;
+﻿using Fullerenes.Server.Extensions;
+using Fullerenes.Server.Geometry;
+using Fullerenes.Server.Objects.Fullerenes;
+using System.Drawing;
+using System.Numerics;
 
-namespace Fullerenes.Server.Objects.CustomStructures
+namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
 {
-    public class Parallelepiped : IEquatable<Parallelepiped>
+    public class Parallelepiped : IRegion, IEquatable<Parallelepiped>
     {
         public required Vector3 Center { get; init; }
         public required float Height { get; init; }
         public required float Width { get; init; }
         public required float Length { get; init; }
 
-        public static Parallelepiped[] Split8Parts(Parallelepiped parent)
+        public IRegion[] Split8Parts()
         {
-            ArgumentNullException.ThrowIfNull(parent);
+            var halfWidth = Width / 2;
+            var halfHeight = Height / 2;
+            var halfLength = Length / 2;
 
-            var halfWidth = parent.Width / 2;
-            var halfHeight = parent.Height / 2;
-            var halfLength = parent.Length / 2;
-
-            var dX = parent.Width / 4;
-            var dY = parent.Height / 4;
-            var dZ = parent.Length / 4;
+            var dX = Width / 4;
+            var dY = Height / 4;
+            var dZ = Length / 4;
 
             return [
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X - dX, parent.Center.Y - dY, parent.Center.Z - dZ),
+                    Center = new Vector3(Center.X - dX, Center.Y - dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X - dX, parent.Center.Y - dY, parent.Center.Z + dZ),
+                    Center = new Vector3(Center.X - dX, Center.Y - dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X - dX, parent.Center.Y + dY, parent.Center.Z - dZ),
+                    Center = new Vector3(Center.X - dX, Center.Y + dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X - dX, parent.Center.Y + dY, parent.Center.Z + dZ),
+                    Center = new Vector3(Center.X - dX, Center.Y + dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X + dX, parent.Center.Y - dY, parent.Center.Z - dZ),
+                    Center = new Vector3(Center.X + dX, Center.Y - dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X + dX, parent.Center.Y - dY, parent.Center.Z + dZ),
+                    Center = new Vector3(Center.X + dX, Center.Y - dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X + dX, parent.Center.Y + dY, parent.Center.Z - dZ),
+                    Center = new Vector3(Center.X + dX, Center.Y + dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
                 new Parallelepiped {
-                    Center = new Vector3(parent.Center.X + dX, parent.Center.Y + dY, parent.Center.Z + dZ),
+                    Center = new Vector3(Center.X + dX, Center.Y + dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
@@ -73,10 +75,47 @@ namespace Fullerenes.Server.Objects.CustomStructures
             ];
 
         }
+
+        public bool CreateCondition(float maxFigureSize)
+        {
+            return Width > 3 * maxFigureSize;
+        }
+
+        public bool Contains(Fullerene fullerene)
+        {
+            ArgumentNullException.ThrowIfNull(fullerene);
+
+            var outerSphereRadius = fullerene.GenerateOuterSphereRadius();
+
+            return Center.X - Length / 2 <= fullerene.Center.X - outerSphereRadius &&
+                fullerene.Center.X + outerSphereRadius <= Center.X + Length / 2 &&
+                Center.Y - Height / 2 <= fullerene.Center.Y - outerSphereRadius &&
+                fullerene.Center.Y + outerSphereRadius <= Center.Y + Height / 2 &&
+                Center.Z - Width / 2 <= fullerene.Center.Z - outerSphereRadius &&
+                fullerene.Center.Z + outerSphereRadius <= Center.Z + Width / 2;
+        }
+
+        public bool ContainsPart(Fullerene fullerene)
+        {
+            ArgumentNullException.ThrowIfNull(fullerene);
+
+            if (!FiguresCollision.Intersects(this, fullerene.Center, fullerene.GenerateOuterSphereRadius()))
+                return false;
+
+            if (FiguresCollision.Intersects(this, fullerene.Center, fullerene.GenerateInnerSphereRadius()))
+                return true;
+
+            return
+                fullerene.Vertices
+                .AddMidPoints(fullerene.Faces)
+                .Any(vertex => FiguresCollision.Pointinside(this, vertex));
+        }
+
         public override string ToString()
         {
             return '{' + $"Center: {Center}, Height: {Height}, Width: {Width}, Length: {Length}" + '}';
         }
+
         public override bool Equals(object? obj)
         {
             return obj is Parallelepiped second

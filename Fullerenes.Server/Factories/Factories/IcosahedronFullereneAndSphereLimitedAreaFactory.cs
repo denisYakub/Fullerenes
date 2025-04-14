@@ -1,34 +1,29 @@
 ﻿using CsvHelper;
 using Fullerenes.Server.Factories.AbstractFactories;
-using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.CustomStructures.Octree;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Dtos;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using System.Numerics;
-using static MessagePack.GeneratedMessagePackResolver.Fullerenes.Server.Objects;
 
 namespace Fullerenes.Server.Factories.Factories
 {
     public class IcosahedronFullereneAndSphereLimitedAreaFactory : FullereneAndLimitedAreaFactory
     {
-        private Vector3 _areaCenter;
-        private float _areaRaduis;
-        private Vector3 _maxRotationAngles;
-        private (float min, float max) _fullereneSize;
-        private (float shape, float scale) _sizeDistr;
         public IcosahedronFullereneAndSphereLimitedAreaFactory(
             float areaX, float areaY, float areaZ, float areaR,
             int numberOfSeries, int numberOfFullerenes,
             float maxPracessioAngle, float maxNutationAngle, float maxProperRotationAngle,
             float minFullereneSize, float maxFullereneSize,
-            float shape, float scale)
+            float shape, float scale
+            )
             : base(
                   numberOfSeries, numberOfFullerenes,
-                  minFullereneSize, maxFullereneSize,
                   AreaTypes.Sphere, FullereneTypes.Icosahedron)
         {
-            Octree = new Octree<Parallelepiped, Fullerene>(
+            Octree = new Octree<Fullerene>(
                 new Parallelepiped
                 {
                     Center = new(areaX, areaY, areaZ),
@@ -39,19 +34,23 @@ namespace Fullerenes.Server.Factories.Factories
                 numberOfSeries
             );
 
-            Octree.GenerateRegions(Parallelepiped.Split8Parts, p => p.Width > 3 * maxFullereneSize);
+            Octree.StartRegionGeneration(maxFullereneSize);
 
-            _areaCenter = new(areaX, areaY, areaZ);
-            _areaRaduis = areaR;
+            _areaParams = (new(areaX, areaY, areaZ), areaR);
             _maxRotationAngles = new(maxPracessioAngle, maxNutationAngle, maxProperRotationAngle);
             _fullereneSize = (minFullereneSize, maxFullereneSize);
             _sizeDistr = (shape, scale);
         }
 
+        private (Vector3 center, float r) _areaParams;
+        private Vector3 _maxRotationAngles;
+        private (float min, float max) _fullereneSize;
+        private (float shape, float scale) _sizeDistr;
+
         public override LimitedArea CreateLimitedArea(int series)
         {
             return new SphereLimitedArea(
-                _areaCenter.X, _areaCenter.Y, _areaCenter.Z, _areaRaduis,
+                _areaParams.center.X, _areaParams.center.Y, _areaParams.center.Z, _areaParams.r,
                 Octree, series,
                 CreateFullerene);
         }
@@ -59,9 +58,9 @@ namespace Fullerenes.Server.Factories.Factories
         public override Fullerene CreateFullerene()
         {
             return new IcosahedronFullerene(
-                _areaCenter.X - _areaRaduis, _areaCenter.X + _areaRaduis,
-                _areaCenter.Y - _areaRaduis, _areaCenter.Y + _areaRaduis,
-                _areaCenter.Z - _areaRaduis, _areaCenter.Z + _areaRaduis,
+                _areaParams.center.X - _areaParams.r, _areaParams.center.X + _areaParams.r,
+                _areaParams.center.Y - _areaParams.r, _areaParams.center.Y + _areaParams.r,
+                _areaParams.center.Z - _areaParams.r, _areaParams.center.Z + _areaParams.r,
                 _maxRotationAngles.X, _maxRotationAngles.Y, _maxRotationAngles.Z,
                 _fullereneSize.min, _fullereneSize.max,
                 _sizeDistr.shape, _sizeDistr.scale);

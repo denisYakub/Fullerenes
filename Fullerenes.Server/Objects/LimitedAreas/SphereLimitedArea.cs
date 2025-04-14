@@ -1,5 +1,6 @@
 ﻿using Fullerenes.Server.Geometry;
-using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.CustomStructures.Octree;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using MessagePack;
 
@@ -8,7 +9,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
     [MessagePackObject]
     public class SphereLimitedArea(
         float x, float y, float z, float r,
-        Octree<Parallelepiped, Fullerene> octree, int series,
+        IOctree<Fullerene> octree, int series,
         Func<Fullerene> produceFullerene) : LimitedArea(
               x, y, z, [("Radius", r)], 
               octree, series,
