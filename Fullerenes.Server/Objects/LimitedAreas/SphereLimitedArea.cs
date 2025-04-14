@@ -16,7 +16,6 @@ namespace Fullerenes.Server.Objects.LimitedAreas
               produceFullerene)
     {
         public SphereLimitedArea() : this(0, 0, 0, 0, null, 0, null) { }
-        public override float GenerateOuterRadius() => Params[0].param;
 
         public override bool Contains(Fullerene fullerene)
         {
@@ -25,14 +24,21 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             return
                 FiguresCollision.SpheresInside(
                     fullerene.Center, fullerene.GenerateOuterSphereRadius(),
-                    Center, Params[0].param);
+                    Center, Params[0].value);
+        }
+
+        public override float GenerateOuterRadius() => Params[0].value;
+
+        public override string SaveToCsv(string folderPath)
+        {
+            throw new NotImplementedException();
         }
 
         public override string ToString()
         {
             return
                 "Center: " + Center + ", " +
-                "Parameters: " + string.Join(", ", Params.Select(val => val.name + ": " + val.param));
+                "Parameters: " + string.Join(", ", Params.Select(val => val.name + ": " + val.value));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Fullerenes.Server.Factories.AbstractFactories
         public int NumberOfFullerenes { get; init; } = numberOfFullerenes;
         public FullereneTypes FullereneType { get; init; } = fullereneType;
         public AreaTypes AreaType { get; init; } = areaType;
-        public IOctree<Fullerene> Octree { get; set; }
+        public required IOctree<Fullerene> Octree { get; set; }
         public abstract LimitedArea CreateLimitedArea(int series);
         public abstract Fullerene CreateFullerene();
     }

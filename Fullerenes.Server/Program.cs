@@ -1,6 +1,9 @@
 using Fullerenes.Server.DataBase;
+using Fullerenes.Server.Factories.AbstractFactories;
+using Fullerenes.Server.Factories.Factories;
 using Fullerenes.Server.Mappers;
 using Fullerenes.Server.Middlewares;
+using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Services.IServices;
 using Fullerenes.Server.Services.Services;
 using Microsoft.AspNetCore.Authentication.Negotiate;
@@ -27,6 +30,7 @@ builder.Services.AddScoped<IDataBaseService, DataBaseService>();
 builder.Services.AddScoped<ICreateService, CreateService>();
 builder.Services.AddScoped<IFactoryService, FactoryService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddScoped<OctreeAbstractFactory<Fullerene>, OctreeForFullerenesFactory<Fullerene>>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

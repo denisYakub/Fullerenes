@@ -1,4 +1,5 @@
 ﻿using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
+using Fullerenes.Server.Objects.Fullerenes;
 
 namespace Fullerenes.Server.Objects.CustomStructures.Octree
 {

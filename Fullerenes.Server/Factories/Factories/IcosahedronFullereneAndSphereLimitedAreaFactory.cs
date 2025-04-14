@@ -23,19 +23,6 @@ namespace Fullerenes.Server.Factories.Factories
                   numberOfSeries, numberOfFullerenes,
                   AreaTypes.Sphere, FullereneTypes.Icosahedron)
         {
-            Octree = new Octree<Fullerene>(
-                new Parallelepiped
-                {
-                    Center = new(areaX, areaY, areaZ),
-                    Height = 2 * areaR,
-                    Width = 2 * areaR,
-                    Length = 2 * areaR,
-                },
-                numberOfSeries
-            );
-
-            Octree.StartRegionGeneration(maxFullereneSize);
-
             _areaParams = (new(areaX, areaY, areaZ), areaR);
             _maxRotationAngles = new(maxPracessioAngle, maxNutationAngle, maxProperRotationAngle);
             _fullereneSize = (minFullereneSize, maxFullereneSize);

@@ -17,15 +17,16 @@ namespace Fullerenes.Server.Objects.Fullerenes
         float size)
     {
         [Key(0)]
-        public float Size { get; init; } = size;
+        public float Size { get; } = size;
         [Key(1)]
-        public Vector3 Center { get; init; } = new(x, y, z);
+        public Vector3 Center { get; } = new(x, y, z);
         [Key(3)]
         public abstract ICollection<Vector3> Vertices { get; }
         [IgnoreMember]
         public abstract IReadOnlyCollection<int[]> Faces { get; }
         [Key(4)]
-        public EulerAngles EulerAngles { get; init; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
+        public EulerAngles EulerAngles { get; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
+
         public abstract float GenerateOuterSphereRadius();
         public abstract float GenerateInnerSphereRadius();
         public abstract float GenerateVolume();

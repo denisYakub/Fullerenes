@@ -9,26 +9,29 @@ namespace Fullerenes.Server.Objects.LimitedAreas
     [MessagePackObject]
     [Union(0, typeof(SphereLimitedArea))]
     public abstract class LimitedArea(
-        float x, float y, float z, (string name, float param)[] parameters,
+        float x, float y, float z, 
+        (string name, float value)[] parameters,
         IOctree<Fullerene> octree, int series,
         Func<Fullerene>? produceFullerene)
     {
-        protected static readonly int RetryCountMax = 100;
-        protected IOctree<Fullerene> Octree = octree;
         [Key(0)]
-        public Vector3 Center { get; set; } = new(x, y, z);
+        public Vector3 Center { get; } = new(x, y, z);
         [Key(1)]
-        public (string name, float param)[] Params { get; set; } = parameters;
+        public (string name, float value)[] Params { get; } = parameters;
         [Key(2)]
-        public IEnumerable<Fullerene>? Fullerenes { get; set; }
+        public int Series { get; } = series;
         [Key(3)]
-        public int Series { get; set; } = series;
-        [IgnoreMember]
-        public Func<Fullerene>? ProduceFullerene { get; set; } = produceFullerene;
-        [IgnoreMember]
-        public static bool ClearOctreeCollection { get; set; } = false;
+        public IEnumerable<Fullerene>? Fullerenes { get; set; }
+
+        protected Func<Fullerene>? ProduceFullerene { get; } = produceFullerene;
+        protected IOctree<Fullerene> Octree = octree;
+
+        protected static bool ClearOctreeCollection { get; set; }
+        protected static readonly int RetryCountMax = 100;
+
         public abstract bool Contains(Fullerene fullerene);
         public abstract float GenerateOuterRadius();
+        public abstract string SaveToCsv(string folderPath);
 
         public void StartGeneration(int fullerenesNumber)
         {
