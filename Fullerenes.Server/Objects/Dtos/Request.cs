@@ -5,8 +5,8 @@ namespace Fullerenes.Server.Objects.Dtos
 {
     public record struct CreateFullerenesAndLimitedAreaRequest(
         float AreaX, float AreaY, float AreaZ, AreaAdditionalParamsRequest AreaAdditionalParams,
-        int NumberOfF, float MinSizeF, float MaxSizeF, float MaxAlphaF, float MaxBetaF, float MaxGammaF,
-        float Shape, float Scale, int NumberOfSeries) : IRequest
+        float MinSizeF, float MaxSizeF, float MaxAlphaF, float MaxBetaF, float MaxGammaF,
+        float Shape, float Scale) : IRequest
     {
         public bool IsCorrectRequest()
         {

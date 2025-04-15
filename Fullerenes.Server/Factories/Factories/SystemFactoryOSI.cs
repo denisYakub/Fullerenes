@@ -25,6 +25,8 @@ namespace Fullerenes.Server.Factories.Factories
         public required EulerAngles RotationAngles { get; set; }
         public required (float min, float max) FullereneSize { get; set; }
         public required (float shape, float scale) FullereneSizeDistribution { get; set; }
+        public required int FullerenesNumber { get; set; }
+
         public override IOctree<Fullerene> GenerateOctree()
         {
             Octree<Fullerene> octree = new(StartRegion, ThreadNumber);
@@ -49,11 +51,15 @@ namespace Fullerenes.Server.Factories.Factories
 
         public override LimitedArea GenerateLimitedArea(int thread, IOctree<Fullerene> octree)
         {
-            return new SphereLimitedArea(
+            var area = new SphereLimitedArea(
                 AreaCenter.X, AreaCenter.Y, AreaCenter.Z, 
                 AreaRadius, 
                 thread) 
             { Octree = octree, ProduceFullerene = GenerateFullerene };
+
+            area.StartGeneration(FullerenesNumber);
+
+            return area;
         }
     }
 }

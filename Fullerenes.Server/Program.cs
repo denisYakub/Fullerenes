@@ -10,6 +10,8 @@ using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Services.IServices;
 using Fullerenes.Server.Services.Services;
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.JsonPatch.Internal;
+
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,9 +33,8 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IDataBaseService, DataBaseService>();
 builder.Services.AddScoped<ICreateService, CreateService>();
-
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+builder.Services.AddScoped<ILimitedAreaAdapter, CsvLimitedAreaAdapter>();
 builder.Services.AddScoped<ILimitedAreaAdapter>(provider => {
     string folderPath = Path.Combine(
         AppContext.BaseDirectory,

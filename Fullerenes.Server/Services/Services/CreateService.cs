@@ -25,7 +25,7 @@ namespace Fullerenes.Server.Services.Services
             {
                 LimitedArea limitedArea = factory.GenerateLimitedArea(i, octree);
 
-                limitedArea.StartGeneration(fullereneNumber);
+                //limitedArea.StartGeneration(fullereneNumber);
 
                 ArgumentNullException.ThrowIfNull(limitedArea.Fullerenes);
 

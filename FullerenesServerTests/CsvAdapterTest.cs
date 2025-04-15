@@ -24,8 +24,6 @@ namespace FullerenesServerTests
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            string filePath = Path.Combine(folderPath, "test-" + DateTime.Now.Minute + ".csv");
-
             LimitedArea[] areas = new LimitedArea[3];
 
             var octree = new Octree<Fullerene>(
@@ -51,16 +49,14 @@ namespace FullerenesServerTests
 
             for (int i = 0; i < areas.Length; i++)
             {
-                areas[i] = new SphereLimitedArea(
-                    0, 0, 0, 10,
-                    octree, i,
-                    CreateIcosaherdonFullerene);
+                areas[i] = new SphereLimitedArea(0, 0, 0, 10, i)
+                { Octree = octree, ProduceFullerene = CreateIcosaherdonFullerene };
 
                 areas[i].StartGeneration(5);
             }
 
-            var adapter = new CsvLimitedAreaAdapter(filePath);
-            adapter.Write(areas);
+            var adapter = new CsvLimitedAreaAdapter(folderPath);
+            adapter.Write(areas, "testSave");
         }
         [TestMethod]
         public void TestReadMethod()
@@ -70,10 +66,8 @@ namespace FullerenesServerTests
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            string filePath = Path.Combine(folderPath, "test-13.csv");
-
-            var adapter = new CsvLimitedAreaAdapter(filePath);
-            var area = adapter.Read(0);
+            var adapter = new CsvLimitedAreaAdapter(folderPath);
+            var area = adapter.Read(0, "testSave");
         }
     }
 }

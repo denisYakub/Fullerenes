@@ -46,12 +46,10 @@ namespace FullerenesServerTests
 
             var timeBefore = DateTime.Now;
 
-            Parallel.For(0, numberOfSeries, i => {
-
-                var limitedArea = new SphereLimitedArea(
-                0, 0, 0, 3000,
-                _octree, i,
-                CreateIcosaherdonFullerene);
+            Parallel.For(0, numberOfSeries, i => 
+            {
+                var limitedArea = new SphereLimitedArea(0, 0, 0, 3000, i)
+                { Octree = _octree, ProduceFullerene = CreateIcosaherdonFullerene };
 
                 limitedArea.StartGeneration(numberOfFullerenes);
 

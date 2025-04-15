@@ -1,4 +1,5 @@
-﻿using Fullerenes.Server.Objects.Dtos;
+﻿using Fullerenes.Server.Objects.Adapters;
+using Fullerenes.Server.Objects.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fullerenes.Server.Factories.AbstractFactories
