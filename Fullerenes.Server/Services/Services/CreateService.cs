@@ -21,16 +21,16 @@ namespace Fullerenes.Server.Services.Services
 
             IOctree<Fullerene> octree = factory.GenerateOctree();
 
-            Parallel.For(0, factory.ThreadNumber, (i, state) =>
+            Parallel.For(0, factory.ThreadNumber, (thread, state) =>
             {
-                LimitedArea limitedArea = factory.GenerateLimitedArea(i, octree);
+                LimitedArea limitedArea = factory.GenerateLimitedArea(thread, octree);
 
                 ArgumentNullException.ThrowIfNull(limitedArea.Fullerenes);
 
-                SpData data = new(limitedArea, limitedArea.Fullerenes.ToArray(), i, generationId);
+                SpData data = new(limitedArea, limitedArea.Fullerenes.ToArray(), thread, generationId);
                 dataBaseService.SaveData(data);
 
-                SpGen gen = new(factory.AreaType, factory.FullereneType, i, generationId, data.Id);
+                SpGen gen = new(factory.AreaType, factory.FullereneType, thread, generationId, data.Id);
                 dataBaseService.SaveGen(gen);
             });
 
