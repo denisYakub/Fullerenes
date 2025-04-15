@@ -3,6 +3,9 @@ using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Factories.Factories;
 using Fullerenes.Server.Mappers;
 using Fullerenes.Server.Middlewares;
+using Fullerenes.Server.Objects.Adapters;
+using Fullerenes.Server.Objects.Adapters.CsvAdapter;
+using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Services.IServices;
 using Fullerenes.Server.Services.Services;
@@ -28,9 +31,20 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IDataBaseService, DataBaseService>();
 builder.Services.AddScoped<ICreateService, CreateService>();
-builder.Services.AddScoped<IFactoryService, FactoryService>();
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddScoped<OctreeAbstractFactory<Fullerene>, OctreeForFullerenesFactory<Fullerene>>();
+
+builder.Services.AddScoped<ILimitedAreaAdapter>(provider => {
+    string folderPath = Path.Combine(
+        AppContext.BaseDirectory,
+        "CsvResults");
+
+    if (!Directory.Exists(folderPath))
+        Directory.CreateDirectory(folderPath);
+
+    return new CsvLimitedAreaAdapter(folderPath);
+});
+builder.Services.AddScoped<SystemAbstractFactoryCreator, SystemOSIFactoryCreator>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

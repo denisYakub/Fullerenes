@@ -2,29 +2,20 @@
 using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
-using MessagePack;
 
 namespace Fullerenes.Server.Objects.LimitedAreas
 {
-    [MessagePackObject]
-    [Union(0, typeof(SphereLimitedArea))]
     public abstract class LimitedArea(
         float x, float y, float z, 
         (string name, float value)[] parameters,
-        IOctree<Fullerene> octree, int series,
-        Func<Fullerene>? produceFullerene)
+        int series)
     {
-        [Key(0)]
         public Vector3 Center { get; } = new(x, y, z);
-        [Key(1)]
         public (string name, float value)[] Params { get; } = parameters;
-        [Key(2)]
         public int Series { get; } = series;
-        [Key(3)]
         public IEnumerable<Fullerene>? Fullerenes { get; set; }
-
-        protected Func<Fullerene>? ProduceFullerene { get; } = produceFullerene;
-        protected IOctree<Fullerene> Octree = octree;
+        public required Func<Fullerene>  ProduceFullerene { get; init; }
+        public required IOctree<Fullerene> Octree { get; init; }
 
         protected static bool ClearOctreeCollection { get; set; }
         protected static readonly int RetryCountMax = 100;

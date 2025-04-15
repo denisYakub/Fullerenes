@@ -8,18 +8,20 @@ using System.Numerics;
 
 namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
 {
-    public class CsvLimitedAreaAdapter
+    public class CsvLimitedAreaAdapter : ILimitedAreaAdapter
     {
-        private readonly string _filePath;
+        private readonly string _folderPath;
 
-        public CsvLimitedAreaAdapter(string filePath)
+        public CsvLimitedAreaAdapter(string folderPath)
         {
-            _filePath = filePath;
+            _folderPath = folderPath;
         }
 
-        public void Write(IReadOnlyCollection<LimitedArea> areas)
+        public string Write(IReadOnlyCollection<LimitedArea> areas, string fileName)
         {
-            using var writer = new StreamWriter(_filePath);
+            string fullPath = Path.Combine(_folderPath, fileName + ".csv");
+
+            using var writer = new StreamWriter(fullPath);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
             csvWriter.WriteField("SeriesA");
@@ -43,11 +45,14 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
                     csvWriter.NextRecord();
                 }
             }
+            return fullPath;
         }
 
-        public LimitedArea Read(int series)
+        public LimitedArea Read(int series, string fileName)
         {
-            using var reader = new StreamReader(_filePath);
+            string fullPath = Path.Combine(_folderPath, fileName);
+
+            using var reader = new StreamReader(fullPath);
             using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
 
             csvReader.Read();
@@ -58,7 +63,7 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
                 var res = csvReader.GetField("CenterF");
             }
 
-            return new SphereLimitedArea();
+            throw new NotImplementedException();
         }
     }
 }

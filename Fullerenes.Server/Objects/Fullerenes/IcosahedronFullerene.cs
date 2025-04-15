@@ -21,8 +21,9 @@ namespace Fullerenes.Server.Objects.Fullerenes
             : this(0, 0, 0, 0, 0, 0, 0) { }
 
         public IcosahedronFullerene(
-            float minX, float maxX, float minY,
-            float maxY, float minZ, float maxZ,
+            float minX, float maxX, 
+            float minY, float maxY, 
+            float minZ, float maxZ,
             float maxAlpha, float maxBeta, float maxGamma,
             float minSize, float maxSize,
             float shape, float scale)

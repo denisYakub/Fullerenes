@@ -6,16 +6,10 @@ using MessagePack;
 
 namespace Fullerenes.Server.Objects.LimitedAreas
 {
-    [MessagePackObject]
-    public class SphereLimitedArea(
-        float x, float y, float z, float r,
-        IOctree<Fullerene> octree, int series,
-        Func<Fullerene> produceFullerene) : LimitedArea(
-              x, y, z, [("Radius", r)], 
-              octree, series,
-              produceFullerene)
+    public class SphereLimitedArea(float x, float y, float z, float r, int series) 
+        : LimitedArea(x, y, z, [("Radius", r)], series)
     {
-        public SphereLimitedArea() : this(0, 0, 0, 0, null, 0, null) { }
+        public SphereLimitedArea() : this(0, 0, 0, 0, 0) { }
 
         public override bool Contains(Fullerene fullerene)
         {

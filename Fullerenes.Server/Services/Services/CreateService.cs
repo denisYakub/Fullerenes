@@ -3,6 +3,7 @@ using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using Fullerenes.Server.Services.IServices;
@@ -12,18 +13,19 @@ namespace Fullerenes.Server.Services.Services
 {
     public class CreateService(IDataBaseService dataBaseService) : ICreateService
     {
-        public long GenerateArea(FullereneAndLimitedAreaFactory factory)
+        public long GenerateArea(SystemAbstractFactory factory, int series, int fullereneNumber)
         {
             ArgumentNullException.ThrowIfNull(factory);
 
             long generationId = dataBaseService.GetGenerationId();
 
-            Parallel.For(0, factory.NumberOfSeries, (i, state) =>
+            IOctree<Fullerene> octree = factory.GenerateOctree();
+
+            Parallel.For(0, series, (i, state) =>
             {
+                LimitedArea limitedArea = factory.GenerateLimitedArea(i, octree);
 
-                LimitedArea limitedArea = factory.CreateLimitedArea(i);
-
-                limitedArea.StartGeneration(factory.NumberOfFullerenes);
+                limitedArea.StartGeneration(fullereneNumber);
 
                 ArgumentNullException.ThrowIfNull(limitedArea.Fullerenes);
 

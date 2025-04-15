@@ -14,11 +14,7 @@ namespace Fullerenes.Server.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class MainController(
-        ICreateService createService, ITestService testService,
-        IDataBaseService dataBaseService, IFactoryService factoryService,
-        IMapper mapper
-        ) : ControllerBase
+    public class MainController(ICreateService createService, SystemAbstractFactoryCreator factoryCreator) : ControllerBase
     {
         [HttpGet("get-message-from-server")]
         public IActionResult Get()
@@ -26,24 +22,19 @@ namespace Fullerenes.Server.Controllers
             return new OkObjectResult("user.Name");
         }
         [AllowAnonymous]
-        [HttpPost("create-fullerenes-and-limited-area/{areaType}/{fullereneType}")]
-        public IActionResult CreateFullerenesAndLimitedArea([FromRoute] AreaTypes areaType, [FromRoute] FullereneTypes fullereneType,
-            [FromBody] CreateFullerenesAndLimitedAreaRequest request)
+        [HttpPost("create-fullerenes-and-limited-area/{series}/{fullereneNumber}")]
+        public IActionResult CreateFullerenesAndLimitedArea(
+            [FromBody] CreateFullerenesAndLimitedAreaRequest request, [FromRoute] int series, [FromRoute] int fullereneNumber)
         {
             if (!request.IsCorrectRequest())
                 return new BadRequestObjectResult("Something wrong with your request!");
 
-            FullereneAndLimitedAreaFactory factory = factoryService.GetFactory(areaType, fullereneType, request);
+            SystemAbstractFactory factory = factoryCreator.CreateSystemFactory(request, series, fullereneNumber);
 
-            var before = DateTime.Now;
-
-            var result = createService.GenerateArea(factory);
-
-            var after = DateTime.Now;
-
-            Print.PrintToConsole((after - before).Minutes + " min");
+            var result = createService.GenerateArea(factory, series, fullereneNumber);
 
             return new OkObjectResult(result);
         }
+
     }
 }
