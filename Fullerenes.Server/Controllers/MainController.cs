@@ -31,7 +31,7 @@ namespace Fullerenes.Server.Controllers
 
             SystemAbstractFactory factory = factoryCreator.CreateSystemFactory(request, series, fullereneNumber);
 
-            var result = createService.GenerateArea(factory, series, fullereneNumber);
+            var result = createService.GenerateArea(factory);
 
             return new OkObjectResult(result);
         }

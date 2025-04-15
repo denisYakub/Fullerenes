@@ -10,7 +10,8 @@ namespace Fullerenes.Server.Factories.AbstractFactories
     {
         public abstract AreaTypes AreaType { get; init; }
         public abstract FullereneTypes FullereneType { get; init; }
-
+        public abstract required int ThreadNumber {  get; set; }
+        public abstract required int FullerenesNumber { get; set; }
         public abstract IOctree<Fullerene> GenerateOctree();
         public abstract Fullerene GenerateFullerene();
         public abstract LimitedArea GenerateLimitedArea(int thread, IOctree<Fullerene> octree);

@@ -18,7 +18,7 @@ namespace Fullerenes.Server.Services.IServices
     }
     public interface ICreateService
     {
-        long GenerateArea(SystemAbstractFactory factory, int series, int fullereneNumber);
+        long GenerateArea(SystemAbstractFactory factory);
         Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
     }
 }

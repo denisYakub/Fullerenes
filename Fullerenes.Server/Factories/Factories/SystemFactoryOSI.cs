@@ -17,7 +17,7 @@ namespace Fullerenes.Server.Factories.Factories
         public override FullereneTypes FullereneType { get; init; } = FullereneTypes.Icosahedron;
 
         public required TRegion StartRegion { get; set; }
-        public required int ThreadNumber { get; set; }
+        public override required int ThreadNumber { get; set; }
         public required Vector3 AreaCenter { get; set; }
         public required float AreaRadius { get; set; }
         public required Vector3 FullereneMinCenter {  get; set; }
@@ -25,7 +25,7 @@ namespace Fullerenes.Server.Factories.Factories
         public required EulerAngles RotationAngles { get; set; }
         public required (float min, float max) FullereneSize { get; set; }
         public required (float shape, float scale) FullereneSizeDistribution { get; set; }
-        public required int FullerenesNumber { get; set; }
+        public override required int FullerenesNumber { get; set; }
 
         public override IOctree<Fullerene> GenerateOctree()
         {

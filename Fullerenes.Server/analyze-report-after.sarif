@@ -12,6 +12,48 @@
       },
       "results": [
         {
+          "ruleId": "CS8625",
+          "level": "warning",
+          "message": "Литерал, равный NULL, не может быть преобразован в ссылочный тип, не допускающий значение NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/SpData.cs",
+                "region": {
+                  "startLine": 37,
+                  "startColumn": 33,
+                  "endLine": 37,
+                  "endColumn": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Разыменование вероятной пустой ссылки.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Adapters/CsvAdapter/CsvLimitedAreaAdapter.cs",
+                "region": {
+                  "startLine": 37,
+                  "startColumn": 49,
+                  "endLine": 37,
+                  "endColumn": 64
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
           "ruleId": "CS8618",
           "level": "warning",
           "message": "свойство \"SpGen\", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Рассмотрите возможность добавления модификатора \"required\" или объявления значения свойство, допускающего значение NULL.",
@@ -86,39 +128,18 @@
           }
         },
         {
-          "ruleId": "CS8625",
+          "ruleId": "CA1819",
           "level": "warning",
-          "message": "Литерал, равный NULL, не может быть преобразован в ссылочный тип, не допускающий значение NULL.",
+          "message": "Свойства не должны возвращать массивы",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/SpData.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
                 "region": {
-                  "startLine": 37,
-                  "startColumn": 33,
-                  "endLine": 37,
-                  "endColumn": 37
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CS8602",
-          "level": "warning",
-          "message": "Разыменование вероятной пустой ссылки.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Adapters/CsvAdapter/CsvLimitedAreaAdapter.cs",
-                "region": {
-                  "startLine": 37,
-                  "startColumn": 49,
-                  "endLine": 37,
-                  "endColumn": 64
+                  "startLine": 16,
+                  "startColumn": 63,
+                  "endLine": 16,
+                  "endColumn": 73
                 }
               }
             }
@@ -155,12 +176,12 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
                 "region": {
-                  "startLine": 16,
-                  "startColumn": 63,
-                  "endLine": 16,
-                  "endColumn": 73
+                  "startLine": 14,
+                  "startColumn": 45,
+                  "endLine": 14,
+                  "endColumn": 51
                 }
               }
             }
@@ -170,18 +191,18 @@
           }
         },
         {
-          "ruleId": "CA1819",
+          "ruleId": "CA1031",
           "level": "warning",
-          "message": "Свойства не должны возвращать массивы",
+          "message": "Измените \"InvokeAsync\", чтобы перехватывать исключение более конкретного типа или выдать исключение повторно.",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
                 "region": {
-                  "startLine": 14,
-                  "startColumn": 45,
-                  "endLine": 14,
-                  "endColumn": 51
+                  "startLine": 11,
+                  "startColumn": 13,
+                  "endLine": 11,
+                  "endColumn": 18
                 }
               }
             }
@@ -212,18 +233,18 @@
           }
         },
         {
-          "ruleId": "CA1031",
+          "ruleId": "CA1062",
           "level": "warning",
-          "message": "Измените \"InvokeAsync\", чтобы перехватывать исключение более конкретного типа или выдать исключение повторно.",
+          "message": "В видимом извне методе \"Task GlobalExceptionHandlingMiddleware.InvokeAsync(HttpContext context)\" перед использованием параметра \"context\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
           "locations": [
             {
               "resultFile": {
                 "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
                 "region": {
-                  "startLine": 11,
-                  "startColumn": 13,
-                  "endLine": 11,
-                  "endColumn": 18
+                  "startLine": 13,
+                  "startColumn": 44,
+                  "endLine": 13,
+                  "endColumn": 51
                 }
               }
             }
@@ -277,48 +298,6 @@
         {
           "ruleId": "CA1062",
           "level": "warning",
-          "message": "В видимом извне методе \"Task GlobalExceptionHandlingMiddleware.InvokeAsync(HttpContext context)\" перед использованием параметра \"context\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
-                "region": {
-                  "startLine": 13,
-                  "startColumn": 44,
-                  "endLine": 13,
-                  "endColumn": 51
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1062",
-          "level": "warning",
-          "message": "В видимом извне методе \"void DBNormolize.Up(MigrationBuilder migrationBuilder)\" перед использованием параметра \"migrationBuilder\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
-                "region": {
-                  "startLine": 14,
-                  "startColumn": 13,
-                  "endLine": 14,
-                  "endColumn": 29
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1062",
-          "level": "warning",
           "message": "В видимом извне методе \"string CsvLimitedAreaAdapter.Write(IReadOnlyCollection<LimitedArea> areas, string fileName)\" перед использованием параметра \"areas\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
           "locations": [
             {
@@ -356,117 +335,6 @@
           ],
           "properties": {
             "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1062",
-          "level": "warning",
-          "message": "В видимом извне методе \"void DBNormolize.Down(MigrationBuilder migrationBuilder)\" перед использованием параметра \"migrationBuilder\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
-                "region": {
-                  "startLine": 55,
-                  "startColumn": 13,
-                  "endLine": 55,
-                  "endColumn": 29
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1860",
-          "level": "warning",
-          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
-                "region": {
-                  "startLine": 34,
-                  "startColumn": 20,
-                  "endLine": 34,
-                  "endColumn": 31
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1,
-            "customProperties": {
-              "DiagnosticPropertyKey": "Count"
-            }
-          }
-        },
-        {
-          "ruleId": "CA1851",
-          "level": "warning",
-          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
-                "region": {
-                  "startLine": 58,
-                  "startColumn": 57,
-                  "endLine": 58,
-                  "endColumn": 62
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1851",
-          "level": "warning",
-          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
-                "region": {
-                  "startLine": 58,
-                  "startColumn": 30,
-                  "endLine": 58,
-                  "endColumn": 35
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1860",
-          "level": "warning",
-          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
-                "region": {
-                  "startLine": 78,
-                  "startColumn": 20,
-                  "endLine": 78,
-                  "endColumn": 31
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1,
-            "customProperties": {
-              "DiagnosticPropertyKey": "Count"
-            }
           }
         },
         {
@@ -533,6 +401,96 @@
           }
         },
         {
+          "ruleId": "CA1851",
+          "level": "warning",
+          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
+                "region": {
+                  "startLine": 56,
+                  "startColumn": 30,
+                  "endLine": 56,
+                  "endColumn": 35
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1851",
+          "level": "warning",
+          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
+                "region": {
+                  "startLine": 56,
+                  "startColumn": 57,
+                  "endLine": 56,
+                  "endColumn": 62
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "region": {
+                  "startLine": 34,
+                  "startColumn": 20,
+                  "endLine": 34,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "region": {
+                  "startLine": 78,
+                  "startColumn": 20,
+                  "endLine": 78,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
           "ruleId": "CA1860",
           "level": "warning",
           "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
@@ -544,6 +502,51 @@
                   "startLine": 115,
                   "startColumn": 20,
                   "endLine": 115,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1062",
+          "level": "warning",
+          "message": "В видимом извне методе \"void DBNormolize.Up(MigrationBuilder migrationBuilder)\" перед использованием параметра \"migrationBuilder\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
+                "region": {
+                  "startLine": 14,
+                  "startColumn": 13,
+                  "endLine": 14,
+                  "endColumn": 29
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "region": {
+                  "startLine": 137,
+                  "startColumn": 20,
+                  "endLine": 137,
                   "endColumn": 31
                 }
               }
@@ -578,27 +581,24 @@
           }
         },
         {
-          "ruleId": "CA1860",
+          "ruleId": "CA1062",
           "level": "warning",
-          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "message": "В видимом извне методе \"void DBNormolize.Down(MigrationBuilder migrationBuilder)\" перед использованием параметра \"migrationBuilder\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
                 "region": {
-                  "startLine": 137,
-                  "startColumn": 20,
-                  "endLine": 137,
-                  "endColumn": 31
+                  "startLine": 55,
+                  "startColumn": 13,
+                  "endLine": 55,
+                  "endColumn": 29
                 }
               }
             }
           ],
           "properties": {
-            "warningLevel": 1,
-            "customProperties": {
-              "DiagnosticPropertyKey": "Count"
-            }
+            "warningLevel": 1
           }
         },
         {
@@ -667,16 +667,16 @@
         {
           "ruleId": "CA1852",
           "level": "warning",
-          "message": "Тип \\\"DequeNode\\\" может быть запечатанным, так как у него нет подтипов в содержащей его сборке и он невидим извне",
+          "message": "Тип \\\"Node\\\" может быть запечатанным, так как у него нет подтипов в содержащей его сборке и он невидим извне",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Deques/Deque.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
                 "region": {
                   "startLine": 9,
                   "startColumn": 23,
                   "endLine": 9,
-                  "endColumn": 32
+                  "endColumn": 27
                 }
               }
             }
@@ -688,16 +688,16 @@
         {
           "ruleId": "CA1852",
           "level": "warning",
-          "message": "Тип \\\"Node\\\" может быть запечатанным, так как у него нет подтипов в содержащей его сборке и он невидим извне",
+          "message": "Тип \\\"DequeNode\\\" может быть запечатанным, так как у него нет подтипов в содержащей его сборке и он невидим извне",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Deques/Deque.cs",
                 "region": {
                   "startLine": 9,
                   "startColumn": 23,
                   "endLine": 9,
-                  "endColumn": 27
+                  "endColumn": 32
                 }
               }
             }
