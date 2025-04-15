@@ -27,7 +27,9 @@ namespace Fullerenes.Server.Services.Services
 
                 ArgumentNullException.ThrowIfNull(limitedArea.Fullerenes);
 
-                SpData data = new(limitedArea, limitedArea.Fullerenes.ToArray(), thread, generationId);
+                string filePath = factory.SaveLimitedArea(limitedArea, generationId);
+
+                SpData data = new(filePath);
                 dataBaseService.SaveData(data);
 
                 SpGen gen = new(factory.AreaType, factory.FullereneType, thread, generationId, data.Id);

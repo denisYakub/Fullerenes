@@ -33,8 +33,9 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IDataBaseService, DataBaseService>();
 builder.Services.AddScoped<ICreateService, CreateService>();
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddScoped<ILimitedAreaAdapter, CsvLimitedAreaAdapter>();
+
 builder.Services.AddScoped<ILimitedAreaAdapter>(provider => {
     string folderPath = Path.Combine(
         AppContext.BaseDirectory,
