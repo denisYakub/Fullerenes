@@ -51,7 +51,7 @@ namespace Fullerenes.Server.Factories.Factories
                 ProperRotationAngle = request.MaxGammaF
             };
 
-            return new SystemFactoryOSI<Parallelepiped>(adapter)
+            return new SystemOSIFactory<Parallelepiped>(adapter)
             { 
                 StartRegion = startArea,
                 ThreadNumber = series,
@@ -66,7 +66,7 @@ namespace Fullerenes.Server.Factories.Factories
             };
         }
 
-        private static float GetAreaRadius(
+        public static float GetAreaRadius(
             AreaAdditionalParamsRequest request,
             int numberOfFullerenes,
             float minSizeFullerne, float maxSizeFullerene,
@@ -98,7 +98,8 @@ namespace Fullerenes.Server.Factories.Factories
         {
             float avgSize = new Gamma(shape, scale)
                 .GetGammaRandoms(minSize, maxSize)
-                .First();
+                .Take(number)
+                .Average();
 
             return number * new IcosahedronFullerene(0, 0, 0, 0, 0, 0, avgSize).GenerateVolume();
         }

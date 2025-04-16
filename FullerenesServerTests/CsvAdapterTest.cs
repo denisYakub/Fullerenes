@@ -56,7 +56,7 @@ namespace FullerenesServerTests
             }
 
             var adapter = new CsvLimitedAreaAdapter(folderPath);
-            adapter.Write(areas, "testSave");
+            adapter.Write(areas, "subTestFolder", "testSave");
         }
         [TestMethod]
         public void TestReadMethod()

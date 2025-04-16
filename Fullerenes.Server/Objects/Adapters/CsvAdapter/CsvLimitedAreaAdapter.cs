@@ -17,9 +17,11 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
             _folderPath = folderPath;
         }
 
-        public string Write(IReadOnlyCollection<LimitedArea> areas, string fileName)
+        public string Write(IReadOnlyCollection<LimitedArea> areas, string subFolder, string fileName)
         {
-            string fullPath = Path.Combine(_folderPath, fileName + ".csv");
+            string fullFolderPath = Path.Combine(_folderPath, subFolder);
+
+            string fullPath = Path.Combine(fullFolderPath, fileName + ".csv");
 
             using var writer = new StreamWriter(fullPath);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);

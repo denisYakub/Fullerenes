@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace Fullerenes.Server.Factories.Factories
 {
-    public class SystemFactoryOSI<TRegion>(ILimitedAreaAdapter adapter) 
+    public class SystemOSIFactory<TRegion>(ILimitedAreaAdapter adapter) 
         : SystemAbstractFactory(adapter) where TRegion : IRegion
     {
         public override AreaTypes AreaType { get; init; } = AreaTypes.Sphere;

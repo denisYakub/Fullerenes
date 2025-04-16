@@ -19,7 +19,7 @@ namespace Fullerenes.Server.Factories.AbstractFactories
         {
             ArgumentNullException.ThrowIfNull(limitedArea);
 
-            return adapter.Write([ limitedArea ], $"{generationId}_{limitedArea.Series}");
+            return adapter.Write([ limitedArea ], $"Gen_{generationId}", $"Series_{limitedArea.Series}");
         }
     }
 }

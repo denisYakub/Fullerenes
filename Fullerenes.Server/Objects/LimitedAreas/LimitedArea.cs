@@ -22,7 +22,6 @@ namespace Fullerenes.Server.Objects.LimitedAreas
 
         public abstract bool Contains(Fullerene fullerene);
         public abstract float GenerateOuterRadius();
-        public abstract string SaveToCsv(string folderPath);
 
         public void StartGeneration(int fullerenesNumber)
         {

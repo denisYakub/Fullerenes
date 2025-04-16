@@ -22,12 +22,6 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         }
 
         public override float GenerateOuterRadius() => Params[0].value;
-
-        public override string SaveToCsv(string folderPath)
-        {
-            throw new NotImplementedException();
-        }
-
         public override string ToString()
         {
             return
