@@ -16,14 +16,13 @@ namespace FullerenesServerTests
     [TestClass]
     public class CsvAdapterTest
     {
+        private string _folderPath = Path.Combine(AppContext.BaseDirectory, "AdapterFiles");
+        string _subFolder = DateTime.Now.Day + "_" + DateTime.Now.Month;
+        string _fileName = "save_" + DateTime.Now.Minute;
+
         [TestMethod]
         public void TestWriteMethod()
         {
-            string folderPath = Path.Combine(AppContext.BaseDirectory, "TestSaveFile");
-
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
             LimitedArea[] areas = new LimitedArea[3];
 
             var octree = new Octree<Fullerene>(
@@ -55,19 +54,14 @@ namespace FullerenesServerTests
                 areas[i].StartGeneration(5);
             }
 
-            var adapter = new CsvLimitedAreaAdapter(folderPath);
-            adapter.Write(areas, "subTestFolder", "testSave");
+            var adapter = new CsvLimitedAreaAdapter(_folderPath);
+            adapter.Write(areas, _fileName, _subFolder);
         }
         [TestMethod]
         public void TestReadMethod()
         {
-            string folderPath = Path.Combine(AppContext.BaseDirectory, "TestSaveFile");
-
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            var adapter = new CsvLimitedAreaAdapter(folderPath);
-            var area = adapter.Read(0, "testSave");
+            var adapter = new CsvLimitedAreaAdapter(_folderPath);
+            LimitedArea area = adapter.Read("save_10", _subFolder);
         }
     }
 }

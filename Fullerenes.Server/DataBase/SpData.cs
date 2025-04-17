@@ -23,17 +23,5 @@ namespace Fullerenes.Server.DataBase
         public static string FolderNameBin { get; private set; } = "OutPutFilesBin";
 
         public SpData() : this ("") { }
-
-        public static LimitedArea GetDataFormFileBin(string fullFilePath)
-        {
-            if (!File.Exists(fullFilePath))
-                throw new FileNotFoundException();
-
-            var areaBytes = File.ReadAllBytes(fullFilePath);
-
-            LimitedArea area = MessagePackSerializer.Deserialize<LimitedArea>(areaBytes);
-
-            return area;
-        }
     }
 }

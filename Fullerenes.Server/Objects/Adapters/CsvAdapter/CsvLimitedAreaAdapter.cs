@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using Npgsql.Internal;
@@ -10,6 +11,16 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
 {
     public class CsvLimitedAreaAdapter : ILimitedAreaAdapter
     {
+        private class FlatArea
+        {
+            public required int SeriesA {  get; set; }
+            public required string CenterA { get; set; }
+            public required string ParamsA { get; set; }
+            public required float SizeF { get; set; }
+            public required string CenterF { get; set; }
+            public required string EulerAnglesF { get; set; }
+        }
+
         private readonly string _folderPath;
 
         public CsvLimitedAreaAdapter(string folderPath)
@@ -17,54 +28,66 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
             _folderPath = folderPath;
         }
 
-        public string Write(IReadOnlyCollection<LimitedArea> areas, string subFolder, string fileName)
+        public string Write(IReadOnlyCollection<LimitedArea> areas, string fileName, string? subFolder = null)
         {
-            string fullFolderPath = Path.Combine(_folderPath, subFolder);
+            ArgumentNullException.ThrowIfNull(areas);
+
+            string fullFolderPath;
+
+            if (subFolder is null)
+                fullFolderPath = _folderPath;
+            else
+                fullFolderPath = Path.Combine(_folderPath, subFolder);
+
+            if(!Directory.Exists(fullFolderPath))
+                Directory.CreateDirectory(fullFolderPath);
 
             string fullPath = Path.Combine(fullFolderPath, fileName + ".csv");
 
             using var writer = new StreamWriter(fullPath);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
-            csvWriter.WriteField("SeriesA");
-            csvWriter.WriteField("CenterA");
-            csvWriter.WriteField("ParamsA");
-            csvWriter.WriteField("SizeF");
-            csvWriter.WriteField("CenterF");
-            csvWriter.WriteField("EulerAnglesF");
-            csvWriter.NextRecord();
-
             foreach (LimitedArea area in areas)
             {
-                foreach (Fullerene fullerene in area.Fullerenes)
+                if (area.Fullerenes is not null)
                 {
-                    csvWriter.WriteField(area.Series);
-                    csvWriter.WriteField(area.Center);
-                    csvWriter.WriteField(area.Params);
-                    csvWriter.WriteField(fullerene.Size);
-                    csvWriter.WriteField(fullerene.Center);
-                    csvWriter.WriteField(fullerene.EulerAngles);
-                    csvWriter.NextRecord();
+                    var flatArea = area.Fullerenes.Select(fullerene => new FlatArea { 
+                        SeriesA = area.Series,
+                        CenterA = area.Center.ToString(),
+                        ParamsA = string.Join(", ", area.Params),
+                        SizeF = fullerene.Size,
+                        CenterF = fullerene.Center.ToString(),
+                        EulerAnglesF = fullerene.EulerAngles.ToString(),
+                    });
+
+                    csvWriter.WriteRecords(flatArea);
                 }
             }
             return fullPath;
         }
 
-        public LimitedArea Read(int series, string fileName)
+        public LimitedArea Read(string fileName, string? subFolder = null)
         {
-            string fullPath = Path.Combine(_folderPath, fileName);
+            string fullFolderPath;
+
+            if (subFolder is null)
+                fullFolderPath = _folderPath;
+            else
+                fullFolderPath = Path.Combine(_folderPath, subFolder);
+
+            string fullPath = Path.Combine(fullFolderPath, fileName + ".csv");
 
             using var reader = new StreamReader(fullPath);
             using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-            csvReader.Read();
-            csvReader.ReadHeader();
+            var flatList = csvReader.GetRecords<FlatArea>();
 
-            while (csvReader.Read())
-            {
-                var res = csvReader.GetField("CenterF");
-            }
-
+            /*return new SphereLimitedArea {
+                Fullerenes = flatList
+                .Select(areaFlat => new IcosahedronFullerene()),
+                Octree = null,
+                ProduceFullerene = null
+            };*/
             throw new NotImplementedException();
         }
     }

@@ -2,16 +2,15 @@
 using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Factories.AbstractFactories;
-using Fullerenes.Server.Objects.CustomStructures;
+using Fullerenes.Server.Objects.Adapters;
 using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using Fullerenes.Server.Services.IServices;
-using static MessagePack.GeneratedMessagePackResolver.Fullerenes.Server.Objects;
 
 namespace Fullerenes.Server.Services.Services
 {
-    public class CreateService(IDataBaseService dataBaseService) : ICreateService
+    public class CreateService(IDataBaseService dataBaseService, ILimitedAreaAdapter adapter) : ICreateService
     {
         public long GenerateArea(SystemAbstractFactory factory)
         {
@@ -41,11 +40,11 @@ namespace Fullerenes.Server.Services.Services
         
         public async Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000)
         {
-            string? genData = dataBaseService.GetDataPath(superId);
+            string? dataPath = dataBaseService.GetDataPath(superId);
 
-            ArgumentNullException.ThrowIfNull(genData);
+            ArgumentNullException.ThrowIfNull(dataPath);
 
-            var data = SpData.GetDataFormFileBin(genData);
+            var data = adapter.Read(dataPath);
 
             var radii = GenerateRadii(data.GenerateOuterRadius(), numberOfLayers);
 
