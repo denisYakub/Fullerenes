@@ -6,6 +6,7 @@ using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
+using MathNet.Numerics.Distributions;
 using System.Numerics;
 
 namespace Fullerenes.Server.Factories.Factories
@@ -36,17 +37,15 @@ namespace Fullerenes.Server.Factories.Factories
             return octree;
         }
 
-        public override Fullerene GenerateFullerene()
+        public override Fullerene GenerateFullerene(
+            float x, float y, float z,
+            float praecessioAngle, float nutatioAngle, float properRotationAngle, 
+            float size)
         {
             return new IcosahedronFullerene(
-                FullereneMinCenter.X, FullereneMaxCenter.X,
-                FullereneMinCenter.Y, FullereneMaxCenter.Y,
-                FullereneMinCenter.Z, FullereneMaxCenter.Z,
-                RotationAngles.PraecessioAngle, 
-                RotationAngles.NutatioAngle, 
-                RotationAngles.ProperRotationAngle,
-                FullereneSize.min, FullereneSize.max,
-                FullereneSizeDistribution.shape, FullereneSizeDistribution.scale);
+                x, y, z,
+                praecessioAngle, nutatioAngle, properRotationAngle,
+                size);
         }
 
         public override LimitedArea GenerateLimitedArea(int thread, IOctree<Fullerene> octree)
@@ -54,10 +53,12 @@ namespace Fullerenes.Server.Factories.Factories
             var area = new SphereLimitedArea(
                 AreaCenter.X, AreaCenter.Y, AreaCenter.Z, 
                 AreaRadius, 
-                thread) 
+                thread,
+                new Random(), 
+                new Gamma(FullereneSizeDistribution.shape, FullereneSizeDistribution.scale)) 
             { Octree = octree, ProduceFullerene = GenerateFullerene };
 
-            area.StartGeneration(FullerenesNumber);
+            area.StartGeneration(FullerenesNumber, RotationAngles, FullereneSize);
 
             return area;
         }

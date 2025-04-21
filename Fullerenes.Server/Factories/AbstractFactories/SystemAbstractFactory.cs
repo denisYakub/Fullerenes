@@ -13,7 +13,10 @@ namespace Fullerenes.Server.Factories.AbstractFactories
         public abstract required int ThreadNumber {  get; set; }
         public abstract required int FullerenesNumber { get; set; }
         public abstract IOctree<Fullerene> GenerateOctree();
-        public abstract Fullerene GenerateFullerene();
+        public abstract Fullerene GenerateFullerene(
+            float x, float y, float z,
+            float praecessioAngle, float nutatioAngle, float properRotationAngle,
+            float size);
         public abstract LimitedArea GenerateLimitedArea(int thread, IOctree<Fullerene> octree);
         public string SaveLimitedArea(LimitedArea limitedArea, long generationId)
         {

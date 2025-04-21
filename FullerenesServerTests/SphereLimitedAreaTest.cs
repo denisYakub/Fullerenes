@@ -2,6 +2,7 @@
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
+using MathNet.Numerics.Distributions;
 
 namespace FullerenesServerTests
 {
@@ -33,13 +34,12 @@ namespace FullerenesServerTests
 
             _octree.StartRegionGeneration(10);
 
-            static IcosahedronFullerene CreateIcosaherdonFullerene()
+            var random = new Random();
+            var gamma = new Gamma(3, 1.5);
+
+            static IcosahedronFullerene CreateIcosaherdonFullerene(float x, float y, float z, float a, float b, float g, float size)
             {
-                return new IcosahedronFullerene(
-                    -areaR, areaR, -areaR, areaR, -areaR, areaR,
-                    360, 360, 360,
-                    1, 10,
-                    3, 1.5f);
+                return new IcosahedronFullerene(x, y, z, a, b, g, size);
             }
 
             List<Fullerene>[] areas = new List<Fullerene>[numberOfSeries];
@@ -48,15 +48,17 @@ namespace FullerenesServerTests
 
             Parallel.For(0, numberOfSeries, i => 
             {
-                var limitedArea = new SphereLimitedArea(0, 0, 0, 3000, i)
+                var limitedArea = new SphereLimitedArea(0, 0, 0, 3000, i, random, gamma)
                 { Octree = _octree, ProduceFullerene = CreateIcosaherdonFullerene };
 
-                limitedArea.StartGeneration(numberOfFullerenes);
+                limitedArea.StartGeneration(numberOfFullerenes, new(360, 360, 360), (1, 10));
 
                 areas[i] = limitedArea.Fullerenes.ToList();
             });
 
             var timeAfter = DateTime.Now;
+
+            Console.WriteLine(timeBefore + " " + timeAfter);
 
             Assert.IsTrue((timeBefore - timeAfter).Minutes < 5);
         }

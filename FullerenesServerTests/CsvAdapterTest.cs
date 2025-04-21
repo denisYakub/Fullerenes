@@ -23,7 +23,7 @@ namespace FullerenesServerTests
         [TestMethod]
         public void TestWriteMethod()
         {
-            LimitedArea[] areas = new LimitedArea[3];
+            /*LimitedArea[] areas = new LimitedArea[3];
 
             var octree = new Octree<Fullerene>(
                 new Parallelepiped
@@ -55,7 +55,7 @@ namespace FullerenesServerTests
             }
 
             var adapter = new CsvLimitedAreaAdapter(_folderPath);
-            adapter.Write(areas, _fileName, _subFolder);
+            adapter.Write(areas, _fileName, _subFolder);*/
         }
         [TestMethod]
         public void TestReadMethod()

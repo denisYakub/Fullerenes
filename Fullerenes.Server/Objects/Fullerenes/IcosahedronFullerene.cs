@@ -16,25 +16,7 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public IcosahedronFullerene() 
             : this(0, 0, 0, 0, 0, 0, 0) { }
 
-        public IcosahedronFullerene(
-            float minX, float maxX, 
-            float minY, float maxY, 
-            float minZ, float maxZ,
-            float maxAlpha, float maxBeta, float maxGamma,
-            float minSize, float maxSize,
-            float shape, float scale)
-            : this(
-                  _random.GetEvenlyRandoms(minX, maxX).First(),
-                  _random.GetEvenlyRandoms(minY, maxY).First(),
-                  _random.GetEvenlyRandoms(minZ, maxZ).First(),
-                  _random.GetEvenlyRandoms(-maxAlpha, maxAlpha).First(),
-                  _random.GetEvenlyRandoms(-maxBeta, maxBeta).First(),
-                  _random.GetEvenlyRandoms(-maxGamma, maxGamma).First(),
-                  new Gamma(shape, scale).GetGammaRandoms(minSize, maxSize).First())
-        { }
-
         private readonly object _lock = new();
-        private static readonly Random _random = new();
         private static readonly float Phi = (1 + MathF.Sqrt(5)) / 2;
 
         public override IReadOnlyCollection<int[]> Faces => _faces;
@@ -114,15 +96,17 @@ namespace Fullerenes.Server.Objects.Fullerenes
             int samples = 1_000_000;
             float radius = GenerateOuterSphereRadius();
 
+            var random = new Random();
+
             for (int i = 0; i < samples; i++)
             {
                 Vector3 dot;
 
                 do
                 {
-                    float x = (float)(_random.NextDouble() * 2 - 1);
-                    float y = (float)(_random.NextDouble() * 2 - 1);
-                    float z = (float)(_random.NextDouble() * 2 - 1);
+                    float x = (float)(random.NextDouble() * 2 - 1);
+                    float y = (float)(random.NextDouble() * 2 - 1);
+                    float z = (float)(random.NextDouble() * 2 - 1);
 
                     dot = new Vector3(x, y, z);
                 }
