@@ -2,6 +2,8 @@
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
+using Fullerenes.Server.Services.IServices;
+using Fullerenes.Server.Services.Services;
 using MathNet.Numerics.Distributions;
 
 namespace FullerenesServerTests

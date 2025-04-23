@@ -33,64 +33,15 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             EulerAngles RotationAngles,
             (float min, float max) FullereneSize)
         {
-            var outerR = GenerateOuterRadius();
-
-            var xs = Random
-                .GetEvenlyRandoms(Center.X- outerR, Center.X + outerR)
-                .Take(fullerenesNumber);
-
-            var ys = Random
-               .GetEvenlyRandoms(Center.Y - outerR, Center.Y + outerR)
-               .Take(fullerenesNumber);
-
-            var zs = Random
-               .GetEvenlyRandoms(Center.Z - outerR, Center.Z + outerR)
-               .Take(fullerenesNumber);
-
-            var praecessioAngles = Random
-                        .GetEvenlyRandoms(-RotationAngles.PraecessioAngle, RotationAngles.PraecessioAngle)
-                        .Take(fullerenesNumber);
-
-            var nutatioAngles = Random
-                .GetEvenlyRandoms(-RotationAngles.NutatioAngle, RotationAngles.NutatioAngle)
-                .Take(fullerenesNumber);
-
-            var properRotationAngles = Random
-                .GetEvenlyRandoms(-RotationAngles.ProperRotationAngle, RotationAngles.ProperRotationAngle)
-                .Take(fullerenesNumber);
-
-            var sizes = Gamma
-                .GetGammaRandoms(FullereneSize.min, FullereneSize.max)
-                .Take(fullerenesNumber);
-
-            Fullerenes = GenerateFullerenes(xs, ys, zs, praecessioAngles, nutatioAngles, properRotationAngles, sizes)
+            Fullerenes = GenerateFullerenes(RotationAngles, FullereneSize)
                 .Take(fullerenesNumber);
         }
 
         protected virtual IEnumerable<Fullerene> GenerateFullerenes(
-            IEnumerable<float> xs,
-            IEnumerable<float> ys,
-            IEnumerable<float> zs,
-            IEnumerable<float> praecessioAngles,
-            IEnumerable<float> nutationAngles,
-            IEnumerable<float> properRotationAngles,
-            IEnumerable<float> sizes)
+            EulerAngles RotationAngles,
+            (float min, float max) FullereneSize)
         {
             ArgumentNullException.ThrowIfNull(Octree);
-            ArgumentNullException.ThrowIfNull(praecessioAngles);
-            ArgumentNullException.ThrowIfNull(nutationAngles);
-            ArgumentNullException.ThrowIfNull(properRotationAngles);
-            ArgumentNullException.ThrowIfNull(sizes);
-
-            var x = xs.GetEnumerator();
-            var y = ys.GetEnumerator();
-            var z = zs.GetEnumerator();
-
-            var praecessioAngle = praecessioAngles.GetEnumerator();
-            var nutationAngle = nutationAngles.GetEnumerator();
-            var properRotationAngle = properRotationAngles.GetEnumerator();
-
-            var size = sizes.GetEnumerator();
 
             try
             {
@@ -101,17 +52,12 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                     if (reTryCount == RetryCountMax)
                         yield break;
 
-                    if (!x.MoveNext() && !y.MoveNext() && !z.MoveNext() && 
-                        !praecessioAngle.MoveNext() && !nutationAngle.MoveNext() && !properRotationAngle.MoveNext() && 
-                        !size.MoveNext())
-                        yield break;
-
                     var fullerene = TryToGenerateFullerene(
-                        x.Current, y.Current, z.Current,
-                        praecessioAngle.Current,
-                        nutationAngle.Current,
-                        properRotationAngle.Current,
-                        size.Current);
+                        GetRandomCenter(),
+                        Random.GetEvenlyRandoms(-RotationAngles.PraecessioAngle, RotationAngles.PraecessioAngle).First(),
+                        Random.GetEvenlyRandoms(-RotationAngles.NutatioAngle, RotationAngles.NutatioAngle).First(),
+                        Random.GetEvenlyRandoms(-RotationAngles.ProperRotationAngle, RotationAngles.ProperRotationAngle).First(),
+                        Gamma.GetGammaRandoms(FullereneSize.min, FullereneSize.max).First());
 
                     if (fullerene != null)
                     {
@@ -132,8 +78,9 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                     Octree.ClearThreadCollection(Series);
             }
         }
+        protected abstract Vector3 GetRandomCenter();
         protected virtual Fullerene? TryToGenerateFullerene(
-            float x, float y, float z,
+            Vector3 center,
             float praecessioAngle, 
             float nutatioAngle, 
             float properRotationAngle, 
@@ -141,7 +88,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         {
             var fullerene = ProduceFullerene?
                 .Invoke(
-                    x, y, z,
+                    center.X, center.Y, center.Z,
                     praecessioAngle, 
                     nutatioAngle, 
                     properRotationAngle,

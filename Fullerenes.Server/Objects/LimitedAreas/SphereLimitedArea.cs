@@ -1,9 +1,11 @@
-﻿using Fullerenes.Server.Geometry;
+﻿using Fullerenes.Server.Extensions;
+using Fullerenes.Server.Geometry;
 using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using MathNet.Numerics.Distributions;
 using MessagePack;
+using System.Numerics;
 
 namespace Fullerenes.Server.Objects.LimitedAreas
 {
@@ -29,6 +31,15 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             return
                 "Center: " + Center + ", " +
                 "Parameters: " + string.Join(", ", Params.Select(val => val.name + ": " + val.value));
+        }
+
+        protected override Vector3 GetRandomCenter()
+        {
+            return new( 
+                Random.GetEvenlyRandoms(Center.X - Params[0].value, Center.X + Params[0].value).First(),
+                Random.GetEvenlyRandoms(Center.Y - Params[0].value, Center.Y + Params[0].value).First(),
+                Random.GetEvenlyRandoms(Center.Z - Params[0].value, Center.Z + Params[0].value).First()
+                );
         }
     }
 }

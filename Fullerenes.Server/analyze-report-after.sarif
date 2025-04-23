@@ -5,9 +5,9 @@
     {
       "tool": {
         "name": "Компилятор Microsoft (R) Visual C#",
-        "version": "4.12.0.0",
-        "fileVersion": "4.12.0-3.24572.7 (dfa7fc6b)",
-        "semanticVersion": "4.12.0",
+        "version": "4.11.0.0",
+        "fileVersion": "4.11.0-3.24460.3 (5649376e)",
+        "semanticVersion": "4.11.0",
         "language": "ru-RU"
       },
       "results": [
@@ -21,12 +21,12 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
                 "region": {
-                  "startLine": 8,
-                  "startColumn": 29,
-                  "endLine": 8,
-                  "endColumn": 34
+                  "startLine": 6,
+                  "startColumn": 18,
+                  "endLine": 6,
+                  "endColumn": 38
                 }
               }
             }
@@ -34,7 +34,7 @@
           "relatedLocations": [
             {
               "physicalLocation": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
                 "region": {
                   "startLine": 8,
                   "startColumn": 29,
@@ -58,12 +58,12 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
                 "region": {
-                  "startLine": 9,
-                  "startColumn": 30,
-                  "endLine": 9,
-                  "endColumn": 36
+                  "startLine": 6,
+                  "startColumn": 18,
+                  "endLine": 6,
+                  "endColumn": 38
                 }
               }
             }
@@ -71,7 +71,7 @@
           "relatedLocations": [
             {
               "physicalLocation": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/DataBase/ApplicationDbContext.cs",
                 "region": {
                   "startLine": 9,
                   "startColumn": 30,
@@ -92,11 +92,11 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/SphereLimitedArea.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/SphereLimitedArea.cs",
                 "region": {
-                  "startLine": 13,
+                  "startLine": 15,
                   "startColumn": 58,
-                  "endLine": 13,
+                  "endLine": 15,
                   "endColumn": 62
                 }
               }
@@ -113,11 +113,11 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/SphereLimitedArea.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/SphereLimitedArea.cs",
                 "region": {
-                  "startLine": 13,
+                  "startLine": 15,
                   "startColumn": 64,
-                  "endLine": 13,
+                  "endLine": 15,
                   "endColumn": 68
                 }
               }
@@ -134,53 +134,11 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
                 "region": {
-                  "startLine": 16,
-                  "startColumn": 35,
-                  "endLine": 16,
-                  "endColumn": 41
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1819",
-          "level": "warning",
-          "message": "Свойства не должны возвращать массивы",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
-                "region": {
-                  "startLine": 19,
-                  "startColumn": 45,
-                  "endLine": 19,
-                  "endColumn": 51
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1051",
-          "level": "warning",
-          "message": "Не объявляйте видимые поля экземпляров",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
-                "region": {
-                  "startLine": 17,
+                  "startLine": 18,
                   "startColumn": 34,
-                  "endLine": 17,
+                  "endLine": 18,
                   "endColumn": 39
                 }
               }
@@ -197,7 +155,70 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 45,
+                  "endLine": 20,
+                  "endColumn": 51
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1051",
+          "level": "warning",
+          "message": "Не объявляйте видимые поля экземпляров",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 35,
+                  "endLine": 17,
+                  "endColumn": 41
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1819",
+          "level": "warning",
+          "message": "Свойства не должны возвращать массивы",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
+                "region": {
+                  "startLine": 25,
+                  "startColumn": 17,
+                  "endLine": 25,
+                  "endColumn": 27
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1819",
+          "level": "warning",
+          "message": "Свойства не должны возвращать массивы",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
                 "region": {
                   "startLine": 16,
                   "startColumn": 63,
@@ -218,12 +239,33 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Extensions/RandomExtensions.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Extensions/RandomExtensions.cs",
                 "region": {
                   "startLine": 13,
                   "startColumn": 42,
                   "endLine": 13,
                   "endColumn": 61
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1031",
+          "level": "warning",
+          "message": "Измените \"InvokeAsync\", чтобы перехватывать исключение более конкретного типа или выдать исключение повторно.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
+                "region": {
+                  "startLine": 11,
+                  "startColumn": 13,
+                  "endLine": 11,
+                  "endColumn": 18
                 }
               }
             }
@@ -239,7 +281,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Controllers/WeatherForecastController.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Controllers/WeatherForecastController.cs",
                 "region": {
                   "startLine": 29,
                   "startColumn": 32,
@@ -260,33 +302,12 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Controllers/WeatherForecastController.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Controllers/WeatherForecastController.cs",
                 "region": {
                   "startLine": 30,
                   "startColumn": 37,
                   "endLine": 30,
                   "endColumn": 73
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1031",
-          "level": "warning",
-          "message": "Измените \"InvokeAsync\", чтобы перехватывать исключение более конкретного типа или выдать исключение повторно.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
-                "region": {
-                  "startLine": 11,
-                  "startColumn": 13,
-                  "endLine": 11,
-                  "endColumn": 18
                 }
               }
             }
@@ -302,33 +323,12 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Middlewares/GlobalExceptionHandlingMiddleware.cs",
                 "region": {
                   "startLine": 13,
                   "startColumn": 44,
                   "endLine": 13,
                   "endColumn": 51
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1001",
-          "level": "warning",
-          "message": "Тип \"DataBaseService\" владеет высвобождаемыми полями \"_semaphore\", но не является высвобождаемым",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/DataBaseService.cs",
-                "region": {
-                  "startLine": 6,
-                  "startColumn": 18,
-                  "endLine": 6,
-                  "endColumn": 33
                 }
               }
             }
@@ -344,54 +344,12 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
                 "region": {
                   "startLine": 14,
                   "startColumn": 13,
                   "endLine": 14,
                   "endColumn": 29
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1851",
-          "level": "warning",
-          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
-                "region": {
-                  "startLine": 57,
-                  "startColumn": 30,
-                  "endLine": 57,
-                  "endColumn": 35
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1851",
-          "level": "warning",
-          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
-                "region": {
-                  "startLine": 57,
-                  "startColumn": 57,
-                  "endLine": 57,
-                  "endColumn": 62
                 }
               }
             }
@@ -407,7 +365,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250410122110_DBNormolize.cs",
                 "region": {
                   "startLine": 55,
                   "startColumn": 13,
@@ -422,66 +380,27 @@
           }
         },
         {
-          "ruleId": "CA1062",
+          "ruleId": "CA1860",
           "level": "warning",
-          "message": "В видимом извне методе \"IEnumerable<Fullerene> LimitedArea.GenerateFullerenes(IEnumerable<float> xs, IEnumerable<float> ys, IEnumerable<float> zs, IEnumerable<float> praecessioAngles, IEnumerable<float> nutationAngles, IEnumerable<float> properRotationAngles, IEnumerable<float> sizes)\" перед использованием параметра \"ys\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
                 "region": {
-                  "startLine": 85,
-                  "startColumn": 21,
-                  "endLine": 85,
-                  "endColumn": 23
+                  "startLine": 34,
+                  "startColumn": 20,
+                  "endLine": 34,
+                  "endColumn": 31
                 }
               }
             }
           ],
           "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1062",
-          "level": "warning",
-          "message": "В видимом извне методе \"IEnumerable<Fullerene> LimitedArea.GenerateFullerenes(IEnumerable<float> xs, IEnumerable<float> ys, IEnumerable<float> zs, IEnumerable<float> praecessioAngles, IEnumerable<float> nutationAngles, IEnumerable<float> properRotationAngles, IEnumerable<float> sizes)\" перед использованием параметра \"xs\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
-                "region": {
-                  "startLine": 84,
-                  "startColumn": 21,
-                  "endLine": 84,
-                  "endColumn": 23
-                }
-              }
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
             }
-          ],
-          "properties": {
-            "warningLevel": 1
-          }
-        },
-        {
-          "ruleId": "CA1062",
-          "level": "warning",
-          "message": "В видимом извне методе \"IEnumerable<Fullerene> LimitedArea.GenerateFullerenes(IEnumerable<float> xs, IEnumerable<float> ys, IEnumerable<float> zs, IEnumerable<float> praecessioAngles, IEnumerable<float> nutationAngles, IEnumerable<float> properRotationAngles, IEnumerable<float> sizes)\" перед использованием параметра \"zs\" нужно убедиться, что его значение отличается от NULL. При необходимости следует вызвать исключение ArgumentNullException, если аргумент равен NULL.",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/LimitedAreas/LimitedArea.cs",
-                "region": {
-                  "startLine": 86,
-                  "startColumn": 21,
-                  "endLine": 86,
-                  "endColumn": 23
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1
           }
         },
         {
@@ -491,7 +410,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/Fullerenes/IcosahedronFullerene.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Fullerenes/IcosahedronFullerene.cs",
                 "region": {
                   "startLine": 107,
                   "startColumn": 39,
@@ -512,7 +431,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/Fullerenes/IcosahedronFullerene.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Fullerenes/IcosahedronFullerene.cs",
                 "region": {
                   "startLine": 108,
                   "startColumn": 39,
@@ -533,7 +452,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/Fullerenes/IcosahedronFullerene.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Fullerenes/IcosahedronFullerene.cs",
                 "region": {
                   "startLine": 109,
                   "startColumn": 39,
@@ -554,11 +473,11 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
                 "region": {
-                  "startLine": 34,
+                  "startLine": 78,
                   "startColumn": 20,
-                  "endLine": 34,
+                  "endLine": 78,
                   "endColumn": 31
                 }
               }
@@ -578,11 +497,56 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
                 "region": {
-                  "startLine": 78,
+                  "startLine": 115,
                   "startColumn": 20,
-                  "endLine": 78,
+                  "endLine": 115,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "DiagnosticPropertyKey": "Count"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1001",
+          "level": "warning",
+          "message": "Тип \"DataBaseService\" владеет высвобождаемыми полями \"_semaphore\", но не является высвобождаемым",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/DataBaseService.cs",
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 18,
+                  "endLine": 6,
+                  "endColumn": 33
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1860",
+          "level": "warning",
+          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "region": {
+                  "startLine": 137,
+                  "startColumn": 20,
+                  "endLine": 137,
                   "endColumn": 31
                 }
               }
@@ -602,7 +566,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Migrations/20250401172415_FinalDBModel.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250401172415_FinalDBModel.cs",
                 "region": {
                   "startLine": 246,
                   "startColumn": 13,
@@ -617,61 +581,13 @@
           }
         },
         {
-          "ruleId": "CA1860",
-          "level": "warning",
-          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
-                "region": {
-                  "startLine": 115,
-                  "startColumn": 20,
-                  "endLine": 115,
-                  "endColumn": 31
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1,
-            "customProperties": {
-              "DiagnosticPropertyKey": "Count"
-            }
-          }
-        },
-        {
-          "ruleId": "CA1860",
-          "level": "warning",
-          "message": "Для ясности и для обеспечения производительности старайтесь сравнивать 'Count' с 0 вместо того, чтобы использовать 'Any()'",
-          "locations": [
-            {
-              "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
-                "region": {
-                  "startLine": 137,
-                  "startColumn": 20,
-                  "endLine": 137,
-                  "endColumn": 31
-                }
-              }
-            }
-          ],
-          "properties": {
-            "warningLevel": 1,
-            "customProperties": {
-              "DiagnosticPropertyKey": "Count"
-            }
-          }
-        },
-        {
           "ruleId": "CA1859",
           "level": "warning",
           "message": "Измените тип возвращаемого значения метода \"GenerateAvgSize\" с \"Fullerenes.Server.Objects.Fullerenes.Fullerene\" на \"Fullerenes.Server.Objects.Fullerenes.IcosahedronFullerene\" для повышения производительности",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/TestService.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/TestService.cs",
                 "region": {
                   "startLine": 82,
                   "startColumn": 34,
@@ -686,18 +602,39 @@
           }
         },
         {
-          "ruleId": "CA1819",
+          "ruleId": "CA1851",
           "level": "warning",
-          "message": "Свойства не должны возвращать массивы",
+          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/Dtos/Request.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
                 "region": {
-                  "startLine": 25,
-                  "startColumn": 17,
-                  "endLine": 25,
-                  "endColumn": 27
+                  "startLine": 57,
+                  "startColumn": 30,
+                  "endLine": 57,
+                  "endColumn": 35
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1851",
+          "level": "warning",
+          "message": "Возможно несколько перечислений коллекции IEnumerable. Рассмотрите возможность использования реализации без нескольких перечислений.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
+                "region": {
+                  "startLine": 57,
+                  "startColumn": 57,
+                  "endLine": 57,
+                  "endColumn": 62
                 }
               }
             }
@@ -713,7 +650,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Migrations/20250401172415_FinalDBModel.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Migrations/20250401172415_FinalDBModel.cs",
                 "region": {
                   "startLine": 15,
                   "startColumn": 13,
@@ -734,7 +671,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
                 "region": {
                   "startLine": 6,
                   "startColumn": 18,
@@ -755,7 +692,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Deques/Deque.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Deques/Deque.cs",
                 "region": {
                   "startLine": 9,
                   "startColumn": 23,
@@ -776,7 +713,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/CustomStructures/Octrees/Octree.cs",
                 "region": {
                   "startLine": 9,
                   "startColumn": 23,
@@ -797,7 +734,7 @@
           "locations": [
             {
               "resultFile": {
-                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Objects/Adapters/CsvAdapter/CsvLimitedAreaAdapter.cs",
+                "uri": "file:///C:/Users/denis/source/repos/Fullerenes/Fullerenes.Server/Objects/Adapters/CsvAdapter/CsvLimitedAreaAdapter.cs",
                 "region": {
                   "startLine": 14,
                   "startColumn": 23,
