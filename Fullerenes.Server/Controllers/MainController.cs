@@ -14,7 +14,10 @@ namespace Fullerenes.Server.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class MainController(ICreateService createService, SystemAbstractFactoryCreator factoryCreator) : ControllerBase
+    public class MainController(
+        ICreateService createService, IDataBaseService dataBaseService, 
+        SystemAbstractFactoryCreator factoryCreator) 
+        : ControllerBase
     {
         [HttpGet("get-message-from-server")]
         public IActionResult Get()
@@ -36,5 +39,13 @@ namespace Fullerenes.Server.Controllers
             return new OkObjectResult(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("get-avg-phi-generations")]
+        public IActionResult GetGenerationsAvgPhis()
+        {
+            var result = dataBaseService.GetAvgPhiGroups();
+
+            return new OkObjectResult(result);
+        }
     }
 }

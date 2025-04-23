@@ -15,6 +15,7 @@ namespace Fullerenes.Server.Services.IServices
         void SaveData(SpData data);
         void SaveGen(SpGen gen);
         string? GetDataPath(long superId);
+        ICollection<SpGenGroup> GetAvgPhiGroups();
     }
     public interface ICreateService
     {

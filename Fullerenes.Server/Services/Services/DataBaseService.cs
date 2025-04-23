@@ -47,6 +47,13 @@ namespace Fullerenes.Server.Services.Services
                 .SpData
                 .Find(superId)
                 ?.FilePath;
-       }
+        }
+
+        public ICollection<SpGenGroup> GetAvgPhiGroups()
+        {
+            var viewresult = context.SpGenGroup.ToList();
+
+            return viewresult;
+        }
     }
 }
