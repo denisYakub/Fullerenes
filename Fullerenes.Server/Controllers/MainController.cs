@@ -45,7 +45,7 @@ namespace Fullerenes.Server.Controllers
         [HttpGet("get-series-of-generation/{seriesId}/{genId}")]
         public IActionResult GetGenerationSeries([FromRoute] int seriesId, [FromRoute] int genId)
         {
-            var result = fileService.Read($"Series_{seriesId}", $"Gen_{genId}");
+            var result = fileService.ReadMainInfo($"Series_{seriesId}", $"Gen_{genId}");
 
             return new OkObjectResult(result);
         }
