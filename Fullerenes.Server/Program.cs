@@ -3,10 +3,6 @@ using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Factories.Factories;
 using Fullerenes.Server.Mappers;
 using Fullerenes.Server.Middlewares;
-using Fullerenes.Server.Objects.Adapters;
-using Fullerenes.Server.Objects.Adapters.CsvAdapter;
-using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
-using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Services.IServices;
 using Fullerenes.Server.Services.Services;
 using Microsoft.AspNetCore.Authentication.Negotiate;
@@ -33,10 +29,8 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IDataBaseService, DataBaseService>();
 builder.Services.AddScoped<ICreateService, CreateService>();
-
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-builder.Services.AddScoped<ILimitedAreaAdapter>(provider => {
+builder.Services.AddScoped<IFileService>(provider =>
+{
     string folderPath = Path.Combine(
         AppContext.BaseDirectory,
         "CsvResults");
@@ -44,8 +38,11 @@ builder.Services.AddScoped<ILimitedAreaAdapter>(provider => {
     if (!Directory.Exists(folderPath))
         Directory.CreateDirectory(folderPath);
 
-    return new CsvLimitedAreaAdapter(folderPath);
+    return new FileService(folderPath);
 });
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 builder.Services.AddScoped<SystemAbstractFactoryCreator, SystemOSIFactoryCreator>();
 
 builder.Services.AddEndpointsApiExplorer();

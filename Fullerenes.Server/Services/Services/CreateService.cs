@@ -2,7 +2,6 @@
 using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Factories.AbstractFactories;
-using Fullerenes.Server.Objects.Adapters;
 using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
@@ -10,7 +9,7 @@ using Fullerenes.Server.Services.IServices;
 
 namespace Fullerenes.Server.Services.Services
 {
-    public class CreateService(IDataBaseService dataBaseService, ILimitedAreaAdapter adapter) : ICreateService
+    public class CreateService(IDataBaseService dataBaseService, IFileService fileService) : ICreateService
     {
         public long GenerateArea(SystemAbstractFactory factory)
         {
@@ -26,7 +25,7 @@ namespace Fullerenes.Server.Services.Services
 
                 ArgumentNullException.ThrowIfNull(limitedArea.Fullerenes);
 
-                string filePath = factory.SaveLimitedArea(limitedArea, generationId);
+                string filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{generationId}");
 
                 SpData data = new(filePath);
                 dataBaseService.SaveData(data);
@@ -44,7 +43,7 @@ namespace Fullerenes.Server.Services.Services
 
             ArgumentNullException.ThrowIfNull(dataPath);
 
-            var data = adapter.Read(dataPath);
+            var data = fileService.Read(dataPath);
 
             var radii = GenerateRadii(data.GenerateOuterRadius(), numberOfLayers);
 

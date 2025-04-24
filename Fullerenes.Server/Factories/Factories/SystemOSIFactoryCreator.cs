@@ -1,6 +1,5 @@
 ﻿using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Factories.AbstractFactories;
-using Fullerenes.Server.Objects.Adapters;
 using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Dtos;
@@ -10,7 +9,7 @@ using System.Numerics;
 
 namespace Fullerenes.Server.Factories.Factories
 {
-    public class SystemOSIFactoryCreator(ILimitedAreaAdapter adapter) : SystemAbstractFactoryCreator
+    public class SystemOSIFactoryCreator : SystemAbstractFactoryCreator
     {
         public override SystemAbstractFactory CreateSystemFactory(CreateFullerenesAndLimitedAreaRequest request, int series, int fullereneNumber)
         {
@@ -51,7 +50,7 @@ namespace Fullerenes.Server.Factories.Factories
                 ProperRotationAngle = request.MaxGammaF
             };
 
-            return new SystemOSIFactory<Parallelepiped>(adapter)
+            return new SystemOSIFactory<Parallelepiped>
             { 
                 StartRegion = startArea,
                 ThreadNumber = series,

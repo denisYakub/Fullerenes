@@ -1,5 +1,4 @@
 ﻿using Fullerenes.Server.Factories.AbstractFactories;
-using Fullerenes.Server.Objects.Adapters;
 using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
@@ -11,8 +10,7 @@ using System.Numerics;
 
 namespace Fullerenes.Server.Factories.Factories
 {
-    public class SystemOSIFactory<TRegion>(ILimitedAreaAdapter adapter) 
-        : SystemAbstractFactory(adapter) where TRegion : IRegion
+    public class SystemOSIFactory<TRegion> : SystemAbstractFactory where TRegion : IRegion
     {
         public override AreaTypes AreaType { get; init; } = AreaTypes.Sphere;
         public override FullereneTypes FullereneType { get; init; } = FullereneTypes.Icosahedron;

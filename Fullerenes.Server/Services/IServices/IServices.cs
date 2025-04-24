@@ -2,6 +2,7 @@
 using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Fullerenes;
+using Fullerenes.Server.Objects.LimitedAreas;
 
 namespace Fullerenes.Server.Services.IServices
 {
@@ -21,5 +22,10 @@ namespace Fullerenes.Server.Services.IServices
     {
         long GenerateArea(SystemAbstractFactory factory);
         Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
+    }
+    public interface IFileService
+    {
+        string Write(IReadOnlyCollection<LimitedArea> areas, string fileName, string? subFolder = null);
+        LimitedArea Read(string fileName, string? subFolder = null);
     }
 }

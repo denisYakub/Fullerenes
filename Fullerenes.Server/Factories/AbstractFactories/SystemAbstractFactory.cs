@@ -1,12 +1,11 @@
-﻿using Fullerenes.Server.Objects.Adapters;
-using Fullerenes.Server.Objects.CustomStructures.Octree;
+﻿using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 
 namespace Fullerenes.Server.Factories.AbstractFactories
 {
-    public abstract class SystemAbstractFactory(ILimitedAreaAdapter adapter)
+    public abstract class SystemAbstractFactory
     {
         public abstract AreaTypes AreaType { get; init; }
         public abstract FullereneTypes FullereneType { get; init; }
@@ -18,11 +17,5 @@ namespace Fullerenes.Server.Factories.AbstractFactories
             float praecessioAngle, float nutatioAngle, float properRotationAngle,
             float size);
         public abstract LimitedArea GenerateLimitedArea(int thread, IOctree<Fullerene> octree);
-        public string SaveLimitedArea(LimitedArea limitedArea, long generationId)
-        {
-            ArgumentNullException.ThrowIfNull(limitedArea);
-
-            return adapter.Write([ limitedArea ], $"Series_{limitedArea.Series}", $"Gen_{generationId}");
-        }
     }
 }

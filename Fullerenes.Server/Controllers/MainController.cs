@@ -4,6 +4,7 @@ using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Dtos;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
+using Fullerenes.Server.Objects.LimitedAreas;
 using Fullerenes.Server.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -15,7 +16,7 @@ namespace Fullerenes.Server.Controllers
     [ApiController]
     [Route("/api/[controller]")]
     public class MainController(
-        ICreateService createService, IDataBaseService dataBaseService, 
+        ICreateService createService, IDataBaseService dataBaseService, IFileService fileService,
         SystemAbstractFactoryCreator factoryCreator) 
         : ControllerBase
     {
@@ -24,6 +25,7 @@ namespace Fullerenes.Server.Controllers
         {
             return new OkObjectResult("user.Name");
         }
+
         [AllowAnonymous]
         [HttpPost("create-fullerenes-and-limited-area/{series}/{fullereneNumber}")]
         public IActionResult CreateFullerenesAndLimitedArea(
@@ -35,6 +37,15 @@ namespace Fullerenes.Server.Controllers
             SystemAbstractFactory factory = factoryCreator.CreateSystemFactory(request, series, fullereneNumber);
 
             var result = createService.GenerateArea(factory);
+
+            return new OkObjectResult(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("get-series-of-generation/{seriesId}/{genId}")]
+        public IActionResult GetGenerationSeries([FromRoute] int seriesId, [FromRoute] int genId)
+        {
+            var result = fileService.Read($"Series_{seriesId}", $"Gen_{genId}");
 
             return new OkObjectResult(result);
         }

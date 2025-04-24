@@ -1,19 +1,15 @@
 ﻿using CsvHelper;
-using CsvHelper.Configuration;
-using Fullerenes.Server.Objects.CustomStructures;
-using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
-using Npgsql.Internal;
+using Fullerenes.Server.Services.IServices;
 using System.Globalization;
-using System.Numerics;
 
-namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
+namespace Fullerenes.Server.Services.Services
 {
-    public class CsvLimitedAreaAdapter : ILimitedAreaAdapter
+    public class FileService : IFileService
     {
         private class FlatArea
         {
-            public required int SeriesA {  get; set; }
+            public required int SeriesA { get; set; }
             public required string CenterA { get; set; }
             public required string ParamsA { get; set; }
             public required float SizeF { get; set; }
@@ -23,7 +19,7 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
 
         private readonly string _folderPath;
 
-        public CsvLimitedAreaAdapter(string folderPath)
+        public FileService(string folderPath)
         {
             _folderPath = folderPath;
         }
@@ -39,7 +35,7 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
             else
                 fullFolderPath = Path.Combine(_folderPath, subFolder);
 
-            if(!Directory.Exists(fullFolderPath))
+            if (!Directory.Exists(fullFolderPath))
                 Directory.CreateDirectory(fullFolderPath);
 
             string fullPath = Path.Combine(fullFolderPath, fileName + ".csv");
@@ -51,7 +47,8 @@ namespace Fullerenes.Server.Objects.Adapters.CsvAdapter
             {
                 if (area.Fullerenes is not null)
                 {
-                    var flatArea = area.Fullerenes.Select(fullerene => new FlatArea { 
+                    var flatArea = area.Fullerenes.Select(fullerene => new FlatArea
+                    {
                         SeriesA = area.Series,
                         CenterA = area.Center.ToString(),
                         ParamsA = string.Join(", ", area.Params),
