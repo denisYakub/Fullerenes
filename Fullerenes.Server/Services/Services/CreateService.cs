@@ -43,7 +43,7 @@ namespace Fullerenes.Server.Services.Services
 
             ArgumentNullException.ThrowIfNull(dataPath);
 
-            var data = fileService.Read(dataPath);
+            var data = fileService.GetArea(dataPath);
 
             var radii = GenerateRadii(data.GenerateOuterRadius(), numberOfLayers);
 

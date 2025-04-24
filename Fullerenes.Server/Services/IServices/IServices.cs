@@ -3,6 +3,7 @@ using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
+using static Fullerenes.Server.Services.Services.FileService;
 
 namespace Fullerenes.Server.Services.IServices
 {
@@ -26,6 +27,7 @@ namespace Fullerenes.Server.Services.IServices
     public interface IFileService
     {
         string Write(IReadOnlyCollection<LimitedArea> areas, string fileName, string? subFolder = null);
-        LimitedArea Read(string fileName, string? subFolder = null);
+        AreaMainInfo ReadMainInfo(string fileName, string? subFolder = null);
+        LimitedArea GetArea(string fileName, string? subFolder = null);
     }
 }
