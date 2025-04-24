@@ -56,7 +56,7 @@
 
         public override string ToString()
         {
-            return $"<{PraecessioAngle}, {NutatioAngle}, {ProperRotationAngle}>";
+            return $"<{PraecessioAngle} {NutatioAngle} {ProperRotationAngle}>";
         }
     }
 }
