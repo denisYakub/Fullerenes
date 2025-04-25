@@ -32,11 +32,11 @@ namespace Fullerenes.Server.Services.Services
                 public EulerAngles EulerAngles { get; set; }
             }
             public required AreaTypes AreaType { get; set; }
+            public required FullereneTypes FullereneType { get; set; }
             public required int Series { get; set; }
             public required Vector3 Center { get; set; }
             public required (string name, float value)[] Params { get; set; }
             public required IReadOnlyCollection<FullereneMainInfo> Fullerenes { get; set; }
-            public required FullereneTypes FullereneType { get; set; }
         }
 
         private readonly string _folderPath;
