@@ -1,5 +1,6 @@
 ﻿using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
+using System.Drawing;
 
 namespace Fullerenes.Server.Objects.CustomStructures.Octree
 {
@@ -21,15 +22,11 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
 
         private readonly int _threadsNumber = threadsNumber;
         private readonly Node _head = new(Guid.NewGuid(), startRegion, threadsNumber);
-        public int CountNodes { get; private set; }
-        public int CountElements { get; private set; }
 
         public void StartRegionGeneration(float maxFigureSize)
         {
             var queue = new Queue<Node>();
             queue.Enqueue(_head);
-
-            CountNodes++;
 
             while (queue.Any())
             {
@@ -44,7 +41,6 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
                         var newNode = new Node(Guid.NewGuid(), newRegions[i], _threadsNumber);
 
                         nextInQueue.AddChildRegion(newNode, i);
-                        CountNodes++;
 
                         queue.Enqueue(newNode);
                     }
@@ -58,51 +54,42 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
             ArgumentNullException.ThrowIfNull(inputData);
             ArgumentNullException.ThrowIfNull(checkIfDataCannotBeAdded);
 
-            var regionThatContainsData = _head;
-
-            while (true)
-            {
-                var nextRegionThatContainsData = regionThatContainsData
-                    .Children.FirstOrDefault(child =>
-                    child != null &&
-                    child.Region.Contains(inputData));
-
-                if (nextRegionThatContainsData is null) break;
-
-                regionThatContainsData = nextRegionThatContainsData;
-            }
-
             var queue = new Queue<Node>();
-            queue.Enqueue(regionThatContainsData);
+            queue.Enqueue(_head);
+
+            var queueToAdd = new Queue<ICollection<TData>>();
 
             while (queue.Any())
             {
                 var region = queue.Dequeue();
 
-                if (region.Region.ContainsPart(inputData))
+                if (region.Region.Contains(inputData) || region.Region.ContainsPart(inputData))
                 {
                     var threadDataCollection = region.DataCollections[thread];
 
                     if (threadDataCollection == null)
                     {
                         threadDataCollection = [inputData];
-                        CountElements++;
-
                     }
                     else if (threadDataCollection.Any(checkIfDataCannotBeAdded))
                     {
                         return false;
-
                     }
                     else
                     {
-                        threadDataCollection.Add(inputData);
+                        //threadDataCollection.Add(inputData);
+                        queueToAdd.Enqueue(threadDataCollection);
                     }
 
                     foreach (var child in region.Children)
                         if (child is not null)
                             queue.Enqueue(child);
                 }
+            }
+
+            while (queueToAdd.Any())
+            {
+                queueToAdd.Dequeue().Add(inputData);
             }
 
             return true;
@@ -120,7 +107,6 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
 
                 if (threadDataCollection is not null)
                 {
-                    CountElements -= threadDataCollection.Count;
                     threadDataCollection.Clear();
                 }
 
@@ -145,8 +131,6 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
                     if (child is not null)
                         queue.Enqueue(child);
             }
-
-            CountElements = 0;
         }
     }
 }

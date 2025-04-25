@@ -33,8 +33,39 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             EulerAngles RotationAngles,
             (float min, float max) FullereneSize)
         {
-            Fullerenes = GenerateFullerenes(RotationAngles, FullereneSize)
-                .Take(fullerenesNumber);
+            int reTryCount = 0;
+
+            List<Fullerene> fullerenes = new List<Fullerene>(fullerenesNumber);
+
+            while (true)
+            {
+                if (reTryCount == RetryCountMax || fullerenes.Count == fullerenesNumber)
+                    break;
+
+                var center = GetRandomCenter();
+
+                var fullerene = ProduceFullerene?
+                    .Invoke(
+                        center.X, center.Y, center.Z,
+                        Random.GetEvenlyRandoms(-RotationAngles.PraecessioAngle, RotationAngles.PraecessioAngle).First(),
+                        Random.GetEvenlyRandoms(-RotationAngles.NutatioAngle, RotationAngles.NutatioAngle).First(),
+                        Random.GetEvenlyRandoms(-RotationAngles.ProperRotationAngle, RotationAngles.ProperRotationAngle).First(),
+                        Gamma.GetGammaRandoms(FullereneSize.min, FullereneSize.max).First()) ?? null;
+
+                if (fullerene == null || !Contains(fullerene) || fullerenes.AsParallel().Any(fullerene.Intersect))
+                {
+                    ++reTryCount;
+                }
+                else
+                {
+                    fullerenes.Add(fullerene);
+                    reTryCount = 0;
+                }
+            }
+
+            Fullerenes = fullerenes;
+            //Fullerenes = GenerateFullerenes(RotationAngles, FullereneSize)
+                //.Take(fullerenesNumber);
         }
 
         protected virtual IEnumerable<Fullerene> GenerateFullerenes(
@@ -42,7 +73,6 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             (float min, float max) FullereneSize)
         {
             ArgumentNullException.ThrowIfNull(Octree);
-
             try
             {
                 int reTryCount = 0;

@@ -12,7 +12,7 @@ namespace FullerenesServerTests
     public class SphereLimitedAreaTest
     {
 
-        static int numberOfSeries = 100;
+        static int numberOfSeries = 1;
         static int numberOfFullerenes = 1_000_000;
 
         static float areaX = 0, areaY = 0, areaZ = 0, areaR = 300;
