@@ -30,7 +30,7 @@ export default function RenderPage() {
                 <div key={generationId}>
                     <h3>Generation #{generationId}</h3>
                     <ul>
-                        {Array.from({ length: maxSeries + 1 }, (_, i) => (
+                        {Array.from({ length: maxSeries }, (_, i) => (
                             <li key={i}>
                                 {/* Создаем ссылку на RenderSeries с передачей seriesId и genId */}
                                 <Link to={`/render-series/${i}/${generationId}`}>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import RenderLimitedArea from "../Render/RenderLimitedArea"
 
 export default function RenderSeries() {
     const { seriesId, genId } = useParams();
@@ -38,28 +39,11 @@ export default function RenderSeries() {
             {loading ? (
                 <div className="loader"></div>  // Спиннер
             ) : (
-                <div>
-                    <h2>Series {seriesId} of Generation {genId}</h2>
-                    <div className="data-container">
-                        {/* Выводим данные в виде таблицы */}
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Key</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Object.entries(data).map(([key, value]) => (
-                                    <tr key={key}>
-                                        <td>{key}</td>
-                                        <td>{JSON.stringify(value, null, 2)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                    <RenderLimitedArea
+                        areaType={data.areaType} fullereneType={data.fullereneType}
+                        center={data.center} params={data.params}
+                        fullerenes={data.fullerenes}
+                />
             )}
         </div>
     );
