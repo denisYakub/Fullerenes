@@ -17,7 +17,7 @@ namespace Fullerenes.Server.Services.Services
 
             long generationId = dataBaseService.GetGenerationId();
 
-            IOctree<Fullerene> octree = factory.GenerateOctree();
+            IOctree octree = factory.GenerateOctree();
 
             Parallel.For(0, factory.ThreadNumber, (thread, state) =>
             {

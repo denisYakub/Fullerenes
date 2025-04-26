@@ -8,6 +8,6 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
         bool CreateCondition(float maxFigureSize);
         bool Contains(Fullerene fullerene);
         bool ContainsPart(Fullerene fullerene);
-
+        int MaxDepth(float maxSize);
     }
 }

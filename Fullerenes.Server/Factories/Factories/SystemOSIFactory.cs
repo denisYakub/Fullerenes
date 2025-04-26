@@ -26,13 +26,9 @@ namespace Fullerenes.Server.Factories.Factories
         public required (float shape, float scale) FullereneSizeDistribution { get; set; }
         public override required int FullerenesNumber { get; set; }
 
-        public override IOctree<Fullerene> GenerateOctree()
+        public override IOctree GenerateOctree()
         {
-            Octree<Fullerene> octree = new(StartRegion, ThreadNumber);
-
-            octree.StartRegionGeneration(FullereneSize.max);
-
-            return octree;
+            return new Octree(StartRegion.MaxDepth(3 * FullereneSize.max), ThreadNumber, StartRegion);
         }
 
         public override Fullerene GenerateFullerene(
@@ -46,7 +42,7 @@ namespace Fullerenes.Server.Factories.Factories
                 size);
         }
 
-        public override LimitedArea GenerateLimitedArea(int thread, IOctree<Fullerene> octree)
+        public override LimitedArea GenerateLimitedArea(int thread, IOctree octree)
         {
             var area = new SphereLimitedArea(
                 AreaCenter.X, AreaCenter.Y, AreaCenter.Z, 

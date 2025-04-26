@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
 {
-    public class Parallelepiped : IRegion, IEquatable<Parallelepiped>
+    public class Cube : IRegion, IEquatable<Cube>
     {
         public required Vector3 Center { get; init; }
         public required float Height { get; init; }
@@ -24,49 +24,49 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
             var dZ = Length / 4;
 
             return [
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X - dX, Center.Y - dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X - dX, Center.Y - dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X - dX, Center.Y + dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X - dX, Center.Y + dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X + dX, Center.Y - dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X + dX, Center.Y - dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X + dX, Center.Y + dY, Center.Z - dZ),
                     Width = halfWidth,
                     Height = halfHeight,
                     Length = halfLength
                 },
-                new Parallelepiped {
+                new Cube {
                     Center = new Vector3(Center.X + dX, Center.Y + dY, Center.Z + dZ),
                     Width = halfWidth,
                     Height = halfHeight,
@@ -81,18 +81,33 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
             return Width > 3 * maxFigureSize;
         }
 
+        public int MaxDepth(float maxSize)
+        {
+            int count = 0;
+            float a = Width;
+
+            while (a > maxSize)
+            {
+                a /= 2;
+                count++;
+            }
+
+            return count;   
+        }
+
         public bool Contains(Fullerene fullerene)
         {
             ArgumentNullException.ThrowIfNull(fullerene);
 
-            var outerSphereRadius = fullerene.GenerateOuterSphereRadius();
+            var fullereneR = fullerene.GenerateOuterSphereRadius();
 
-            return Center.X - Length / 2 <= fullerene.Center.X - outerSphereRadius &&
-                fullerene.Center.X + outerSphereRadius <= Center.X + Length / 2 &&
-                Center.Y - Height / 2 <= fullerene.Center.Y - outerSphereRadius &&
-                fullerene.Center.Y + outerSphereRadius <= Center.Y + Height / 2 &&
-                Center.Z - Width / 2 <= fullerene.Center.Z - outerSphereRadius &&
-                fullerene.Center.Z + outerSphereRadius <= Center.Z + Width / 2;
+            return
+                (Center.X - Length / 2) + fullereneR <= fullerene.Center.X &&
+                fullerene.Center.X <= (Center.X + Length / 2) - fullereneR &&
+                (Center.Y - Length / 2) + fullereneR <= fullerene.Center.Y &&
+                fullerene.Center.Y <= (Center.Y + Length / 2) - fullereneR &&
+                (Center.Z - Length / 2) + fullereneR <= fullerene.Center.Z &&
+                fullerene.Center.Z <= (Center.Z + Length / 2) - fullereneR;
         }
 
         public bool ContainsPart(Fullerene fullerene)
@@ -118,7 +133,7 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
 
         public override bool Equals(object? obj)
         {
-            return obj is Parallelepiped second
+            return obj is Cube second
                 && Center.Equals(second.Center)
                 && Math.Abs(Height - second.Height) < 0.00001
                 && Math.Abs(Width - second.Width) < 0.00001
@@ -130,7 +145,7 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
             return Center.GetHashCode() ^ Height.GetHashCode() ^ Width.GetHashCode() ^ Length.GetHashCode();
         }
 
-        public static bool operator ==(Parallelepiped left, Parallelepiped right)
+        public static bool operator ==(Cube left, Cube right)
         {
             if (left is null || right is null)
                 return false;
@@ -138,12 +153,12 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
             return left.Equals(right);
         }
 
-        public static bool operator !=(Parallelepiped left, Parallelepiped right)
+        public static bool operator !=(Cube left, Cube right)
         {
             return !(left == right);
         }
 
-        public bool Equals(Parallelepiped? other)
+        public bool Equals(Cube? other)
         {
             if (other is null)
                 return false;

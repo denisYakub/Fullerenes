@@ -21,7 +21,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public int Series { get; } = series;
         public IEnumerable<Fullerene>? Fullerenes { get; set; }
         public required Func<float, float, float, float, float, float, float, Fullerene>  ProduceFullerene { get; init; }
-        public required IOctree<Fullerene> Octree { get; init; }
+        public required IOctree Octree { get; init; }
 
         protected static bool ClearOctreeCollection { get; set; }
         protected static readonly int RetryCountMax = 100;
@@ -29,107 +29,9 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public abstract bool Contains(Fullerene fullerene);
         public abstract float GenerateOuterRadius();
 
-        public void StartGeneration(int fullerenesNumber,
-            EulerAngles RotationAngles,
-            (float min, float max) FullereneSize)
-        {
-            int reTryCount = 0;
+        public void StartGeneration(int fullerenesNumber, EulerAngles RotationAngles, (float min, float max) FullereneSize) 
+            => Fullerenes = GenerateFullerenes(RotationAngles, FullereneSize).Take(fullerenesNumber);
 
-            List<Fullerene> fullerenes = new List<Fullerene>(fullerenesNumber);
-
-            while (true)
-            {
-                if (reTryCount == RetryCountMax || fullerenes.Count == fullerenesNumber)
-                    break;
-
-                var center = GetRandomCenter();
-
-                var fullerene = ProduceFullerene?
-                    .Invoke(
-                        center.X, center.Y, center.Z,
-                        Random.GetEvenlyRandoms(-RotationAngles.PraecessioAngle, RotationAngles.PraecessioAngle).First(),
-                        Random.GetEvenlyRandoms(-RotationAngles.NutatioAngle, RotationAngles.NutatioAngle).First(),
-                        Random.GetEvenlyRandoms(-RotationAngles.ProperRotationAngle, RotationAngles.ProperRotationAngle).First(),
-                        Gamma.GetGammaRandoms(FullereneSize.min, FullereneSize.max).First()) ?? null;
-
-                if (fullerene == null || !Contains(fullerene) || fullerenes.AsParallel().Any(fullerene.Intersect))
-                {
-                    ++reTryCount;
-                }
-                else
-                {
-                    fullerenes.Add(fullerene);
-                    reTryCount = 0;
-                }
-            }
-
-            Fullerenes = fullerenes;
-            //Fullerenes = GenerateFullerenes(RotationAngles, FullereneSize)
-                //.Take(fullerenesNumber);
-        }
-
-        protected virtual IEnumerable<Fullerene> GenerateFullerenes(
-            EulerAngles RotationAngles,
-            (float min, float max) FullereneSize)
-        {
-            ArgumentNullException.ThrowIfNull(Octree);
-            try
-            {
-                int reTryCount = 0;
-
-                while (true)
-                {
-                    if (reTryCount == RetryCountMax)
-                        yield break;
-
-                    var fullerene = TryToGenerateFullerene(
-                        GetRandomCenter(),
-                        Random.GetEvenlyRandoms(-RotationAngles.PraecessioAngle, RotationAngles.PraecessioAngle).First(),
-                        Random.GetEvenlyRandoms(-RotationAngles.NutatioAngle, RotationAngles.NutatioAngle).First(),
-                        Random.GetEvenlyRandoms(-RotationAngles.ProperRotationAngle, RotationAngles.ProperRotationAngle).First(),
-                        Gamma.GetGammaRandoms(FullereneSize.min, FullereneSize.max).First());
-
-                    if (fullerene != null)
-                    {
-                        reTryCount = 0;
-
-                        yield return fullerene;
-
-                    }
-                    else
-                    {
-                        reTryCount++;
-                    }
-                }
-            }
-            finally
-            {
-                if (ClearOctreeCollection)
-                    Octree.ClearThreadCollection(Series);
-            }
-        }
-        protected abstract Vector3 GetRandomCenter();
-        protected virtual Fullerene? TryToGenerateFullerene(
-            Vector3 center,
-            float praecessioAngle, 
-            float nutatioAngle, 
-            float properRotationAngle, 
-            float size)
-        {
-            var fullerene = ProduceFullerene?
-                .Invoke(
-                    center.X, center.Y, center.Z,
-                    praecessioAngle, 
-                    nutatioAngle, 
-                    properRotationAngle,
-                    size) ?? null;
-
-            return
-                fullerene is not null &&
-                Contains(fullerene) &&
-                Octree.AddData(fullerene, Series, fullerene.Intersect)
-                ? fullerene
-                : null;
-        }
+        protected abstract IEnumerable<Fullerene> GenerateFullerenes(EulerAngles RotationAngles, (float min, float max) FullereneSize);
     }
 }

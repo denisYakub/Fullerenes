@@ -15,26 +15,23 @@ namespace FullerenesServerTests
         static int numberOfSeries = 1;
         static int numberOfFullerenes = 1_000_000;
 
-        static float areaX = 0, areaY = 0, areaZ = 0, areaR = 300;
+        static float areaX = 0, areaY = 0, areaZ = 0, areaR = 3000;
 
         private LimitedArea _limitedArea;
-        private IOctree<Fullerene> _octree; 
+        private IOctree _octree; 
 
         [TestMethod]
         public void TestGenerateFullerenesMethod()
         {
+            var startRegion = new Cube
+            {
+                Center = new(0, 0, 0),
+                Width = areaR * 2,
+                Height = areaR * 2,
+                Length = areaR * 2,
+            };
 
-            _octree = new Octree<Fullerene>(
-                new Parallelepiped
-                {
-                    Center = new(areaX, areaY, areaZ),
-                    Height = 2 * areaR,
-                    Width = 2 * areaR,
-                    Length = 2 * areaR,
-                },
-                numberOfSeries);
-
-            _octree.StartRegionGeneration(10);
+            _octree = new Octree(startRegion.MaxDepth(3 * 10), numberOfSeries, startRegion);
 
             var random = new Random();
             var gamma = new Gamma(3, 1.5);
@@ -50,7 +47,7 @@ namespace FullerenesServerTests
 
             Parallel.For(0, numberOfSeries, i => 
             {
-                var limitedArea = new SphereLimitedArea(0, 0, 0, 3000, i, random, gamma)
+                var limitedArea = new SphereLimitedArea(0, 0, 0, areaR, i, random, gamma)
                 { Octree = _octree, ProduceFullerene = CreateIcosaherdonFullerene };
 
                 limitedArea.StartGeneration(numberOfFullerenes, new(360, 360, 360), (1, 10));

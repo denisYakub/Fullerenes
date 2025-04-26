@@ -50,7 +50,7 @@ namespace Fullerenes.Server.Geometry
         /// <param name="parallelepiped"></param>
         /// <param name="point"></param>
         /// <returns>true if point inside</returns>
-        public static bool Pointinside(Parallelepiped parallelepiped, Vector3 point)
+        public static bool Pointinside(Cube parallelepiped, Vector3 point)
         {
             ArgumentNullException.ThrowIfNull(parallelepiped);
 
@@ -98,7 +98,7 @@ namespace Fullerenes.Server.Geometry
         /// <param name="sphereCenter">Center of th sphere</param>
         /// <param name="sphereRadius">Radius of the sphere</param>
         /// <returns>true if intersect, else false</returns>
-        public static bool Intersects(Parallelepiped area, Vector3 sphereCenter, float sphereRadius)
+        public static bool Intersects(Cube area, Vector3 sphereCenter, float sphereRadius)
         {
             ArgumentNullException.ThrowIfNull(area);
 

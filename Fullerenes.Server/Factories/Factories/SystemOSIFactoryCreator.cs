@@ -21,7 +21,7 @@ namespace Fullerenes.Server.Factories.Factories
 
             Vector3 areaCenter = new(request.AreaX, request.AreaY, request.AreaZ);
 
-            Parallelepiped startArea = new()
+            Cube startArea = new()
             {
                 Center = areaCenter,
                 Height = 2 * areaRadius,
@@ -50,7 +50,7 @@ namespace Fullerenes.Server.Factories.Factories
                 ProperRotationAngle = request.MaxGammaF
             };
 
-            return new SystemOSIFactory<Parallelepiped>
+            return new SystemOSIFactory<Cube>
             { 
                 StartRegion = startArea,
                 ThreadNumber = series,
