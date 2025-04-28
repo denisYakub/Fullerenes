@@ -15,8 +15,8 @@ namespace Fullerenes.Server.Geometry
         /// <param name="r2">float radius of the second shpere</param>
         /// <returns>true if contains, elase false</returns>
         public static bool SpheresInside(
-            Vector3 center1, float r1,
-            Vector3 center2, float r2
+            in Vector3 center1, float r1,
+            in Vector3 center2, float r2
         )
         {
             ArgumentNullException.ThrowIfNull(center1);
@@ -35,8 +35,8 @@ namespace Fullerenes.Server.Geometry
         /// <param name="r2">Radius of the second shpere</param>
         /// <returns>true if intersect, else false</returns>
         public static bool SpheresIntersect(
-            Vector3 center1, float r1,
-            Vector3 center2, float r2
+            in Vector3 center1, float r1,
+            in Vector3 center2, float r2
         )
         {
             ArgumentNullException.ThrowIfNull(center1);
@@ -50,7 +50,7 @@ namespace Fullerenes.Server.Geometry
         /// <param name="parallelepiped"></param>
         /// <param name="point"></param>
         /// <returns>true if point inside</returns>
-        public static bool Pointinside(Cube parallelepiped, Vector3 point)
+        public static bool Pointinside(Cube parallelepiped, in Vector3 point)
         {
             ArgumentNullException.ThrowIfNull(parallelepiped);
 
@@ -60,45 +60,13 @@ namespace Fullerenes.Server.Geometry
                 MathF.Abs(point.Z - parallelepiped.Center.Z) <= parallelepiped.Height / 2;
         }
         /// <summary>
-        /// Checks two figures intersection using Separating Axis Theorem
-        /// </summary>
-        /// <param name="vertices1">Vertices of the first figure</param>
-        /// <param name="faces1">Faces of the first figure</param>
-        /// <param name="vertices2">Vertices of the second figure</param>
-        /// <param name="faces2">Faces of the second figure</param>
-        /// <returns>true if intersect, else false</returns>
-        public static bool FiguresIntersectUsingSat(
-            ICollection<Vector3> vertices1, ICollection<int[]> faces1,
-            ICollection<Vector3> vertices2, ICollection<int[]> faces2)
-        {
-            ArgumentNullException.ThrowIfNull(faces1);
-            ArgumentNullException.ThrowIfNull(faces2);
-
-            foreach (var face in faces1)
-            {
-                Vector3 normal = Formulas.GetNormal(vertices1.ElementAt(face[0]), vertices1.ElementAt(face[1]), vertices1.ElementAt(face[2]));
-
-                if (Formulas.IsSeparatingAxis(normal, vertices1, vertices2))
-                    return false;
-            }
-
-            foreach (var face in faces2)
-            {
-                Vector3 normal = Formulas.GetNormal(vertices2.ElementAt(face[0]), vertices2.ElementAt(face[1]), vertices2.ElementAt(face[2]));
-                if (Formulas.IsSeparatingAxis(normal, vertices1, vertices2))
-                    return false;
-            }
-
-            return true;
-        }
-        /// <summary>
         /// Checks if sphere intersect with parallelepiped
         /// </summary>
         /// <param name="area">Parallelepiped</param>
         /// <param name="sphereCenter">Center of th sphere</param>
         /// <param name="sphereRadius">Radius of the sphere</param>
         /// <returns>true if intersect, else false</returns>
-        public static bool Intersects(Cube area, Vector3 sphereCenter, float sphereRadius)
+        public static bool Intersects(Cube area, in Vector3 sphereCenter, float sphereRadius)
         {
             ArgumentNullException.ThrowIfNull(area);
 

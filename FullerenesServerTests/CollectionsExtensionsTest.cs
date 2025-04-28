@@ -14,7 +14,7 @@ namespace FullerenesServerTests
                 0, 0, 0,
                 5);
 
-            var vertices = fullerne.Vertices.AddMidPoints(fullerne.Faces);
+            var vertices = fullerne.Vertices;
 
             Assert.AreEqual(vertices.Count, fullerne.Vertices.Count);
         }

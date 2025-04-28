@@ -16,23 +16,13 @@ namespace Fullerenes.Server.Objects.LimitedAreas
     {
         public SphereLimitedArea() : this(0, 0, 0, 0, 0, null, null) { }
 
+        public override float OuterRadius => Params[0].value;
+
         public override bool Contains(Fullerene fullerene)
         {
             ArgumentNullException.ThrowIfNull(fullerene);
 
-            return
-                FiguresCollision.SpheresInside(
-                    fullerene.Center, fullerene.GenerateOuterSphereRadius(),
-                    Center, Params[0].value);
-        }
-
-        public override float GenerateOuterRadius() => Params[0].value;
-
-        public override string ToString()
-        {
-            return
-                "Center: " + Center + ", " +
-                "Parameters: " + string.Join(", ", Params.Select(val => val.name + ": " + val.value));
+            return FiguresCollision.SpheresInside(fullerene.Center, fullerene.OuterSphereRadius, Center, OuterRadius);
         }
 
         protected override IEnumerable<Fullerene> GenerateFullerenes(EulerAngles RotationAngles, (float min, float max) FullereneSize)

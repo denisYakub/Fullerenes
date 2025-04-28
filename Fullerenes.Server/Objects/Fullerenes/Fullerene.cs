@@ -10,14 +10,14 @@ namespace Fullerenes.Server.Objects.Fullerenes
         float praecessioAngle, float nutatioAngle, float properRotationAngle, 
         float size)
     {
-        public float Size { get; } = size;
-        public Vector3 Center { get; } = new(x, y, z);
+        public float Size => size;
+        public Vector3 Center => new(x, y, z);
         public abstract ICollection<Vector3> Vertices { get; }
         public abstract IReadOnlyCollection<int[]> Faces { get; }
-        public EulerAngles EulerAngles { get; } = new(praecessioAngle, nutatioAngle, properRotationAngle);
+        public EulerAngles EulerAngles => new(praecessioAngle, nutatioAngle, properRotationAngle);
 
-        public abstract float GenerateOuterSphereRadius();
-        public abstract float GenerateInnerSphereRadius();
+        public abstract float OuterSphereRadius { get; }
+        public abstract float InnerSphereRadius { get; }
         public abstract float GenerateVolume();
         public abstract float GetEdgeSize();
 
@@ -25,39 +25,46 @@ namespace Fullerenes.Server.Objects.Fullerenes
         {
             ArgumentNullException.ThrowIfNull(fullerene);
 
-            var outerRadiusF1 = GenerateOuterSphereRadius();
-            var outerRadiusF2 = fullerene.GenerateOuterSphereRadius();
+            var outerRadiusF1 = OuterSphereRadius;
+            var centerF1 = Center;
 
-            if (FiguresCollision.SpheresInside(Center, outerRadiusF1, fullerene.Center, outerRadiusF2))
+            var outerRadiusF2 = fullerene.OuterSphereRadius;
+            var centerF2 = fullerene.Center;
+
+            if (FiguresCollision.SpheresInside(in centerF1, outerRadiusF1, in centerF2, outerRadiusF2))
                 return true;
 
-            var innerRadiusF1 = GenerateInnerSphereRadius();
-            var innerRadiusF2 = fullerene.GenerateInnerSphereRadius();
+            var innerRadiusF1 = InnerSphereRadius;
+            var innerRadiusF2 = fullerene.InnerSphereRadius;
 
-            if (FiguresCollision.SpheresInside(Center, innerRadiusF1, fullerene.Center, outerRadiusF2))
+            if (FiguresCollision.SpheresInside(in centerF1, innerRadiusF1, in centerF2, outerRadiusF2))
                 return true;
 
-            if (FiguresCollision.SpheresInside(Center, outerRadiusF1, fullerene.Center, innerRadiusF2))
+            if (FiguresCollision.SpheresInside(in centerF1, outerRadiusF1, in centerF2, innerRadiusF2))
                 return true;
 
-            if (FiguresCollision.SpheresIntersect(Center, innerRadiusF1, fullerene.Center, innerRadiusF2))
+            if (FiguresCollision.SpheresIntersect(in centerF1, innerRadiusF1, in centerF2, innerRadiusF2))
                 return true;
 
-            if (!FiguresCollision.SpheresIntersect(Center, outerRadiusF1, fullerene.Center, outerRadiusF2))
+            if (!FiguresCollision.SpheresIntersect(in centerF1, outerRadiusF1, in centerF2, outerRadiusF2))
                 return false;
 
-            return 
+            if (Vertices.Count != 42)
+                throw new Exception();
+
+            return
                 Vertices
-                .AddMidPoints(Faces)
                 .Any(fullerene.Contains);
         }
 
         public virtual bool Contains(Vector3 point)
         {
-            if (FiguresCollision.SpheresInside(point, 0, Center, GenerateInnerSphereRadius()))
+            var centerF = Center;
+
+            if (FiguresCollision.SpheresInside(in point, 0, in centerF, InnerSphereRadius))
                 return true;
 
-            if (!FiguresCollision.SpheresInside(point, 0, Center, GenerateOuterSphereRadius()))
+            if (!FiguresCollision.SpheresInside(in point, 0, in centerF, OuterSphereRadius))
                 return false;
 
             var vertices = Vertices;

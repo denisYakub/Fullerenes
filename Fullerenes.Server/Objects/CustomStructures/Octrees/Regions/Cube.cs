@@ -99,7 +99,7 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
         {
             ArgumentNullException.ThrowIfNull(fullerene);
 
-            var fullereneR = fullerene.GenerateOuterSphereRadius();
+            var fullereneR = fullerene.OuterSphereRadius;
 
             return
                 (Center.X - Length / 2) + fullereneR <= fullerene.Center.X &&
@@ -114,16 +114,17 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
         {
             ArgumentNullException.ThrowIfNull(fullerene);
 
-            if (!FiguresCollision.Intersects(this, fullerene.Center, fullerene.GenerateOuterSphereRadius()))
+            var centerF = fullerene.Center;
+
+            if (!FiguresCollision.Intersects(this, in centerF, fullerene.OuterSphereRadius))
                 return false;
 
-            if (FiguresCollision.Intersects(this, fullerene.Center, fullerene.GenerateInnerSphereRadius()))
+            if (FiguresCollision.Intersects(this, in centerF, fullerene.InnerSphereRadius))
                 return true;
 
             return
                 fullerene.Vertices
-                .AddMidPoints(fullerene.Faces)
-                .Any(vertex => FiguresCollision.Pointinside(this, vertex));
+                .Any(vertex => FiguresCollision.Pointinside(this, in vertex));
         }
 
         public override string ToString()

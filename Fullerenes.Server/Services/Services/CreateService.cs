@@ -45,9 +45,9 @@ namespace Fullerenes.Server.Services.Services
 
             var data = fileService.GetArea(dataPath);
 
-            var radii = GenerateRadii(data.GenerateOuterRadius(), numberOfLayers);
+            var radii = GenerateRadii(data.OuterRadius, numberOfLayers);
 
-            var points = GenerateDots(data.Center, data.GenerateOuterRadius()).Take(numberOfPoints);
+            var points = GenerateDots(data.Center, data.OuterRadius).Take(numberOfPoints);
 
             var tasks = new Task<(int dotsInFullerene, int dotsInLayer)>[numberOfLayers];
 

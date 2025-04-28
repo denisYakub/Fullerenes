@@ -16,11 +16,10 @@ namespace Fullerenes.Server.Objects.Fullerenes
         public IcosahedronFullerene() 
             : this(0, 0, 0, 0, 0, 0, 0) { }
 
-        private readonly object _lock = new();
         private static readonly float Phi = (1 + MathF.Sqrt(5)) / 2;
 
         public override IReadOnlyCollection<int[]> Faces => _faces;
-        private static readonly IReadOnlyCollection<int[]> _faces = [
+        private static readonly int[][] _faces = [
             [0, 11, 5],
             [0, 5, 1],
             [0, 1, 7],
@@ -43,25 +42,21 @@ namespace Fullerenes.Server.Objects.Fullerenes
             [9, 8, 1]
         ];
 
-        private ICollection<Vector3>? _vertices;
         public override ICollection<Vector3> Vertices
         {
             get
             {
-                lock (_lock)
-                {
-                    return _vertices ??=
-                        GenerateDefaultVerticesPositions(Size)
-                        .Rotate(EulerAngles)
-                        .Shift(Center);
-                }
+                return GenerateDefaultVerticesPositions(Size)
+                    .AddMidPoints(in _faces)
+                    .Rotate(EulerAngles)
+                    .Shift(Center);
             }
         }
 
-        public override float GenerateOuterSphereRadius() 
+        public override float OuterSphereRadius 
             => 0.951f * GetEdgeSize();
 
-        public override float GenerateInnerSphereRadius()
+        public override float InnerSphereRadius
             => 0.7557f * GetEdgeSize();
 
         public override float GetEdgeSize()
@@ -69,10 +64,10 @@ namespace Fullerenes.Server.Objects.Fullerenes
                 new Vector3(-1, Phi, 0) * Size,
                 new Vector3(-Phi, 0, 1) * Size);
 
-        private static ICollection<Vector3> GenerateDefaultVerticesPositions(float size)
+        private static List<Vector3> GenerateDefaultVerticesPositions(float size)
         {
-            return
-            [
+            return new List<Vector3>(42)
+            {
                 new Vector3(-1, Phi, 0) * size,
                 new Vector3( 1, Phi, 0) * size,
                 new Vector3(-1, -Phi, 0) * size,
@@ -87,14 +82,14 @@ namespace Fullerenes.Server.Objects.Fullerenes
                 new Vector3(Phi, 0,  1) * size,
                 new Vector3(-Phi, 0, -1) * size,
                 new Vector3(-Phi, 0,  1) * size
-            ];
+            };
         }
 
         public override float GenerateVolume()
         {
             int numberOfDotsInsideFullerene = 0;
             int samples = 1_000_000;
-            float radius = GenerateOuterSphereRadius();
+            float radius = OuterSphereRadius;
 
             var random = new Random();
 
