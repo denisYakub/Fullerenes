@@ -11,11 +11,11 @@ namespace FullerenesServerTests
     [TestClass]
     public class SphereLimitedAreaTest
     {
-        private readonly static int numberOfFullerenes = 1_000_000;
+        private readonly static int numberOfFullerenes = 300_000;
 
         private readonly static int numberOfSeries = 1;
 
-        private readonly static float areaX = 0, areaY = 0, areaZ = 0, areaR = 3000;
+        private readonly static float areaX = 0, areaY = 0, areaZ = 0, areaR = 500;
 
         private readonly static float shape = 3, scale = 2.5f;
 

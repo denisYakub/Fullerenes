@@ -19,16 +19,15 @@ namespace Fullerenes.Server.Extensions
         {
             ArgumentNullException.ThrowIfNull(gamma);
 
+            float xMax = (float)gamma.InverseCumulativeDistribution(0.99);
+
             while (true)
             {
-                float randValue = (float)gamma.Sample();
+                float x = (float)gamma.Sample();
 
-                while (randValue <= min || randValue >= max)
-                {
-                    randValue = (float)gamma.Sample();
-                }
+                float randValue = min + (max - min) * (x / xMax);
 
-                yield return randValue;
+                yield return Math.Max(min, Math.Min(max, randValue));
             }
         }
     }
