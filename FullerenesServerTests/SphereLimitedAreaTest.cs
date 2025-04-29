@@ -9,7 +9,7 @@ namespace FullerenesServerTests
     [TestClass]
     public class SphereLimitedAreaTest
     {
-        private readonly static int numberOfFullerenes = 300_000;
+        private readonly static int numberOfFullerenes = 1_000_000;
 
         private readonly static int numberOfSeries = 1;
 

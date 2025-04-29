@@ -30,7 +30,7 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
 
         private readonly Node _root = new Node(threads) { Depth = 0, Region = startRegion };
 
-        public bool Add(Fullerene fullerene, int thread) => Insert(fullerene, thread, _root);
+        public bool Add(Fullerene fullerene, int thread) => Insert(fullerene, thread);
 
         private bool Insert(Fullerene fullerene, int thread, Node node)
         {

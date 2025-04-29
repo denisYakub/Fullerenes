@@ -13,8 +13,6 @@
         }
         public EulerAngles(string anglesStr)
         {
-            ArgumentNullException.ThrowIfNull(anglesStr);
-
             float[] coordinates = anglesStr.Split(' ').Select(float.Parse).ToArray();
 
             if (coordinates.Length != 3) return;

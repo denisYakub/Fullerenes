@@ -23,8 +23,6 @@ namespace Fullerenes.Server.Objects.Fullerenes
 
         public virtual bool Intersect(Fullerene fullerene)
         {
-            ArgumentNullException.ThrowIfNull(fullerene);
-
             var centerF1 = Center;
             var centerF2 = fullerene.Center;
 

@@ -19,9 +19,6 @@ namespace Fullerenes.Server.Geometry
             in Vector3 outerC, float outerR
         )
         {
-            ArgumentNullException.ThrowIfNull(innerC);
-            ArgumentNullException.ThrowIfNull(outerC);
-
             var distanceSquar = Vector3.DistanceSquared(innerC, outerC);
             float radiusDiff = outerR - innerR;
 
@@ -40,9 +37,6 @@ namespace Fullerenes.Server.Geometry
             in Vector3 center2, float r2
         )
         {
-            ArgumentNullException.ThrowIfNull(center1);
-            ArgumentNullException.ThrowIfNull(center2);
-
             return Vector3.Distance(center2, center1) < (r1 + r2) * (r1 + r2);
         }
         /// <summary>
@@ -53,9 +47,7 @@ namespace Fullerenes.Server.Geometry
         /// <returns>true if point inside</returns>
         public static bool Pointinside(Cube parallelepiped, in Vector3 point)
         {
-            ArgumentNullException.ThrowIfNull(parallelepiped);
-
-            return
+           return
                 MathF.Abs(point.X - parallelepiped.Center.X) <= parallelepiped.Length / 2 &&
                 MathF.Abs(point.Y - parallelepiped.Center.Y) <= parallelepiped.Width / 2 &&
                 MathF.Abs(point.Z - parallelepiped.Center.Z) <= parallelepiped.Height / 2;
@@ -69,8 +61,6 @@ namespace Fullerenes.Server.Geometry
         /// <returns>true if intersect, else false</returns>
         public static bool Intersects(Cube area, in Vector3 sphereCenter, float sphereRadius)
         {
-            ArgumentNullException.ThrowIfNull(area);
-
             float minX = area.Center.X - area.Width / 2;
             float maxX = area.Center.X + area.Width / 2;
             float minY = area.Center.Y - area.Height / 2;

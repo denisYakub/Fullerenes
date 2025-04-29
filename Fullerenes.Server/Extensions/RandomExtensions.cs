@@ -6,8 +6,6 @@ namespace Fullerenes.Server.Extensions
     {
         public static IEnumerable<float> GetEvenlyRandoms(this Random random, float min, float max)
         {
-            ArgumentNullException.ThrowIfNull(random);
-
             while (true)
             {
                 float randValue = (float)random.NextDouble();
@@ -17,8 +15,6 @@ namespace Fullerenes.Server.Extensions
         }
         public static IEnumerable<float> GetGammaRandoms(this Gamma gamma, float min, float max)
         {
-            ArgumentNullException.ThrowIfNull(gamma);
-
             while (true)
             {
                 float randValue = (float)gamma.Sample();

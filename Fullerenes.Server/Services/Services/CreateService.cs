@@ -13,8 +13,6 @@ namespace Fullerenes.Server.Services.Services
     {
         public long GenerateArea(SystemAbstractFactory factory)
         {
-            ArgumentNullException.ThrowIfNull(factory);
-
             long generationId = dataBaseService.GetGenerationId();
 
             IOctree octree = factory.GenerateOctree();
@@ -22,8 +20,6 @@ namespace Fullerenes.Server.Services.Services
             Parallel.For(0, factory.ThreadNumber, (thread, state) =>
             {
                 LimitedArea limitedArea = factory.GenerateLimitedArea(thread, octree);
-
-                ArgumentNullException.ThrowIfNull(limitedArea.Fullerenes);
 
                 string filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{generationId}");
 
@@ -40,8 +36,6 @@ namespace Fullerenes.Server.Services.Services
         public async Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000)
         {
             string? dataPath = dataBaseService.GetDataPath(superId);
-
-            ArgumentNullException.ThrowIfNull(dataPath);
 
             var data = fileService.GetArea(dataPath);
 
@@ -93,8 +87,6 @@ namespace Fullerenes.Server.Services.Services
                 if (distance >= radiusMin && distance <= radiusMax)
                 {
                     dotsInLayerCount++;
-
-                    ArgumentNullException.ThrowIfNull(fullerenes);
 
                     dotsInFullerenesAndLayerCount += fullerenes.Count(
                         fullerene =>

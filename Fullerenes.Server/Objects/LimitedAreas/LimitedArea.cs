@@ -17,7 +17,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public IEnumerable<Fullerene>? Fullerenes { get; set; }
         public (string name, float value)[] Params => parameters;
         public required Func<float, float, float, float, float, float, float, Fullerene>  ProduceFullerene { get; init; }
-        //TODO public -> protected
+
         public readonly Gamma Gamma = gamma;
         public readonly Random Random = random;
         public static readonly int RetryCountMax = 100;

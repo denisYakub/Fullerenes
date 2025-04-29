@@ -20,8 +20,6 @@ namespace Fullerenes.Server.Objects.LimitedAreas
 
         public override bool Contains(Fullerene fullerene)
         {
-            ArgumentNullException.ThrowIfNull(fullerene);
-
             return FiguresCollision.SpheresInside(fullerene.Center, fullerene.OuterSphereRadius, Center, OuterRadius);
         }
 
@@ -30,37 +28,36 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             var retryCount = 0;
 
             var xS = Random
-                .GetEvenlyRandoms(Center.X - Params[0].value, Center.X + Params[0].value);
+                .GetEvenlyRandoms(Center.X - Params[0].value, Center.X + Params[0].value)
+                .GetEnumerator();
             var yS = Random
-                .GetEvenlyRandoms(Center.Y - Params[0].value, Center.Y + Params[0].value);
+                .GetEvenlyRandoms(Center.Y - Params[0].value, Center.Y + Params[0].value)
+                .GetEnumerator();
             var zS = Random
-                .GetEvenlyRandoms(Center.Z - Params[0].value, Center.Z + Params[0].value);
+                .GetEvenlyRandoms(Center.Z - Params[0].value, Center.Z + Params[0].value)
+                .GetEnumerator();
 
             var praecessioAngleS = Random
-                .GetEvenlyRandoms(-RotationAngles.PraecessioAngle, RotationAngles.PraecessioAngle);
+                .GetEvenlyRandoms(-RotationAngles.PraecessioAngle, RotationAngles.PraecessioAngle)
+                .GetEnumerator();
             var nutatioAngleS = Random
-                .GetEvenlyRandoms(-RotationAngles.NutatioAngle, RotationAngles.NutatioAngle);
+                .GetEvenlyRandoms(-RotationAngles.NutatioAngle, RotationAngles.NutatioAngle)
+                .GetEnumerator();
             var properRotationAngleS = Random
-                .GetEvenlyRandoms(-RotationAngles.ProperRotationAngle, RotationAngles.ProperRotationAngle);
+                .GetEvenlyRandoms(-RotationAngles.ProperRotationAngle, RotationAngles.ProperRotationAngle)
+                .GetEnumerator();
 
             var sizeS = Gamma
-                .GetGammaRandoms(FullereneSize.min, FullereneSize.max);
+                .GetGammaRandoms(FullereneSize.min, FullereneSize.max)
+                .GetEnumerator();
 
             try
             {
                 while (true)
                 {
-                    using var x = xS.GetEnumerator();
-                    using var y = yS.GetEnumerator();
-                    using var z = zS.GetEnumerator();
-                    using var praecessioAngle = praecessioAngleS.GetEnumerator();
-                    using var nutatioAngle = nutatioAngleS.GetEnumerator();
-                    using var properRotationAngle = properRotationAngleS.GetEnumerator();
-                    using var size = sizeS.GetEnumerator();
-
-                    while (x.MoveNext() && y.MoveNext() && z.MoveNext() &&
-                        praecessioAngle.MoveNext() && nutatioAngle.MoveNext() && properRotationAngle.MoveNext() &&
-                        size.MoveNext())
+                    if (xS.MoveNext() && yS.MoveNext() && zS.MoveNext() &&
+                        praecessioAngleS.MoveNext() && nutatioAngleS.MoveNext() && properRotationAngleS.MoveNext() &&
+                        sizeS.MoveNext())
                     {
                         if (retryCount == RetryCountMax)
                             yield break;
@@ -69,9 +66,9 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                             yield break;
 
                         Fullerene fullerene = ProduceFullerene.Invoke(
-                            x.Current, y.Current, z.Current,
-                            praecessioAngle.Current, nutatioAngle.Current, properRotationAngle.Current,
-                            size.Current);
+                            xS.Current, yS.Current, zS.Current,
+                            praecessioAngleS.Current, nutatioAngleS.Current, properRotationAngleS.Current,
+                            sizeS.Current);
 
                         if (!Contains(fullerene) || !Octree.Add(fullerene, Series))
                         {
@@ -88,7 +85,13 @@ namespace Fullerenes.Server.Objects.LimitedAreas
             }
             finally
             {
-                Print.PrintToConsole($"Generation_{Series} DONE!");
+                xS.Dispose();
+                yS.Dispose();
+                zS.Dispose();
+                praecessioAngleS.Dispose();
+                nutatioAngleS.Dispose();
+                properRotationAngleS.Dispose();
+                sizeS.Dispose();
             }
         }
     }

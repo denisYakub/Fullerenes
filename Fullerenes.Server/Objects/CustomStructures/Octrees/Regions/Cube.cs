@@ -97,8 +97,6 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
 
         public bool Contains(Fullerene fullerene)
         {
-            ArgumentNullException.ThrowIfNull(fullerene);
-
             var fullereneR = fullerene.OuterSphereRadius;
 
             return
@@ -112,8 +110,6 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octrees.Regions
 
         public bool ContainsPart(Fullerene fullerene)
         {
-            ArgumentNullException.ThrowIfNull(fullerene);
-
             var centerF = fullerene.Center;
 
             if (!FiguresCollision.Intersects(this, in centerF, fullerene.OuterSphereRadius))

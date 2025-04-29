@@ -8,9 +8,6 @@ namespace Fullerenes.Server.Extensions
     {
         public static List<Vector3> AddMidPoints(this List<Vector3> vertices, in int[][] facesIndices)
         {
-            ArgumentNullException.ThrowIfNull(vertices);
-            ArgumentNullException.ThrowIfNull(facesIndices);
-
             var edgeSet = new HashSet<(int, int)>();
 
             foreach (var face in facesIndices)
@@ -32,8 +29,6 @@ namespace Fullerenes.Server.Extensions
         }
         public static List<Vector3> Shift(this List<Vector3> vertices, Vector3 dot)
         {
-            ArgumentNullException.ThrowIfNull(vertices);
-
             for (int i = 0; i < vertices.Count; i++) 
             { 
                 vertices[i] += dot;
@@ -44,8 +39,6 @@ namespace Fullerenes.Server.Extensions
 
         public static List<Vector3> Rotate(this List<Vector3> vertices, EulerAngles angles)
         {
-            ArgumentNullException.ThrowIfNull(vertices);
-
             var rotationMatrix = Formulas.CreateRotationMatrix(
                 angles.PraecessioAngle,
                 angles.NutatioAngle,
