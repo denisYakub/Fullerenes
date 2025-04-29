@@ -10,18 +10,17 @@ namespace Fullerenes.Server.Objects.LimitedAreas
 {
     public abstract class LimitedArea(float x, float y, float z, (string name, float value)[] parameters, int series, Random random, Gamma gamma)
     {
-        protected readonly Random Random = random;
-        protected readonly Gamma Gamma = gamma;
-        public Vector3 Center => new(x, y, z);
-        public (string name, float value)[] Params => parameters;
         public int Series => series;
+        public Vector3 Center => new(x, y, z);
         public abstract float OuterRadius { get; }
-        public IEnumerable<Fullerene>? Fullerenes { get; set; }
-        public required Func<float, float, float, float, float, float, float, Fullerene>  ProduceFullerene { get; init; }
         public required IOctree Octree { get; init; }
-
-        protected static bool ClearOctreeCollection { get; set; }
-        protected static readonly int RetryCountMax = 100;
+        public IEnumerable<Fullerene>? Fullerenes { get; set; }
+        public (string name, float value)[] Params => parameters;
+        public required Func<float, float, float, float, float, float, float, Fullerene>  ProduceFullerene { get; init; }
+        //TODO public -> protected
+        public readonly Gamma Gamma = gamma;
+        public readonly Random Random = random;
+        public static readonly int RetryCountMax = 100;
 
         public abstract bool Contains(Fullerene fullerene);
 

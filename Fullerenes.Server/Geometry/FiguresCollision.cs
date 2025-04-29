@@ -9,22 +9,23 @@ namespace Fullerenes.Server.Geometry
         /// Checks if at least one sphere is 
         /// contained within another
         /// </summary>
-        /// <param name="center1">Vector3 center of the first shpere</param>
-        /// <param name="r1">float radius of the first shpere</param>
-        /// <param name="center2">Vector3 center of the second shpere</param>
-        /// <param name="r2">float radius of the second shpere</param>
-        /// <returns>true if contains, elase false</returns>
+        /// <param name="innerC">Vector3 center of the inner shpere</param>
+        /// <param name="r1">float radius of the inner shpere</param>
+        /// <param name="center2">Vector3 center of the outer shpere</param>
+        /// <param name="outerR">float radius of the outer shpere</param>
+        /// <returns>true if contains, else false</returns>
         public static bool SpheresInside(
-            in Vector3 center1, float r1,
-            in Vector3 center2, float r2
+            in Vector3 innerC, float innerR,
+            in Vector3 outerC, float outerR
         )
         {
-            ArgumentNullException.ThrowIfNull(center1);
-            ArgumentNullException.ThrowIfNull(center2);
+            ArgumentNullException.ThrowIfNull(innerC);
+            ArgumentNullException.ThrowIfNull(outerC);
 
-            var distance = Vector3.Distance(center1, center2);
+            var distanceSquar = Vector3.DistanceSquared(innerC, outerC);
+            float radiusDiff = outerR - innerR;
 
-            return distance + r1 <= r2 || distance + r2 <= r2;
+            return radiusDiff >= 0 && distanceSquar <= radiusDiff * radiusDiff;
         }
         /// <summary>
         /// Checks two spheres intersection
@@ -42,7 +43,7 @@ namespace Fullerenes.Server.Geometry
             ArgumentNullException.ThrowIfNull(center1);
             ArgumentNullException.ThrowIfNull(center2);
 
-            return Vector3.Distance(center2, center1) < r1 + r2;
+            return Vector3.Distance(center2, center1) < (r1 + r2) * (r1 + r2);
         }
         /// <summary>
         /// Checks if point is inside parallelepiped

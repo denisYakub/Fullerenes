@@ -25,32 +25,20 @@ namespace Fullerenes.Server.Objects.Fullerenes
         {
             ArgumentNullException.ThrowIfNull(fullerene);
 
-            var outerRadiusF1 = OuterSphereRadius;
             var centerF1 = Center;
-
-            var outerRadiusF2 = fullerene.OuterSphereRadius;
             var centerF2 = fullerene.Center;
-
-            if (FiguresCollision.SpheresInside(in centerF1, outerRadiusF1, in centerF2, outerRadiusF2))
-                return true;
 
             var innerRadiusF1 = InnerSphereRadius;
             var innerRadiusF2 = fullerene.InnerSphereRadius;
 
-            if (FiguresCollision.SpheresInside(in centerF1, innerRadiusF1, in centerF2, outerRadiusF2))
-                return true;
-
-            if (FiguresCollision.SpheresInside(in centerF1, outerRadiusF1, in centerF2, innerRadiusF2))
-                return true;
-
             if (FiguresCollision.SpheresIntersect(in centerF1, innerRadiusF1, in centerF2, innerRadiusF2))
                 return true;
 
-            if (!FiguresCollision.SpheresIntersect(in centerF1, outerRadiusF1, in centerF2, outerRadiusF2))
-                return false;
+            var outerRadiusF1 = OuterSphereRadius;
+            var outerRadiusF2 = fullerene.OuterSphereRadius;
 
-            if (Vertices.Count != 42)
-                throw new Exception();
+            if (!FiguresCollision.SpheresIntersect(in centerF1, OuterSphereRadius, in centerF2, outerRadiusF2))
+                return false;
 
             return
                 Vertices

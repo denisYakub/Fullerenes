@@ -2,8 +2,6 @@
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
-using Fullerenes.Server.Services.IServices;
-using Fullerenes.Server.Services.Services;
 using MathNet.Numerics.Distributions;
 
 namespace FullerenesServerTests
@@ -15,7 +13,7 @@ namespace FullerenesServerTests
 
         private readonly static int numberOfSeries = 1;
 
-        private readonly static float areaX = 0, areaY = 0, areaZ = 0, areaR = 500;
+        private readonly static float areaX = 0, areaY = 0, areaZ = 0, areaR = 3000;
 
         private readonly static float shape = 3, scale = 2.5f;
 

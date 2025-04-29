@@ -5,9 +5,9 @@
     {
       "tool": {
         "name": "Компилятор Microsoft (R) Visual C#",
-        "version": "4.13.0.0",
-        "fileVersion": "4.13.0-3.25167.3 (73eff2b5)",
-        "semanticVersion": "4.13.0",
+        "version": "4.11.0.0",
+        "fileVersion": "4.11.0-3.24460.3 (5649376e)",
+        "semanticVersion": "4.11.0",
         "language": "ru-RU"
       },
       "results": [
