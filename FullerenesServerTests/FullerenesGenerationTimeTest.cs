@@ -36,7 +36,11 @@ namespace FullerenesServerTests
                         gamm.Current);
             }
 
-            area = new SphereLimitedArea(0, 0, 0, 500, 0, null, null) { Octree = null, ProduceFullerene = null };
+            area = new SphereLimitedArea(0, 0, 0, 500, 0) 
+            { 
+                Octree = null, ProduceFullerene = null,
+                Random = null, Gamma = null
+            };
 
             Console.WriteLine($"Number of fullerenes: {numberOfFullerenes}");
         }
@@ -79,32 +83,38 @@ namespace FullerenesServerTests
         {
             TimeSpan? biggestRunTime = null;
             int iB = 0;
+            int jB = 0;
 
             for (int i = 1; i < numberOfFullerenes; i++)
-            {
-                DateTime timeBefore = DateTime.Now;
-
-                var intersect = randFullerenes[0].Intersect(randFullerenes[i]);
-
-                DateTime timeAfter = DateTime.Now;
-
-                var time = timeAfter - timeBefore;
-
-                if (biggestRunTime is null)
+                for (int j = numberOfFullerenes - 1; j > -1; j--)
                 {
-                    biggestRunTime = time;
-                }
-                else if (biggestRunTime < time)
-                {
-                    biggestRunTime = time;
+                    if (i == j)
+                        break;
 
-                    iB = i;
+                    DateTime timeBefore = DateTime.Now;
+
+                    randFullerenes[i].Intersect(randFullerenes[j]);
+
+                    DateTime timeAfter = DateTime.Now;
+
+                    var time = timeAfter - timeBefore;
+
+                    if (biggestRunTime is null)
+                    {
+                        biggestRunTime = time;
+                    }
+                    else if (biggestRunTime < time)
+                    {
+                        biggestRunTime = time;
+
+                        iB = i;
+                        jB = j;
+                    }
                 }
-            }
 
             Console.WriteLine($"Longest Intersect: {biggestRunTime}");
             Console.WriteLine($"f1: size{randFullerenes[iB].Size}, angles: {randFullerenes[iB].EulerAngles}, center:{randFullerenes[iB]}");
-            Console.WriteLine($"f2: size{randFullerenes[0].Size}, angles: {randFullerenes[0].EulerAngles}, center:{randFullerenes[0]}");
+            Console.WriteLine($"f2: size{randFullerenes[jB].Size}, angles: {randFullerenes[jB].EulerAngles}, center:{randFullerenes[jB]}");
         }
 
         [TestMethod]

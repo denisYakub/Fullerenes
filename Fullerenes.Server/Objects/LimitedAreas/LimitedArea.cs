@@ -8,7 +8,7 @@ using MathNet.Numerics.Distributions;
 
 namespace Fullerenes.Server.Objects.LimitedAreas
 {
-    public abstract class LimitedArea(float x, float y, float z, (string name, float value)[] parameters, int series, Random random, Gamma gamma)
+    public abstract class LimitedArea(float x, float y, float z, (string name, float value)[] parameters, int series)
     {
         public int Series => series;
         public Vector3 Center => new(x, y, z);
@@ -18,8 +18,9 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public (string name, float value)[] Params => parameters;
         public required Func<float, float, float, float, float, float, float, Fullerene>  ProduceFullerene { get; init; }
 
-        public readonly Gamma Gamma = gamma;
-        public readonly Random Random = random;
+        public required Gamma Gamma { get; init; }
+        public required Random Random { get; init; }
+
         public static readonly int RetryCountMax = 100;
 
         public abstract bool Contains(Fullerene fullerene);

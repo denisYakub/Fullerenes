@@ -17,7 +17,7 @@ namespace Fullerenes.Server.DataBase
         public int Series { get; set; } = series;
         [AllowNull]
         [Column("phi")]
-        public float? Phi {  get; set; }
+        public required float? Phi {  get; set; }
         [Column("number_of_generation")]
         public long N { get; set; } = n;
         [Column("area_type")]

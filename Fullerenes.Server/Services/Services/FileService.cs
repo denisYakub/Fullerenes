@@ -189,9 +189,94 @@ namespace Fullerenes.Server.Services.Services
             };
         }
 
-        public LimitedArea GetArea(string fileName, string? subFolder = null)
+        public LimitedArea GetArea(string fullPath)
         {
-            throw new NotImplementedException();
+            using var reader = new StreamReader(fullPath);
+            using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var flatList = csvReader.GetRecords<FlatArea>().ToList();
+
+            LimitedArea area = null;
+            List<Fullerene> fullerenesA = new List<Fullerene>(flatList.Count());
+
+            foreach (FlatArea flatArea in flatList)
+            {
+                if (area is null)
+                {
+                    var flatCenterA = flatArea.CenterA;
+
+                    // Убираем угловые скобки
+                    flatCenterA = flatCenterA.Trim('<', '>').Replace(',', '.');
+
+                    // Разделяем строку на компоненты по пробелу
+                    string[] components = flatCenterA.Split(' ');
+
+                    // Преобразуем компоненты в float и создаем Vector3
+                    float xA = float.Parse(components[0].Trim(), CultureInfo.InvariantCulture);
+                    float yA = float.Parse(components[1].Trim(), CultureInfo.InvariantCulture);
+                    float zA = float.Parse(components[2].Trim(), CultureInfo.InvariantCulture);
+
+                    string flatParams = flatArea.ParamsA;
+
+                    // Разделяем строку по "), (" и убираем скобки
+                    string[] pairs = flatParams.Trim('(', ')').Split("), (", StringSplitOptions.None);
+
+                    // Создаем массив кортежей (string, float)
+                    var paramsA = pairs.Select(pair =>
+                    {
+                        // Разделяем пару на имя и значение
+                        var parts = pair.Split(", ");
+                        string name = parts[0];
+                        float value = float.Parse(parts[1]);
+
+                        return (name, value);
+                    }).ToArray();
+
+                    area = new SphereLimitedArea(
+                        xA, yA, zA, paramsA[0].value,
+                        flatArea.SeriesA) 
+                    { 
+                        Octree = null, ProduceFullerene = null,
+                        Random = null, Gamma = null
+                    };
+                }
+
+                float sizeF = flatArea.SizeF;
+
+                var flatCenterF = flatArea.CenterF;
+
+                // Убираем угловые скобки
+                flatCenterF = flatCenterF.Trim('<', '>').Replace(',', '.');
+
+                // Разделяем строку на компоненты по пробелу
+                string[] componentsF = flatCenterF.Split(' ');
+
+                // Преобразуем компоненты в float и создаем Vector3
+                float xF = float.Parse(componentsF[0].Trim(), CultureInfo.InvariantCulture);
+                float yF = float.Parse(componentsF[1].Trim(), CultureInfo.InvariantCulture);
+                float zF = float.Parse(componentsF[2].Trim(), CultureInfo.InvariantCulture);
+
+                Vector3 centerF = new(xF, yF, zF);
+
+                var flatEulerAnglesF = flatArea.EulerAnglesF;
+
+                // Убираем угловые скобки
+                flatEulerAnglesF = flatEulerAnglesF.Trim('<', '>').Replace(',', '.');
+
+                // Разделяем строку на компоненты по пробелу
+                componentsF = flatEulerAnglesF.Split(' ');
+
+                // Преобразуем компоненты в float и создаем Vector3
+                float aF = float.Parse(componentsF[0].Trim(), CultureInfo.InvariantCulture);
+                float bF = float.Parse(componentsF[1].Trim(), CultureInfo.InvariantCulture);
+                float gF = float.Parse(componentsF[2].Trim(), CultureInfo.InvariantCulture);
+
+                EulerAngles eulerAnglesF = new(aF, bF, gF);
+
+                fullerenesA.Add(new IcosahedronFullerene(xF, yF, zF, aF, bF, gF, sizeF));
+            }
+
+            return area;
         }
     }
 }

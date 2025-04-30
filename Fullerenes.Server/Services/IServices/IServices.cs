@@ -22,12 +22,12 @@ namespace Fullerenes.Server.Services.IServices
     public interface ICreateService
     {
         long GenerateArea(SystemAbstractFactory factory);
-        Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
+        Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
     }
     public interface IFileService
     {
         string Write(IReadOnlyCollection<LimitedArea> areas, string fileName, string? subFolder = null);
         AreaMainInfo ReadMainInfo(string fileName, string? subFolder = null);
-        LimitedArea GetArea(string fileName, string? subFolder = null);
+        LimitedArea GetArea(string fullPath);
     }
 }

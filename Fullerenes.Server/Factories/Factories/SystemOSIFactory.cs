@@ -47,10 +47,12 @@ namespace Fullerenes.Server.Factories.Factories
             var area = new SphereLimitedArea(
                 AreaCenter.X, AreaCenter.Y, AreaCenter.Z, 
                 AreaRadius, 
-                thread,
-                new Random(), 
-                new Gamma(FullereneSizeDistribution.shape, FullereneSizeDistribution.scale)) 
-            { Octree = octree, ProduceFullerene = GenerateFullerene };
+                thread) 
+            { 
+                Octree = octree, ProduceFullerene = GenerateFullerene,
+                Random = new Random(),
+                Gamma = new Gamma(FullereneSizeDistribution.shape, FullereneSizeDistribution.scale)
+            };
 
             area.StartGeneration(FullerenesNumber, RotationAngles, FullereneSize);
 

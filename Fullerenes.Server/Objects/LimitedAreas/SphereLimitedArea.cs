@@ -11,10 +11,10 @@ using System.Numerics;
 
 namespace Fullerenes.Server.Objects.LimitedAreas
 {
-    public class SphereLimitedArea(float x, float y, float z, float r, int series, Random random, Gamma gamma) 
-        : LimitedArea(x, y, z, [("Radius", r)], series, random, gamma)
+    public class SphereLimitedArea(float x, float y, float z, float r, int series) 
+        : LimitedArea(x, y, z, [("Radius", r)], series)
     {
-        public SphereLimitedArea() : this(0, 0, 0, 0, 0, null, null) { }
+        public SphereLimitedArea() : this(0, 0, 0, 0, 0) { }
 
         public override float OuterRadius => Params[0].value;
 

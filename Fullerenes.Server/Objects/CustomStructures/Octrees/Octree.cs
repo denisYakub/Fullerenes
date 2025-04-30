@@ -37,7 +37,7 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
             if (!node.Region.Contains(fullerene))
                 return false;
 
-            if (node.ObjectsArr[thread] is not null && node.ObjectsArr[thread].AsParallel().Any(fullerene.Intersect))
+            if (node.ObjectsArr[thread] is not null && node.ObjectsArr[thread].AsParallel().WithDegreeOfParallelism(10).Any(fullerene.Intersect))
                 return false;
 
             if (node.Depth == MaxDepth)

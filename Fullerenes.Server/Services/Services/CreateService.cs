@@ -17,7 +17,7 @@ namespace Fullerenes.Server.Services.Services
 
             IOctree octree = factory.GenerateOctree();
 
-            Parallel.For(0, factory.ThreadNumber, (thread, state) =>
+            Parallel.For(0, factory.ThreadNumber, async (thread, state) =>
             {
                 LimitedArea limitedArea = factory.GenerateLimitedArea(thread, octree);
 
@@ -26,17 +26,18 @@ namespace Fullerenes.Server.Services.Services
                 SpData data = new(filePath);
                 dataBaseService.SaveData(data);
 
-                SpGen gen = new(factory.AreaType, factory.FullereneType, thread, generationId, data.Id);
+                SpGen gen = new(factory.AreaType, factory.FullereneType, thread, generationId, data.Id)
+                {
+                    Phi = GeneratePhis(filePath).Result.Average()
+                };
                 dataBaseService.SaveGen(gen);
             });
 
             return generationId;
         }
         
-        public async Task<float[]> GeneratePhis(long superId, int numberOfLayers = 5, int numberOfPoints = 1_000_000)
+        public async Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000)
         {
-            string? dataPath = dataBaseService.GetDataPath(superId);
-
             var data = fileService.GetArea(dataPath);
 
             var radii = GenerateRadii(data.OuterRadius, numberOfLayers);
