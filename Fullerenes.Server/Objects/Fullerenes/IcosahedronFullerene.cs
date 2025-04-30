@@ -47,7 +47,7 @@ namespace Fullerenes.Server.Objects.Fullerenes
             get
             {
                 return GenerateDefaultVerticesPositions(Size)
-                    .AddMidPoints(in _faces)
+                    .AddMidPoints(in _faces, 12)
                     .Rotate(EulerAngles)
                     .Shift(Center);
             }
@@ -64,25 +64,26 @@ namespace Fullerenes.Server.Objects.Fullerenes
                 new Vector3(-1, Phi, 0) * Size,
                 new Vector3(-Phi, 0, 1) * Size);
 
-        private static List<Vector3> GenerateDefaultVerticesPositions(float size)
+        private static Vector3[] GenerateDefaultVerticesPositions(float size)
         {
-            return new List<Vector3>(42)
-            {
-                new Vector3(-1, Phi, 0) * size,
-                new Vector3( 1, Phi, 0) * size,
-                new Vector3(-1, -Phi, 0) * size,
-                new Vector3( 1, -Phi, 0) * size,
+            var array = new Vector3[42];
 
-                new Vector3(0, -1, Phi) * size,
-                new Vector3(0,  1, Phi) * size,
-                new Vector3(0, -1, -Phi) * size,
-                new Vector3(0,  1, -Phi) * size,
+            array[0] = new Vector3(-1, Phi, 0) * size;
+            array[1] = new Vector3(1, Phi, 0) * size;
+            array[2] = new Vector3(-1, -Phi, 0) * size;
+            array[3] = new Vector3(1, -Phi, 0) * size;
 
-                new Vector3(Phi, 0, -1) * size,
-                new Vector3(Phi, 0,  1) * size,
-                new Vector3(-Phi, 0, -1) * size,
-                new Vector3(-Phi, 0,  1) * size
-            };
+            array[4] = new Vector3(0, -1, Phi) * size;
+            array[5] = new Vector3(0, 1, Phi) * size;
+            array[6] = new Vector3(0, -1, -Phi) * size;
+            array[7] = new Vector3(0, 1, -Phi) * size;
+
+            array[8] = new Vector3(Phi, 0, -1) * size;
+            array[9] = new Vector3(Phi, 0, 1) * size;
+            array[10] = new Vector3(-Phi, 0, -1) * size;
+            array[11] = new Vector3(-Phi, 0, 1) * size;
+
+            return array;
         }
 
         public override float GenerateVolume()
