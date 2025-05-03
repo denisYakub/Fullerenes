@@ -21,13 +21,13 @@ namespace Fullerenes.Server.Services.IServices
     }
     public interface ICreateService
     {
-        long GenerateArea(SystemAbstractFactory factory);
+        (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory);
         Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
     }
     public interface IFileService
     {
         string Write(IReadOnlyCollection<LimitedArea> areas, string fileName, string? subFolder = null);
-        AreaMainInfo ReadMainInfo(string fileName, string? subFolder = null);
+        AreaMainInfo ReadMainInfo(string fullPath);
         LimitedArea GetArea(string fullPath);
     }
 }

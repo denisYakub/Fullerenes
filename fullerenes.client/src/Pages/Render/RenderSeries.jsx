@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import RenderLimitedArea from "../Render/RenderLimitedArea"
+import PhiDistributionChart from "../PhiDistributionPage";
 
 export default function RenderSeries() {
-    const { seriesId, genId } = useParams();
+    const { superId } = useParams();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
+    const [phis, setPhis] = useState(5);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/Main/get-series-of-generation/${seriesId}/${genId}`,
+                const response = await fetch(`/api/Main/get-series-of-generation/${superId}`,
                     {
                         method: "GET",
                         redirect: "follow",
@@ -32,7 +34,7 @@ export default function RenderSeries() {
         };
 
         fetchData();
-    }, [seriesId, genId]);
+    }, [superId]);
 
     return (
         <div>
@@ -45,6 +47,20 @@ export default function RenderSeries() {
                         fullerenes={data.fullerenes}
                 />
             )}
+
+            <div style={{ marginTop: '1rem' }}>
+                <label htmlFor="phis-input">Number of layers : </label>
+                <input
+                    id="phis-input"
+                    type="number"
+                    min="1"
+                    value={phis}
+                    onChange={(e) => setPhis(Number(e.target.value))}
+                    style={{ width: '60px', marginLeft: '10px' }}
+                />
+            </div>
+
+            <PhiDistributionChart phis={phis} superId={superId} />
         </div>
     );
 }

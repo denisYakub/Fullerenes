@@ -11,9 +11,11 @@ namespace Fullerenes.Server.Services.Services
 {
     public class CreateService(IDataBaseService dataBaseService, IFileService fileService) : ICreateService
     {
-        public long GenerateArea(SystemAbstractFactory factory)
+        public (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory)
         {
             long generationId = dataBaseService.GetGenerationId();
+
+            List<long> superIds = new List<long>(factory.ThreadNumber);
 
             IOctree octree = factory.GenerateOctree();
 
@@ -31,9 +33,11 @@ namespace Fullerenes.Server.Services.Services
                     Phi = GeneratePhis(filePath).Result.Average()
                 };
                 dataBaseService.SaveGen(gen);
+
+                superIds.Add(data.Id);
             });
 
-            return generationId;
+            return (generationId, superIds);
         }
         
         public async Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000)
@@ -61,7 +65,7 @@ namespace Fullerenes.Server.Services.Services
 
             for (int i = 0; i < numberOfLayers; i++)
             {
-                phis[i] = taskResults[i].dotsInFullerene / taskResults[i].dotsInLayer;
+                phis[i] = ((float)taskResults[i].dotsInFullerene) / ((float)taskResults[i].dotsInLayer);
             }
             
             return phis;
@@ -89,11 +93,11 @@ namespace Fullerenes.Server.Services.Services
                 {
                     dotsInLayerCount++;
 
-                    dotsInFullerenesAndLayerCount += fullerenes.Count(
-                        fullerene =>
-                        CrossesRegion(sphereCenter, radiusMin, radiusMax, fullerene)
-                        && fullerene.Contains(dot)
-                    );
+                    foreach (var fullerene in fullerenes)
+                    {
+                        if (fullerene.Contains(dot))
+                            dotsInFullerenesAndLayerCount++;
+                    }
                 }
             }
 

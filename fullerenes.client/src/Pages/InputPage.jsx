@@ -87,13 +87,16 @@ export default function InputPage() {
 
             if (!response.ok) throw new Error("Error creating generation");
 
-            const generationId = await response.json();
+            const generation = await response.json();
+
+            const id = generation.item1;
+            const superIds = generation.item2;
 
             const stored = JSON.parse(localStorage.getItem("generations") || "[]");
-            stored.push({ generationId, series });
+            stored.push({ id, superIds });
             localStorage.setItem("generations", JSON.stringify(stored));
 
-            alert(`Saved: generationId = ${generationId}, series = ${series}`);
+            alert(`Saved: generationId = ${id}, superIds = ${superIds}`);
         } catch (err) {
             console.error(err);
             alert("Error while submitting data");

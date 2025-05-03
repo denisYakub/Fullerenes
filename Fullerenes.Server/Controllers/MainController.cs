@@ -42,12 +42,25 @@ namespace Fullerenes.Server.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("get-series-of-generation/{seriesId}/{genId}")]
-        public IActionResult GetGenerationSeries([FromRoute] int seriesId, [FromRoute] int genId)
+        [HttpGet("get-series-of-generation/{superId}")]
+        public IActionResult GetGenerationSeries([FromRoute] int superId)
         {
-            var result = fileService.ReadMainInfo($"Series_{seriesId}", $"Gen_{genId}");
+            var path = dataBaseService.GetDataPath(superId);
+
+            var result = fileService.ReadMainInfo(path);
 
             return new OkObjectResult(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("get-phis-of-generation-series/{phis}/{superId}")]
+        public IActionResult GetPhis([FromRoute] int phis, [FromRoute] int superId)
+        {
+            var path = dataBaseService.GetDataPath(superId);
+
+            var result = createService.GeneratePhis(path, numberOfLayers: phis);
+
+            return new OkObjectResult(result.Result);
         }
 
         [AllowAnonymous]

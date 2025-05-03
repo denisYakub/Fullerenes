@@ -85,17 +85,8 @@ namespace Fullerenes.Server.Services.Services
             return fullPath;
         }
 
-        public AreaMainInfo ReadMainInfo(string fileName, string? subFolder = null)
+        public AreaMainInfo ReadMainInfo(string fullPath)
         {
-            string fullFolderPath;
-
-            if (subFolder is null)
-                fullFolderPath = _folderPath;
-            else
-                fullFolderPath = Path.Combine(_folderPath, subFolder);
-
-            string fullPath = Path.Combine(fullFolderPath, fileName + ".csv");
-
             using var reader = new StreamReader(fullPath);
             using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
 
@@ -168,7 +159,12 @@ namespace Fullerenes.Server.Services.Services
                 float bF = float.Parse(componentsF[1].Trim(), CultureInfo.InvariantCulture);
                 float gF = float.Parse(componentsF[2].Trim(), CultureInfo.InvariantCulture);
 
-                EulerAngles eulerAnglesF = new(aF, bF, gF);
+                EulerAngles eulerAnglesF = new() 
+                { 
+                    PraecessioAngle = aF,
+                    NutatioAngle = bF,
+                    ProperRotationAngle = gF,
+                };
 
                 fullerenesA.Add(new FullereneMainInfo
                 {
@@ -271,10 +267,17 @@ namespace Fullerenes.Server.Services.Services
                 float bF = float.Parse(componentsF[1].Trim(), CultureInfo.InvariantCulture);
                 float gF = float.Parse(componentsF[2].Trim(), CultureInfo.InvariantCulture);
 
-                EulerAngles eulerAnglesF = new(aF, bF, gF);
+                EulerAngles eulerAnglesF = new() 
+                { 
+                    PraecessioAngle = aF, 
+                    NutatioAngle = bF, 
+                    ProperRotationAngle = gF 
+                };
 
                 fullerenesA.Add(new IcosahedronFullerene(xF, yF, zF, aF, bF, gF, sizeF));
             }
+
+            area.Fullerenes = fullerenesA;
 
             return area;
         }
