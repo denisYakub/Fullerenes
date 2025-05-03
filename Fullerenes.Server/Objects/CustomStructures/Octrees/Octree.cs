@@ -2,19 +2,25 @@
 using Fullerenes.Server.Objects.Fullerenes;
 using Iced.Intel;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Xml.Linq;
 
 namespace Fullerenes.Server.Objects.CustomStructures.Octree
 {
-    public class Octree(int maxDepth, int threads, IRegion startRegion) : IOctree
+    public class Octree : IOctree
     {
-        private class Node(int threads)
+        private class Node
         {
-            public required IRegion Region { get; set; }
+            public required CubeRegion Region { get; set; }
             public required int Depth { get; set; }
             public Node?[] Children { get; init; } = new Node?[8];
-            public ICollection<Fullerene?>[] ObjectsArr { get; init; } = new List<Fullerene?>[threads];
+            public ICollection<Fullerene?>[] ObjectsArr { get; init; }
+
+            public Node(int threads)
+            {
+                ObjectsArr = new List<Fullerene?>[threads];
+            }
 
             public void SubDivide(int depth, int threads)
             {
@@ -25,45 +31,19 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
             }
         }
 
-        public int MaxDepth { get; set; } = maxDepth;
-        public int ThreadsNumber { get; set; } = threads;
+        public int MaxDepth { get; set; }
+        public int ThreadsNumber { get; set; }
 
-        private readonly Node _root = new Node(threads) { Depth = 0, Region = startRegion };
+        private readonly Node _root;
+
+        public Octree(int maxDepth, int threads, CubeRegion startRegion)
+        {
+            MaxDepth = maxDepth;
+            ThreadsNumber = threads;
+            _root = new Node(threads) { Depth = 0, Region = startRegion };
+        }
 
         public bool Add(Fullerene fullerene, int thread) => Insert(fullerene, thread);
-
-        private bool Insert(Fullerene fullerene, int thread, Node node)
-        {
-            if (!node.Region.Contains(fullerene))
-                return false;
-
-            if (node.ObjectsArr[thread] is not null && node.ObjectsArr[thread].AsParallel().WithDegreeOfParallelism(10).Any(fullerene.Intersect))
-                return false;
-
-            if (node.Depth == MaxDepth)
-            {
-                if (node.ObjectsArr[thread] is null)
-                    node.ObjectsArr[thread] = [fullerene];
-                else
-                    node.ObjectsArr[thread].Add(fullerene);
-
-                return true;
-            }
-
-            if (node.Children.Any(child => child is null))
-                node.SubDivide(node.Depth, ThreadsNumber);
-
-            foreach (var child in node.Children)
-                if (Insert(fullerene, thread, child))
-                    return true;
-
-            if (node.ObjectsArr[thread] is null)
-                node.ObjectsArr[thread] = [fullerene];
-            else
-                node.ObjectsArr[thread].Add(fullerene);
-
-            return true;
-        }
 
         private bool Insert(Fullerene fullerene, int thread)
         {
@@ -83,7 +63,7 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
                 if (current.Depth == MaxDepth)
                 {
                     if (current.ObjectsArr[thread] is null)
-                        current.ObjectsArr[thread] = [fullerene];
+                        current.ObjectsArr[thread] = new List<Fullerene>(1000) { fullerene };
                     else
                         current.ObjectsArr[thread].Add(fullerene);
 
@@ -106,7 +86,7 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
                 if (!pushedToChild)
                 {
                     if (current.ObjectsArr[thread] is null)
-                        current.ObjectsArr[thread] = [fullerene];
+                        current.ObjectsArr[thread] = new List<Fullerene>(1000) { fullerene };
                     else
                         current.ObjectsArr[thread].Add(fullerene);
 

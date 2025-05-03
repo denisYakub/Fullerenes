@@ -40,43 +40,15 @@ namespace Fullerenes.Server.Geometry
             return Vector3.Distance(center2, center1) < (r1 + r2) * (r1 + r2);
         }
         /// <summary>
-        /// Checks if point is inside parallelepiped
+        /// Checks if point inside sphere
         /// </summary>
-        /// <param name="parallelepiped"></param>
-        /// <param name="point"></param>
-        /// <returns>true if point inside</returns>
-        public static bool Pointinside(Cube parallelepiped, in Vector3 point)
-        {
-           return
-                MathF.Abs(point.X - parallelepiped.Center.X) <= parallelepiped.Length / 2 &&
-                MathF.Abs(point.Y - parallelepiped.Center.Y) <= parallelepiped.Width / 2 &&
-                MathF.Abs(point.Z - parallelepiped.Center.Z) <= parallelepiped.Height / 2;
-        }
-        /// <summary>
-        /// Checks if sphere intersect with parallelepiped
-        /// </summary>
-        /// <param name="area">Parallelepiped</param>
         /// <param name="sphereCenter">Center of th sphere</param>
         /// <param name="sphereRadius">Radius of the sphere</param>
-        /// <returns>true if intersect, else false</returns>
-        public static bool Intersects(Cube area, in Vector3 sphereCenter, float sphereRadius)
+        /// <param name="point"></param>
+        /// <returns>true if point inside</returns>
+        public static bool Pointinside(in Vector3 sphereCenter, float sphereRadius, in Vector3 point)
         {
-            float minX = area.Center.X - area.Width / 2;
-            float maxX = area.Center.X + area.Width / 2;
-            float minY = area.Center.Y - area.Height / 2;
-            float maxY = area.Center.Y + area.Height / 2;
-            float minZ = area.Center.Z - area.Length / 2;
-            float maxZ = area.Center.Z + area.Length / 2;
-
-            float closestX = Math.Clamp(sphereCenter.X, minX, maxX);
-            float closestY = Math.Clamp(sphereCenter.Y, minY, maxY);
-            float closestZ = Math.Clamp(sphereCenter.Z, minZ, maxZ);
-
-            float distanceSquared =
-                (closestX - sphereCenter.X) * (closestX - sphereCenter.X) +
-                (closestY - sphereCenter.Y) * (closestY - sphereCenter.Y) +
-                (closestZ - sphereCenter.Z) * (closestZ - sphereCenter.Z);
-
+            float distanceSquared = Vector3.DistanceSquared(point, sphereCenter);
             return distanceSquared <= sphereRadius * sphereRadius;
         }
     }

@@ -141,7 +141,7 @@ namespace FullerenesServerTests
         [TestMethod]
         public void TestOctreeAddMethodTime()
         {
-            IRegion region = new Cube() { Center = new(0, 0, 0), Height = 1000, Length = 1000, Width = 1000 };
+            CubeRegion region = new CubeRegion() { Center = new(0, 0, 0), Edge = 1000 };
 
             IOctree octree = new Octree(region.MaxDepth(3 * 5), 1, region);
 

@@ -5,21 +5,31 @@ using Fullerenes.Server.Objects.CustomStructures;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
-    public abstract class Fullerene(
-        float x, float y, float z,
-        float praecessioAngle, float nutatioAngle, float properRotationAngle, 
-        float size)
+    public abstract class Fullerene
     {
-        public float Size => size;
-        public Vector3 Center => new(x, y, z);
+        public float Size { get; init; }
+        public Vector3 Center { get; init; }
+        public EulerAngles EulerAngles { get; init; }
         public abstract ICollection<Vector3> Vertices { get; }
         public abstract IReadOnlyCollection<int[]> Faces { get; }
-        public EulerAngles EulerAngles => new(praecessioAngle, nutatioAngle, properRotationAngle);
 
         public abstract float OuterSphereRadius { get; }
         public abstract float InnerSphereRadius { get; }
         public abstract float GenerateVolume();
         public abstract float GetEdgeSize();
+
+        protected Fullerene(float x, float y, float z, 
+            float praecessioAngle, float nutatioAngle, float properRotationAngle, float size)
+        {
+            Size = size;
+            Center = new(x, y, z);
+            EulerAngles = new() 
+            { 
+                PraecessioAngle = praecessioAngle, 
+                NutatioAngle = nutatioAngle,
+                ProperRotationAngle = properRotationAngle,
+            };
+        }
 
         public virtual bool Intersect(Fullerene fullerene)
         {
@@ -47,10 +57,10 @@ namespace Fullerenes.Server.Objects.Fullerenes
         {
             var centerF = Center;
 
-            if (FiguresCollision.SpheresInside(in point, 0, in centerF, InnerSphereRadius))
+            if (FiguresCollision.Pointinside(in centerF, InnerSphereRadius, in point))
                 return true;
 
-            if (!FiguresCollision.SpheresInside(in point, 0, in centerF, OuterSphereRadius))
+            if (!FiguresCollision.Pointinside(in centerF, OuterSphereRadius, in point))
                 return false;
 
             var vertices = Vertices;

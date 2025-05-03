@@ -9,7 +9,7 @@ namespace FullerenesServerTests
     [TestClass]
     public class SphereLimitedAreaTest
     {
-        private readonly static int numberOfFullerenes = 100_000;
+        private readonly static int numberOfFullerenes = 1_000_000;
 
         private readonly static int numberOfSeries = 1;
 
@@ -22,12 +22,10 @@ namespace FullerenesServerTests
         [TestMethod]
         public void TestGenerateFullerenesMethod()
         {
-            var startRegion = new Cube
+            var startRegion = new CubeRegion
             {
                 Center = new(areaX, areaY, areaZ),
-                Width = areaR * 2,
-                Height = areaR * 2,
-                Length = areaR * 2,
+                Edge = areaR * 2,
             };
 
             IOctree octree = new Octree(startRegion.MaxDepth(3 * maxF), numberOfSeries, startRegion);
@@ -40,14 +38,9 @@ namespace FullerenesServerTests
                 return new IcosahedronFullerene(x, y, z, a, b, g, size);
             }
 
-            Fullerene[][] areas = new Fullerene[numberOfSeries][];
-
-            for (int i = 0; i < numberOfSeries; i++)
-                areas[i] = new Fullerene[numberOfFullerenes];
-
             var timeBefore = DateTime.Now;
 
-            Parallel.For(0, numberOfSeries, new ParallelOptions { MaxDegreeOfParallelism = 10 }, (i) =>
+            Parallel.For(0, numberOfSeries, (i) =>
             {
                 var limitedArea = new SphereLimitedArea(areaX, areaY, areaZ, areaR, i)
                 { 
@@ -55,9 +48,10 @@ namespace FullerenesServerTests
                     Random = random, Gamma = gamma
                 };
 
-                limitedArea.StartGeneration(numberOfFullerenes, new(360, 360, 360), (minF, maxF));
-
-                areas[i] = limitedArea.Fullerenes.ToArray();
+                limitedArea.StartGeneration(
+                    numberOfFullerenes, 
+                    new() { ProperRotationAngle = 360, NutatioAngle = 360, PraecessioAngle = 360}, 
+                    (minF, maxF));
             });
 
             var timeAfter = DateTime.Now;

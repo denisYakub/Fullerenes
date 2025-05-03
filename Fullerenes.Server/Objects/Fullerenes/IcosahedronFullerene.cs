@@ -1,20 +1,17 @@
 ﻿using System.Numerics;
 using Fullerenes.Server.Extensions;
+using Fullerenes.Server.Geometry;
 using MathNet.Numerics.Distributions;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
-    public class IcosahedronFullerene(
-        float x, float y, float z, 
-        float alpha, float beta, float gamma, 
-        float size) 
-        : Fullerene(
-            x, y, z, 
-            alpha, beta, gamma, 
-            size)
+    public class IcosahedronFullerene : Fullerene
     {
         public IcosahedronFullerene() 
-            : this(0, 0, 0, 0, 0, 0, 0) { }
+            : base(0, 0, 0, 0, 0, 0, 0) { }
+
+        public IcosahedronFullerene(float x, float y, float z, float alpha, float beta, float gamma, float size)
+            : base(x, y, z, alpha, beta, gamma, size) { }
 
         private static readonly float Phi = (1 + MathF.Sqrt(5)) / 2;
 
@@ -43,15 +40,10 @@ namespace Fullerenes.Server.Objects.Fullerenes
         ];
 
         public override ICollection<Vector3> Vertices
-        {
-            get
-            {
-                return GenerateDefaultVerticesPositions(Size)
-                    .AddMidPoints(in _faces, 12)
-                    .Rotate(EulerAngles)
-                    .Shift(Center);
-            }
-        }
+            => GenerateDefaultVerticesPositions(Size)
+            .AddMidPoints(in _faces, 12)
+            .Rotate(EulerAngles)
+            .Shift(Center);
 
         public override float OuterSphereRadius 
             => 0.951f * GetEdgeSize();

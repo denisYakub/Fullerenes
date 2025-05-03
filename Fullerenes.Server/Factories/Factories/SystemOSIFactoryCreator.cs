@@ -21,12 +21,10 @@ namespace Fullerenes.Server.Factories.Factories
 
             Vector3 areaCenter = new(request.AreaX, request.AreaY, request.AreaZ);
 
-            Cube startArea = new()
+            CubeRegion startArea = new()
             {
                 Center = areaCenter,
-                Height = 2 * areaRadius,
-                Width = 2 * areaRadius,
-                Length = 2 * areaRadius
+                Edge = 2 * areaRadius,
             };
 
             Vector3 fullereneMinCenter = new()
@@ -50,7 +48,7 @@ namespace Fullerenes.Server.Factories.Factories
                 ProperRotationAngle = request.MaxGammaF
             };
 
-            return new SystemOSIFactory<Cube>
+            return new SystemOSIFactory
             { 
                 StartRegion = startArea,
                 ThreadNumber = series,

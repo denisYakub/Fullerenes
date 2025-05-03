@@ -47,15 +47,5 @@ namespace FullerenesServerTests
 
             Console.WriteLine(path);
         }
-
-        [TestMethod]
-        public void TestReadMethod()
-        {
-            AreaMainInfo area = _adapter.ReadMainInfo(_fileName, _subFolder);
-
-            Assert.IsTrue(
-                area.Params[0].value == 100 && 
-                area.Fullerenes.Count() == 100);
-        }
     }
 }

@@ -10,12 +10,12 @@ using System.Numerics;
 
 namespace Fullerenes.Server.Factories.Factories
 {
-    public class SystemOSIFactory<TRegion> : SystemAbstractFactory where TRegion : IRegion
+    public class SystemOSIFactory : SystemAbstractFactory
     {
         public override AreaTypes AreaType { get; init; } = AreaTypes.Sphere;
         public override FullereneTypes FullereneType { get; init; } = FullereneTypes.Icosahedron;
 
-        public required TRegion StartRegion { get; set; }
+        public required CubeRegion StartRegion { get; set; }
         public override required int ThreadNumber { get; set; }
         public required Vector3 AreaCenter { get; set; }
         public required float AreaRadius { get; set; }
