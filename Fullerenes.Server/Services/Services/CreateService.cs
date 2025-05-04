@@ -40,7 +40,7 @@ namespace Fullerenes.Server.Services.Services
             return (generationId, superIds);
         }
         
-        public async Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000)
+        public async Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 100_000)
         {
             var data = fileService.GetArea(dataPath);
 

@@ -58,7 +58,7 @@ namespace Fullerenes.Server.Controllers
         {
             var path = dataBaseService.GetDataPath(superId);
 
-            var result = createService.GeneratePhis(path, numberOfLayers: phis);
+            var result = createService.GeneratePhis(path, numberOfLayers: phis, numberOfPoints: 1_000_000);
 
             return new OkObjectResult(result.Result);
         }
