@@ -22,7 +22,7 @@ namespace Fullerenes.Server.Services.IServices
     public interface ICreateService
     {
         (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory);
-        Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
+        Task<List<float>> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
     }
     public interface IFileService
     {

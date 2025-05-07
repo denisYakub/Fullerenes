@@ -40,7 +40,7 @@ namespace Fullerenes.Server.Services.Services
             return (generationId, superIds);
         }
         
-        public async Task<float[]> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 100_000)
+        public async Task<List<float>> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 100_000)
         {
             var data = fileService.GetArea(dataPath);
 
@@ -52,33 +52,41 @@ namespace Fullerenes.Server.Services.Services
 
             for (int i = 0; i < numberOfLayers; i++)
             {
-                float rMin = radii.ElementAt(i), rMax = radii.ElementAt(i + 1);
+                float rMin = radii[i];
+                float rMax = radii[i + 1];
 
-                var task = new Task<(int dotsInFullerene, int dotsInLayer)>(() => CountDotsHit(points, data.Fullerenes ?? [], data.Center, rMin, rMax));
-                tasks[i] = task;
-                task.Start();
+                tasks[i] = new Task<(int dotsInFullerene, int dotsInLayer)>(
+                    () => CountDotsHit(points, data.Fullerenes ?? [], data.Center, rMin, rMax));
+
+                tasks[i].Start();
             }
 
-            var taskResults = await Task.WhenAll(tasks).ConfigureAwait(false);
+            var phis = new List<float>(numberOfLayers);
 
-            var phis = new float[numberOfLayers];
-
-            for (int i = 0; i < numberOfLayers; i++)
+            foreach (var task in tasks)
             {
-                phis[i] = ((float)taskResults[i].dotsInFullerene) / ((float)taskResults[i].dotsInLayer);
+                var (dotsInFullerene, dotsInLayer) = task.Result;
+
+                float phi = ((float)dotsInFullerene) / ((float)dotsInLayer);
+
+                phis.Add(phi);
             }
             
             return phis;
         }
 
-        private static IEnumerable<float> GenerateRadii(float mainRadius, int numberOfLayers)
+        private static float[] GenerateRadii(float lastR, int numberOfR)
         {
-            for (int i = 0; i < numberOfLayers; i++)
+            float[] radii = new float[numberOfR + 1];
+
+            for (int i = 0; i < numberOfR; i++)
             {
-                yield return (float)Math.Pow(i * (Math.Pow(mainRadius, 3) / numberOfLayers), 1.0f / 3);
+                radii[i] = (float) Math.Pow(i * (Math.Pow(lastR, 3) / numberOfR), 1.0f / 3);
             }
 
-            yield return mainRadius;
+            radii[numberOfR] = lastR;
+
+            return radii;
         }
 
         private static (int dotsInFullerene, int dotsInLayer) CountDotsHit(IEnumerable<Vector3> dots, IEnumerable<Fullerene> fullerenes, Vector3 sphereCenter, float radiusMin, float radiusMax)

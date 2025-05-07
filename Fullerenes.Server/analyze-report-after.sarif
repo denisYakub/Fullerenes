@@ -5,9 +5,9 @@
     {
       "tool": {
         "name": "Компилятор Microsoft (R) Visual C#",
-        "version": "4.13.0.0",
-        "fileVersion": "4.13.0-3.25167.3 (73eff2b5)",
-        "semanticVersion": "4.13.0",
+        "version": "4.12.0.0",
+        "fileVersion": "4.12.0-3.24572.7 (dfa7fc6b)",
+        "semanticVersion": "4.12.0",
         "language": "ru-RU"
       },
       "results": [
@@ -24,6 +24,27 @@
                   "startColumn": 73,
                   "endLine": 22,
                   "endColumn": 75
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS1998",
+          "level": "warning",
+          "message": "В данном асинхронном методе отсутствуют операторы await, поэтому метод будет выполняться синхронно. Воспользуйтесь оператором await для ожидания неблокирующих вызовов API или оператором await Task.Run(...) для выполнения связанных с ЦП заданий в фоновом потоке.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
+                "region": {
+                  "startLine": 43,
+                  "startColumn": 40,
+                  "endLine": 43,
+                  "endColumn": 52
                 }
               }
             }
