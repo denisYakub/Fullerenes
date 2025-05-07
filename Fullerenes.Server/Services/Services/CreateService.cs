@@ -75,6 +75,13 @@ namespace Fullerenes.Server.Services.Services
             return phis;
         }
 
+        public void GenerateIntensOpt(string dataPath)
+        {
+            var data = fileService.GetArea(dataPath);
+
+
+        }
+
         private static float[] GenerateRadii(float lastR, int numberOfR)
         {
             float[] radii = new float[numberOfR + 1];
