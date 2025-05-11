@@ -29,5 +29,6 @@ namespace Fullerenes.Server.Services.IServices
         string Write(IReadOnlyCollection<LimitedArea> areas, string fileName, string? subFolder = null);
         AreaMainInfo ReadMainInfo(string fullPath);
         LimitedArea GetArea(string fullPath);
+        LimitedArea[] GetAreas(long genId);
     }
 }
