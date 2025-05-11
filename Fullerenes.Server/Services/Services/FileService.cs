@@ -281,5 +281,10 @@ namespace Fullerenes.Server.Services.Services
 
             return area;
         }
+
+        public LimitedArea[] GetAreas(long genId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

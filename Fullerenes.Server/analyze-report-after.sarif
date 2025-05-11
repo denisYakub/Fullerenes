@@ -20,9 +20,9 @@
               "resultFile": {
                 "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
                 "region": {
-                  "startLine": 22,
+                  "startLine": 23,
                   "startColumn": 73,
-                  "endLine": 22,
+                  "endLine": 23,
                   "endColumn": 75
                 }
               }
@@ -41,9 +41,9 @@
               "resultFile": {
                 "uri": "file:///C:/Users/denis/source/repos/denisYakub/Fullerenes/Fullerenes.Server/Services/Services/CreateService.cs",
                 "region": {
-                  "startLine": 43,
+                  "startLine": 44,
                   "startColumn": 40,
-                  "endLine": 43,
+                  "endLine": 44,
                   "endColumn": 52
                 }
               }

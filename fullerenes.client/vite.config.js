@@ -47,7 +47,23 @@ export default defineConfig({
                 target,
                 secure: false
             },
-            "^/api": {
+            '^/api': {
+                target,
+                secure: false
+            },
+            '^/ping-auth': {
+                target,
+                secure: false
+            },
+            '^/register': {
+                target,
+                secure: false
+            },
+            '^/login': {
+                target,
+                secure: false
+            },
+            '^/logout': {
                 target,
                 secure: false
             }
