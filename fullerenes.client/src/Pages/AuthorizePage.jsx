@@ -21,6 +21,8 @@ function AuthorizePage(props) {
             try {
                 const response = await fetch(url, options);
 
+                console.log(response);
+
                 if (response.status === 200) {
                     console.log("Authorized");
                     const j = await response.json();

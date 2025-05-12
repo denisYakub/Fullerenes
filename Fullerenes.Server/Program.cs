@@ -70,7 +70,7 @@ app.MapPost("/logout", async (SignInManager<IdentityUser> manager) =>
 }
 ).RequireAuthorization();
 
-app.MapPost("/ping-auth", (ClaimsPrincipal user) =>
+app.MapGet("/ping-auth", (ClaimsPrincipal user) =>
 {
     var email = user.FindFirstValue(ClaimTypes.Email);
 

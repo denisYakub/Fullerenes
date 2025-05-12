@@ -1,12 +1,14 @@
-import { Navigate } from 'react-router-dom';
-import AuthorizePage from "../Pages/AuthorizePage"
+import AuthorizePage, { AuthorizedUser } from "../Pages/AuthorizePage"
 import LogoutPage from "../Pages/LogoutPage"
+import InputPage from "./InputPage";
 
 function HomePage() {
-    return (<AuthorizePage>
-        <span><LogoutPage value="email">Logout</LogoutPage></span>
-        <Navigate to="/input" />
-    </AuthorizePage>);
+    return (
+        <AuthorizePage>
+            <span><LogoutPage>Logout <AuthorizedUser value="email" /></LogoutPage></span>
+            <InputPage />
+        </AuthorizePage>
+    );
 }
 
 export default HomePage;
