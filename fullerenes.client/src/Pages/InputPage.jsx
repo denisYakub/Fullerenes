@@ -80,7 +80,6 @@ export default function InputPage() {
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    redirect: "follow",
                     body: JSON.stringify(body),
                 }
             );

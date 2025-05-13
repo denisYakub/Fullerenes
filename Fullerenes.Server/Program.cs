@@ -78,7 +78,7 @@ app.MapGet("/ping-auth", (ClaimsPrincipal user) =>
 }
 ).RequireAuthorization();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

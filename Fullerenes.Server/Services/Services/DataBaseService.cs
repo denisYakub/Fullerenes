@@ -8,14 +8,26 @@ namespace Fullerenes.Server.Services.Services
         private readonly SemaphoreSlim _semaphore = new(1, 1);
         public long GetGenerationId()
         {
-            var lastId = context
-                .SpGen
+            var counter = context
+                .SpGenIdCounter
                 .OrderByDescending(sp => sp.Id)
-                .Select(sp => sp.N)
                 .FirstOrDefault();
 
-            return ++lastId;
+            if (counter is null)
+            {
+                counter = new SpGenIdCounter();
+                context.SpGenIdCounter.Add(counter);
+            }
+            else
+            {
+                counter.GenIdCurrent++;
+            }
+
+            context.SaveChanges();
+
+            return counter.GenIdCurrent;
         }
+
 
         public void SaveData(SpData data)
         {

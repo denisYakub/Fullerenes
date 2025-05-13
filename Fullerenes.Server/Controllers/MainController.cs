@@ -1,18 +1,12 @@
-﻿using AutoMapper;
-using Fullerenes.Server.CustomLogger;
-using Fullerenes.Server.Factories.AbstractFactories;
+﻿using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Dtos;
-using Fullerenes.Server.Objects.Enums;
-using Fullerenes.Server.Objects.Fullerenes;
-using Fullerenes.Server.Objects.LimitedAreas;
 using Fullerenes.Server.Services.IServices;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using StackExchange.Profiling;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fullerenes.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/api/[controller]")]
     public class MainController(
@@ -20,7 +14,6 @@ namespace Fullerenes.Server.Controllers
         SystemAbstractFactoryCreator factoryCreator) 
         : ControllerBase
     {
-        [Authorize]
         [HttpPost("create-fullerenes-and-limited-area/{series}/{fullereneNumber}")]
         public IActionResult CreateFullerenesAndLimitedArea(
             [FromBody] CreateFullerenesAndLimitedAreaRequest request, [FromRoute] int series, [FromRoute] int fullereneNumber)
@@ -35,7 +28,6 @@ namespace Fullerenes.Server.Controllers
             return new OkObjectResult(result);
         }
 
-        [Authorize]
         [HttpGet("get-series-of-generation/{superId}")]
         public IActionResult GetGenerationSeries([FromRoute] int superId)
         {
@@ -46,7 +38,6 @@ namespace Fullerenes.Server.Controllers
             return new OkObjectResult(result);
         }
 
-        [Authorize]
         [HttpGet("get-phis-of-generation-series/{phis}/{superId}")]
         public IActionResult GetPhis([FromRoute] int phis, [FromRoute] int superId)
         {
@@ -57,7 +48,6 @@ namespace Fullerenes.Server.Controllers
             return new OkObjectResult(result.Result);
         }
 
-        [Authorize]
         [HttpGet("get-avg-phi-generations")]
         public IActionResult GetGenerationsAvgPhis()
         {

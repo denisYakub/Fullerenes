@@ -10,7 +10,6 @@ export default function PhiDistributionChart({ phis, superId }) {
                 const response = await fetch(`/api/Main/get-phis-of-generation-series/${phis}/${superId}`,
                     {
                     method: 'GET',
-                    redirect: "follow",
                     }
                 );
                 const result = await response.json();

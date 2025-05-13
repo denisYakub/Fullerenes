@@ -12,9 +12,10 @@ namespace Fullerenes.Server.Services.Services
 {
     public class CreateService(IDataBaseService dataBaseService, IFileService fileService) : ICreateService
     {
+
         public (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory)
         {
-            long generationId = dataBaseService.GetGenerationId();
+            long GenId = dataBaseService.GetGenerationId();
 
             List<long> superIds = new List<long>(factory.ThreadNumber);
 
@@ -24,12 +25,12 @@ namespace Fullerenes.Server.Services.Services
             {
                 LimitedArea limitedArea = factory.GenerateLimitedArea(thread, octree);
 
-                string filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{generationId}");
+                string filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{GenId}");
 
                 SpData data = new(filePath);
                 dataBaseService.SaveData(data);
 
-                SpGen gen = new(factory.AreaType, factory.FullereneType, thread, generationId, data.Id)
+                SpGen gen = new(factory.AreaType, factory.FullereneType, thread, GenId, data.Id)
                 {
                     Phi = GeneratePhis(filePath).Result.Average()
                 };
@@ -38,7 +39,7 @@ namespace Fullerenes.Server.Services.Services
                 superIds.Add(data.Id);
             });
 
-            return (generationId, superIds);
+            return (GenId, superIds);
         }
         
         public async Task<List<float>> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 100_000)
