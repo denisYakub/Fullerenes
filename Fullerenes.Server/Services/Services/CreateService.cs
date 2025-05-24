@@ -77,14 +77,19 @@ namespace Fullerenes.Server.Services.Services
             return phis;
         }
 
-        public void GenerateIntensOpt(long genId)
+        public (IReadOnlyCollection<float> q, IReadOnlyCollection<float> I) GenerateIntensOpt(string dataPath, float qMin, float qMax, int qNum)
         {
-            LimitedArea[] areas = fileService.GetAreas(genId);
+            var data = fileService.GetArea(dataPath);
 
-            for (int i = 0; i < areas.Length; i++)
-            {
+            var qs = new Random().GetEvenlyRandoms(qMin, qMax).Take(qNum);
 
-            }
+            var eval = Eval(data, qs);
+
+            var nC = data.Fullerenes.Count;
+
+            var (q, I) = IntenceOpt(qs, eval.globalVolume, eval.tmpConst, eval.localVolume, data, nC);
+
+            return (q.ToArray(), I.ToArray());
         }
 
         private static (

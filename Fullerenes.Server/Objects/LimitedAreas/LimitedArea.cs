@@ -21,7 +21,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
         public required Gamma Gamma { get; init; }
         public required Random Random { get; init; }
 
-        public static readonly int RetryCountMax = 100;
+        public static readonly int RetryCountMax = 1000;
 
         protected LimitedArea (float x, float y, float z, (string name, float value)[] parameters, int series)
         {

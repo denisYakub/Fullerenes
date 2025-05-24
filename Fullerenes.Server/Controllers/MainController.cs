@@ -55,5 +55,15 @@ namespace Fullerenes.Server.Controllers
 
             return new OkObjectResult(result);
         }
+
+        [HttpGet("get-intens-opt-series/{qMin}/{qMax}/{qNum}/{superId}")]
+        public IActionResult GetIntensOpt([FromRoute] float qMin, [FromRoute] float qMax, [FromRoute] int qNum, [FromRoute] int superId)
+        {
+            var path = dataBaseService.GetDataPath(superId);
+
+            var result = createService.GenerateIntensOpt(path, qMin, qMax, qNum);
+
+            return new OkObjectResult(result);
+        }
     }
 }

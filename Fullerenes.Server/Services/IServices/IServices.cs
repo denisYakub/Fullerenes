@@ -3,6 +3,7 @@ using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
+using Microsoft.AspNetCore.Mvc;
 using static Fullerenes.Server.Services.Services.FileService;
 
 namespace Fullerenes.Server.Services.IServices
@@ -23,6 +24,7 @@ namespace Fullerenes.Server.Services.IServices
     {
         (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory);
         Task<List<float>> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 1_000_000);
+        (IReadOnlyCollection<float> q, IReadOnlyCollection<float> I) GenerateIntensOpt(string dataPath, float qMin, float qMax, int qNum);
     }
     public interface IFileService
     {
