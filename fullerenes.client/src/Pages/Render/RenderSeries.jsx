@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import RenderLimitedArea from "../Render/RenderLimitedArea"
 import PhiDistributionChart from "../PhiDistributionPage";
+import IntenceOptPage from "../Render/IntenceOptPage";
 
 export default function RenderSeries() {
     const { superId } = useParams();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
     const [phis, setPhis] = useState(5);
+    const [qMin, setQMin] = useState(0.02);
+    const [qMax, setQMax] = useState(5);
+    const [qNum, setQNum] = useState(150);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,6 +65,7 @@ export default function RenderSeries() {
             </div>
 
             <PhiDistributionChart phis={phis} superId={superId} />
+            <IntenceOptPage qMin={qMin} qMax={qMax} qNum={qNum} superId={superId} />
         </div>
     );
 }
