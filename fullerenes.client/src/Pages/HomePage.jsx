@@ -1,14 +1,25 @@
-import AuthorizePage, { AuthorizedUser } from "../Pages/AuthorizePage"
-import LogoutPage from "../Pages/LogoutPage"
-import InputPage from "./InputPage";
+import { useEffect } from "react";
 
-function HomePage() {
+export default function HomePage() {
+    const target = import.meta.env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${import.meta.env.ASPNETCORE_HTTPS_PORT}` :
+        import.meta.env.ASPNETCORE_URLS ? import.meta.env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7245';
+
+    useEffect(() => {
+        fetch("/ping-auth", {
+            credentials: "include",
+        }).then(res => {
+            if (res.status === 401) {
+                window.location.href = `${target}/Identity/Account/Login`;
+            } else {
+                return res.json();
+            }
+        });
+    });
+
     return (
-        <AuthorizePage>
-            <span><LogoutPage>Logout <AuthorizedUser value="email" /></LogoutPage></span>
-            <InputPage />
-        </AuthorizePage>
+        <div>
+            Hello world!
+            <a href={`${target}/Identity/Account/Logout`}>Logout</a>
+        </div>
     );
 }
-
-export default HomePage;
