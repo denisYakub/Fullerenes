@@ -16,54 +16,110 @@ namespace Fullerenes.Server.Controllers
     {
         [HttpPost("create-fullerenes-and-limited-area/{series}/{fullereneNumber}")]
         public IActionResult CreateFullerenesAndLimitedArea(
-            [FromBody] CreateFullerenesAndLimitedAreaRequest request, [FromRoute] int series, [FromRoute] int fullereneNumber)
+            [FromBody] CreateFullerenesAndLimitedAreaRequest request, 
+            [FromRoute] int series, [FromRoute] int fullereneNumber)
         {
-            if (!request.IsCorrectRequest())
-                return new BadRequestObjectResult("Something wrong with your request!");
+            SystemAbstractFactory factory = 
+                factoryCreator
+                .CreateSystemFactory(request, series, fullereneNumber);
 
-            SystemAbstractFactory factory = factoryCreator.CreateSystemFactory(request, series, fullereneNumber);
+            var result = 
+                createService
+                .GenerateArea(factory);
 
-            var result = createService.GenerateArea(factory);
+            var resultJSON = 
+                new JsonResult(
+                    new { 
+                        GenId = result.id, 
+                        SuperIds = result.superIds 
+                    }
+                );
 
-            return new OkObjectResult(result);
+            return new OkObjectResult(resultJSON);
         }
 
         [HttpGet("get-series-of-generation/{superId}")]
         public IActionResult GetGenerationSeries([FromRoute] int superId)
         {
-            var path = dataBaseService.GetDataPath(superId);
+            var path = 
+                dataBaseService
+                .GetDataPath(superId);
 
-            var result = fileService.ReadMainInfo(path);
+            var result = 
+                fileService
+                .ReadMainInfo(path);
 
-            return new OkObjectResult(result);
+            var resultJSON =
+                new JsonResult(
+                    new
+                    {
+                        AreaMainInfo = result
+                    }
+                );
+
+            return new OkObjectResult(resultJSON);
         }
 
         [HttpGet("get-phis-of-generation-series/{phis}/{superId}")]
         public IActionResult GetPhis([FromRoute] int phis, [FromRoute] int superId)
         {
-            var path = dataBaseService.GetDataPath(superId);
+            var path = 
+                dataBaseService
+                .GetDataPath(superId);
 
-            var result = createService.GeneratePhis(path, numberOfLayers: phis, numberOfPoints: 1_000_000);
+            var result = 
+                createService
+                .GeneratePhis(path, numberOfLayers: phis, numberOfPoints: 1_000_000);
 
-            return new OkObjectResult(result.Result);
+            var resultJSON =
+                new JsonResult(
+                    new
+                    {
+                        Phis = result.Result
+                    }
+                );
+
+            return new OkObjectResult(resultJSON);
         }
 
         [HttpGet("get-avg-phi-generations")]
         public IActionResult GetGenerationsAvgPhis()
         {
-            var result = dataBaseService.GetAvgPhiGroups();
+            var result = 
+                dataBaseService
+                .GetAvgPhiGroups();
 
-            return new OkObjectResult(result);
+            var resultJSON =
+                new JsonResult(
+                    new
+                    {
+                        AvgPhi = result
+                    }
+                );
+
+            return new OkObjectResult(resultJSON);
         }
 
         [HttpGet("get-intens-opt-series/{qMin}/{qMax}/{qNum}/{superId}")]
         public IActionResult GetIntensOpt([FromRoute] float qMin, [FromRoute] float qMax, [FromRoute] int qNum, [FromRoute] int superId)
         {
-            var path = dataBaseService.GetDataPath(superId);
+            var path =
+                dataBaseService
+                .GetDataPath(superId);
 
-            var result = createService.GenerateIntensOpt(path, qMin, qMax, qNum);
+            var result = 
+                createService
+                .GenerateIntensOpt(path, qMin, qMax, qNum);
 
-            return new OkObjectResult(result);
+            var resultJSON =
+                new JsonResult(
+                    new
+                    {
+                        IntensOpt = result
+                    }
+                );
+
+            return new OkObjectResult(resultJSON);
         }
     }
 }
