@@ -2,8 +2,7 @@
 
 namespace Fullerenes.Server.DataBase
 {
-    [Table("sp_veiw_group")]
-    public class SpGenGroup
+    public class SpGenGroupView
     {
         [Column("sp_gen_id")]
         public long SpGenId { get; set; }
@@ -13,4 +12,9 @@ namespace Fullerenes.Server.DataBase
         [Column("avg_phi")]
         public float? AvgPhi {  get; set; }
     }
+    /*SELECT number_of_generation AS sp_gen_id,
+    count(series) AS count_of_generation,
+    avg(phi) AS avg_phi
+   FROM sp_gen
+  GROUP BY number_of_generation;*/
 }

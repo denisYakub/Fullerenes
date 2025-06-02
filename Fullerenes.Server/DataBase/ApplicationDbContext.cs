@@ -7,17 +7,17 @@ namespace Fullerenes.Server.DataBase
     {
         public DbSet<SpGen> SpGen { get; set; }
         public DbSet<SpData> SpData { get; set; }
-        public DbSet<SpGenGroup> SpGenGroup { get; set; }
+        public DbSet<SpGenGroupView> SpGenGroupView { get; set; }
         public DbSet<SpGenIdCounter> SpGenIdCounter { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<SpGenGroup>((vw =>
+            builder.Entity<SpGenGroupView>((vw =>
             {
                 vw.HasNoKey();
-                vw.ToView("Gen_Group_View");
+                vw.ToView("gen_group_view");
             }));
         }
     }

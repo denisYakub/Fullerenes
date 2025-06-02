@@ -8,6 +8,6 @@ namespace Fullerenes.Server.Objects.Services
         void SaveData(SpData data);
         void SaveGen(SpGen gen);
         string? GetDataPath(long superId);
-        ICollection<SpGenGroup> GetAvgPhiGroups();
+        ICollection<SpGenGroupView> GetAvgPhiGroups();
     }
 }

@@ -59,9 +59,9 @@ namespace Fullerenes.Server.Objects.Services.ServicesImpl
                 ?.FilePath;
         }
 
-        public ICollection<SpGenGroup> GetAvgPhiGroups()
+        public ICollection<SpGenGroupView> GetAvgPhiGroups()
         {
-            var viewresult = context.SpGenGroup.ToList();
+            var viewresult = context.SpGenGroupView.ToList();
 
             return viewresult;
         }

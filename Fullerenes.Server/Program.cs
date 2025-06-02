@@ -50,8 +50,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 
     options.Events.OnRedirectToLogin = context =>
     {
-        if (context.Request.Path.StartsWithSegments("/ping-auth") &&
-           context.Response.StatusCode == 200)
+        if (context.Request.Path.StartsWithSegments("/ping-auth") 
+            && context.Request.Path.StartsWithSegments("/api/Main") 
+            && context.Request.Path.StartsWithSegments("/swagger/index.html") 
+            && context.Response.StatusCode == 200)
         {
             context.Response.StatusCode = 401;
             return Task.CompletedTask;
