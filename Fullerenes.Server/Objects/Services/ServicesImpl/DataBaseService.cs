@@ -1,10 +1,13 @@
-﻿using Fullerenes.Server.DataBase;
+﻿using System.Runtime.InteropServices;
+using Fullerenes.Server.DataBase;
 
 namespace Fullerenes.Server.Objects.Services.ServicesImpl
 {
-    public class DataBaseService(ApplicationDbContext context) : IDataBaseService//, IDisposable
+    public class DataBaseService(ApplicationDbContext context) : IDataBaseService, IDisposable
     {
-        private readonly SemaphoreSlim _semaphore = new(1, 1);
+        private bool isDisposed;
+        private readonly SemaphoreSlim _semaphore = new(1);
+
         public long GetGenerationId()
         {
             var counter = context
@@ -30,8 +33,6 @@ namespace Fullerenes.Server.Objects.Services.ServicesImpl
 
         public void SaveData(SpData data)
         {
-            ArgumentNullException.ThrowIfNull(data);
-
             _semaphore.Wait();
 
             context.SpData.Add(data);
@@ -42,8 +43,6 @@ namespace Fullerenes.Server.Objects.Services.ServicesImpl
 
         public void SaveGen(SpGen gen)
         {
-            ArgumentNullException.ThrowIfNull(gen);
-
             _semaphore.Wait();
 
             context.SpGen.Add(gen);
@@ -66,5 +65,23 @@ namespace Fullerenes.Server.Objects.Services.ServicesImpl
 
             return viewresult;
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing) 
+                _semaphore.Dispose();
+
+            isDisposed = true;
+        }
+
+        ~DataBaseService() => Dispose(false);
     }
 }
