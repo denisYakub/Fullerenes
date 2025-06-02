@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import RenderLimitedArea from "../Render/RenderLimitedArea"
 import PhiDistributionChart from "../PhiDistributionPage";
-import IntenceOptPage from "../Render/IntenceOptPage";
+import IntenceOptPage from "../IntenceOptPage";
 
 export default function RenderSeries() {
     const { superId } = useParams();
@@ -28,7 +28,7 @@ export default function RenderSeries() {
                 }
 
                 const result = await response.json();
-                setData(result);
+                setData(result.value.mainInfo);
                 setLoading(false);
             } catch (error) {
                 console.error(error);

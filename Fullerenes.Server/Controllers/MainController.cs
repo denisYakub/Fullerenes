@@ -1,8 +1,9 @@
 ﻿using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.Dtos;
-using Fullerenes.Server.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Fullerenes.Server.Objects.Services;
+using Newtonsoft.Json.Linq;
 
 namespace Fullerenes.Server.Controllers
 {
@@ -19,13 +20,13 @@ namespace Fullerenes.Server.Controllers
             [FromBody] CreateFullerenesAndLimitedAreaRequest request, 
             [FromRoute] int series, [FromRoute] int fullereneNumber)
         {
-            SystemAbstractFactory factory = 
+            var factory = 
                 factoryCreator
-                .CreateSystemFactory(request, series, fullereneNumber);
+                .CreateSystemFactory(request, fullereneNumber);
 
             var result = 
                 createService
-                .GenerateArea(factory);
+                .GenerateArea(factory, series);
 
             var resultJSON = 
                 new JsonResult(
@@ -53,7 +54,7 @@ namespace Fullerenes.Server.Controllers
                 new JsonResult(
                     new
                     {
-                        AreaMainInfo = result
+                        MainInfo = result
                     }
                 );
 
@@ -115,7 +116,8 @@ namespace Fullerenes.Server.Controllers
                 new JsonResult(
                     new
                     {
-                        IntensOpt = result
+                        q = result.q,
+                        I = result.I
                     }
                 );
 

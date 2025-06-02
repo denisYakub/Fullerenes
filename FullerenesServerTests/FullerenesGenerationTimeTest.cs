@@ -37,8 +37,8 @@ namespace FullerenesServerTests
             }
 
             area = new SphereLimitedArea(0, 0, 0, 500, 0) 
-            { 
-                Octree = null, ProduceFullerene = null,
+            {
+                ProduceOctree = null, ProduceFullerene = null,
                 Random = null, Gamma = null
             };
 
@@ -143,7 +143,7 @@ namespace FullerenesServerTests
         {
             CubeRegion region = new CubeRegion() { Center = new(0, 0, 0), Edge = 1000 };
 
-            IOctree octree = new Octree(region.MaxDepth(3 * 5), 1, region);
+            IOctree octree = new Octree(region.MaxDepth(3 * 5), region);
 
             int wasAdded = 0, wasNotAdded = 0;
 
@@ -151,7 +151,7 @@ namespace FullerenesServerTests
 
             for (int i = 0; i < numberOfFullerenes; i++)
             {
-                if (octree.Add(randFullerenes[i], 0))
+                if (octree.Add(randFullerenes[i]))
                     wasAdded++;
                 else
                     wasNotAdded++;

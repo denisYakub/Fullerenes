@@ -26,6 +26,11 @@ namespace Fullerenes.Server.Objects.LimitedAreas
 
         protected override IEnumerable<Fullerene> GenerateFullerenes(EulerAngles RotationAngles, (float min, float max) FullereneSize)
         {
+            if (ProduceOctree is null)
+                yield break;
+
+            var octree = ProduceOctree.Invoke();
+
             var retryCount = 0;
 
             var xS = Random
@@ -71,7 +76,7 @@ namespace Fullerenes.Server.Objects.LimitedAreas
                             praecessioAngleS.Current, nutatioAngleS.Current, properRotationAngleS.Current,
                             sizeS.Current);
 
-                        if (!Contains(fullerene) || !Octree.Add(fullerene, Series))
+                        if (!Contains(fullerene) || !octree.Add(fullerene))
                         {
                             retryCount++;
                         }

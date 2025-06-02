@@ -11,37 +11,37 @@ namespace Fullerenes.Server.Factories.Factories
 {
     public class SystemOSIFactoryCreator : SystemAbstractFactoryCreator
     {
-        public override SystemAbstractFactory CreateSystemFactory(CreateFullerenesAndLimitedAreaRequest request, int series, int fullereneNumber)
+        public override SystemAbstractFactory CreateSystemFactory(CreateFullerenesAndLimitedAreaRequest request, int fullereneNumber)
         {
-            float areaRadius = GetAreaRadius(
+            var areaRadius = GetAreaRadius(
                 request.AreaAdditionalParams,
                 fullereneNumber,
                 request.MinSizeF, request.MaxSizeF,
                 request.Shape, request.Scale);
 
-            Vector3 areaCenter = new(request.AreaX, request.AreaY, request.AreaZ);
+            var areaCenter = new Vector3(request.AreaX, request.AreaY, request.AreaZ);
 
-            CubeRegion startArea = new()
+            var startArea = new CubeRegion()
             {
                 Center = areaCenter,
                 Edge = 2 * areaRadius,
             };
 
-            Vector3 fullereneMinCenter = new()
+            var fullereneMinCenter = new Vector3()
             {
                 X = areaCenter.X - areaRadius,
                 Y = areaCenter.Y - areaRadius,
                 Z = areaCenter.Z - areaRadius
             };
 
-            Vector3 fullereneMaxCenter = new()
+            var fullereneMaxCenter = new Vector3()
             {
                 X = areaCenter.X + areaRadius,
                 Y = areaCenter.Y + areaRadius,
                 Z = areaCenter.Z + areaRadius
             };
 
-            EulerAngles rotationAngles = new()
+            var rotationAngles = new EulerAngles()
             {
                 PraecessioAngle = request.MaxAlphaF,
                 NutatioAngle = request.MaxBetaF,
@@ -51,7 +51,6 @@ namespace Fullerenes.Server.Factories.Factories
             return new SystemOSIFactory
             { 
                 StartRegion = startArea,
-                ThreadNumber = series,
                 AreaCenter = areaCenter,
                 AreaRadius = areaRadius,
                 FullereneMinCenter = fullereneMinCenter,
@@ -71,9 +70,9 @@ namespace Fullerenes.Server.Factories.Factories
         {
             if(request.Nc is not null)
             {
-                float nc = (float)request.Nc;
+                var nc = (float)request.Nc;
 
-                float sumVFullerenes = GenerateSumVAvgFullerenes(
+                var sumVFullerenes = GenerateSumVAvgFullerenes(
                     numberOfFullerenes, 
                     minSizeFullerne, maxSizeFullerene, 
                     shape, scale);
@@ -93,7 +92,7 @@ namespace Fullerenes.Server.Factories.Factories
         private static float GenerateSumVAvgFullerenes(
             int number, float minSize, float maxSize, float shape, float scale)
         {
-            float avgSize = new Gamma(shape, scale)
+            var avgSize = new Gamma(shape, scale)
                 .GetGammaRandoms(minSize, maxSize)
                 .Take(number)
                 .Average();

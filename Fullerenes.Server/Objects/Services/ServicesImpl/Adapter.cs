@@ -4,10 +4,10 @@ using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
 using System.Globalization;
 using System.Numerics;
-using static Fullerenes.Server.Services.Services.FileService;
-using static Fullerenes.Server.Services.Services.FileService.AreaMainInfo;
+using static Fullerenes.Server.Objects.Services.ServicesImpl.FileService;
+using static Fullerenes.Server.Objects.Services.ServicesImpl.FileService.AreaMainInfo;
 
-namespace Fullerenes.Server.Services.Services
+namespace Fullerenes.Server.Objects.Services.ServicesImpl
 {
     public static class Adapter
     {
@@ -161,7 +161,7 @@ namespace Fullerenes.Server.Services.Services
                         xA, yA, zA, paramsA[0].value,
                         record.SeriesA)
                     {
-                        Octree = null,
+                        ProduceOctree = null,
                         ProduceFullerene = null,
                         Random = null,
                         Gamma = null

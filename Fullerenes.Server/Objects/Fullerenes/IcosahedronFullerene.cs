@@ -1,6 +1,9 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Diagnostics;
+using System.Numerics;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Geometry;
+using Fullerenes.Server.Objects.CustomStructures;
 using MathNet.Numerics.Distributions;
 
 namespace Fullerenes.Server.Objects.Fullerenes
@@ -39,11 +42,17 @@ namespace Fullerenes.Server.Objects.Fullerenes
             [9, 8, 1]
         ];
 
-        public override ICollection<Vector3> Vertices
-            => GenerateDefaultVerticesPositions(Size)
-            .AddMidPoints(in _faces, 12)
-            .Rotate(EulerAngles)
-            .Shift(Center);
+        public override ReadOnlySpan<Vector3> Vertices
+        {
+            get
+            {
+                Span<Vector3> span = new Vector3[42];
+
+                int count = IcosahedronFullerene.FillVertices(Size, Center, EulerAngles, _faces, span);
+                
+                return span[..count];
+            }
+        }
 
         public override float OuterSphereRadius 
             => 0.951f * GetEdgeSize();
@@ -56,26 +65,63 @@ namespace Fullerenes.Server.Objects.Fullerenes
                 new Vector3(-1, Phi, 0) * Size,
                 new Vector3(-Phi, 0, 1) * Size);
 
-        private static Vector3[] GenerateDefaultVerticesPositions(float size)
+
+        public static int FillVertices(
+            float size, Vector3 center, EulerAngles angles, 
+            int[][] faces, Span<Vector3> span)
         {
-            var array = new Vector3[42];
+            float phi = (1 + MathF.Sqrt(5)) / 2;
 
-            array[0] = new Vector3(-1, Phi, 0) * size;
-            array[1] = new Vector3(1, Phi, 0) * size;
-            array[2] = new Vector3(-1, -Phi, 0) * size;
-            array[3] = new Vector3(1, -Phi, 0) * size;
+            span[0] = new Vector3(-1, phi, 0) * size;
+            span[1] = new Vector3(1, phi, 0) * size;
+            span[2] = new Vector3(-1, -phi, 0) * size;
+            span[3] = new Vector3(1, -phi, 0) * size;
 
-            array[4] = new Vector3(0, -1, Phi) * size;
-            array[5] = new Vector3(0, 1, Phi) * size;
-            array[6] = new Vector3(0, -1, -Phi) * size;
-            array[7] = new Vector3(0, 1, -Phi) * size;
+            span[4] = new Vector3(0, -1, phi) * size;
+            span[5] = new Vector3(0, 1, phi) * size;
+            span[6] = new Vector3(0, -1, -phi) * size;
+            span[7] = new Vector3(0, 1, -phi) * size;
 
-            array[8] = new Vector3(Phi, 0, -1) * size;
-            array[9] = new Vector3(Phi, 0, 1) * size;
-            array[10] = new Vector3(-Phi, 0, -1) * size;
-            array[11] = new Vector3(-Phi, 0, 1) * size;
+            span[8] = new Vector3(phi, 0, -1) * size;
+            span[9] = new Vector3(phi, 0, 1) * size;
+            span[10] = new Vector3(-phi, 0, -1) * size;
+            span[11] = new Vector3(-phi, 0, 1) * size;
 
-            return array;
+            int index = 12;
+
+            var edgeSet = new HashSet<int>();
+
+            static int EncodeEdge(int a, int b) => (Math.Min(a, b) << 10) | Math.Max(a, b);
+
+            foreach (var face in faces)
+            {
+                for (int i = 0; i < face.Length; i++)
+                {
+                    if (index >= span.Length)
+                        break;
+
+                    int v1 = face[i];
+                    int v2 = face[(i + 1) % face.Length];
+
+                    int code = EncodeEdge(v1, v2);
+                    if (!edgeSet.Add(code)) continue;
+
+                    span[index++] = (span[v1] + span[v2]) * 0.5f;
+                }
+            }
+
+            var matrix = Formulas.CreateRotationMatrix(
+                angles.PraecessioAngle,
+                angles.NutatioAngle,
+                angles.ProperRotationAngle);
+
+            for (int i = 0; i < index; i++)
+            {
+                span[i] = Vector3.Transform(span[i], matrix);
+                span[i] += center;
+            }
+
+            return index;
         }
 
         public override float GenerateVolume()
@@ -109,11 +155,6 @@ namespace Fullerenes.Server.Objects.Fullerenes
             float outerSphereVolume = (4f / 3f) * MathF.PI * MathF.Pow(radius, 3);
 
             return outerSphereVolume * numberOfDotsInsideFullerene / samples;
-        }
-
-        public override string ToString()
-        {
-            return string.Join(", ", Vertices);
         }
     }
 }

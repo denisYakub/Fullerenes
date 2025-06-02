@@ -16,7 +16,6 @@ namespace Fullerenes.Server.Factories.Factories
         public override FullereneTypes FullereneType { get; init; } = FullereneTypes.Icosahedron;
 
         public required CubeRegion StartRegion { get; set; }
-        public override required int ThreadNumber { get; set; }
         public required Vector3 AreaCenter { get; set; }
         public required float AreaRadius { get; set; }
         public required Vector3 FullereneMinCenter {  get; set; }
@@ -28,7 +27,7 @@ namespace Fullerenes.Server.Factories.Factories
 
         public override IOctree GenerateOctree()
         {
-            return new Octree(StartRegion.MaxDepth(3 * FullereneSize.max), ThreadNumber, StartRegion);
+            return new Octree(StartRegion.MaxDepth(3 * FullereneSize.max), StartRegion);
         }
 
         public override Fullerene GenerateFullerene(
@@ -42,14 +41,14 @@ namespace Fullerenes.Server.Factories.Factories
                 size);
         }
 
-        public override LimitedArea GenerateLimitedArea(int thread, IOctree octree)
+        public override LimitedArea GenerateLimitedArea(int thread)
         {
             var area = new SphereLimitedArea(
                 AreaCenter.X, AreaCenter.Y, AreaCenter.Z, 
                 AreaRadius, 
                 thread) 
-            { 
-                Octree = octree, ProduceFullerene = GenerateFullerene,
+            {
+                ProduceOctree = GenerateOctree, ProduceFullerene = GenerateFullerene,
                 Random = new Random(),
                 Gamma = new Gamma(FullereneSizeDistribution.shape, FullereneSizeDistribution.scale)
             };

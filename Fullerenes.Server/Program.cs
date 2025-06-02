@@ -4,8 +4,8 @@ using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Factories.Factories;
 using Fullerenes.Server.Mappers;
 using Fullerenes.Server.Middlewares;
-using Fullerenes.Server.Services.IServices;
-using Fullerenes.Server.Services.Services;
+using Fullerenes.Server.Objects.Services;
+using Fullerenes.Server.Objects.Services.ServicesImpl;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

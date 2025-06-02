@@ -2,9 +2,8 @@
 using Fullerenes.Server.CustomLogger;
 using Fullerenes.Server.Extensions;
 using Fullerenes.Server.Objects.Fullerenes;
-using Fullerenes.Server.Services.IServices;
 
-namespace Fullerenes.Server.Services.Services
+namespace Fullerenes.Server.Objects.Services.ServicesImpl
 {
     public class TestService : ITestService
     {

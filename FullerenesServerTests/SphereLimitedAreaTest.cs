@@ -9,7 +9,7 @@ namespace FullerenesServerTests
     [TestClass]
     public class SphereLimitedAreaTest
     {
-        private readonly static int numberOfFullerenes = 100_000;
+        private readonly static int numberOfFullerenes = 500_000;
 
         private readonly static int numberOfSeries = 1;
 
@@ -28,8 +28,6 @@ namespace FullerenesServerTests
                 Edge = areaR * 2,
             };
 
-            IOctree octree = new Octree(startRegion.MaxDepth(3 * maxF), numberOfSeries, startRegion);
-
             var random = new Random();
             var gamma = new Gamma(shape, scale);
 
@@ -38,13 +36,20 @@ namespace FullerenesServerTests
                 return new IcosahedronFullerene(x, y, z, a, b, g, size);
             }
 
+            IOctree CreateOctree()
+            {
+                return new Octree(startRegion.MaxDepth(3 * maxF), startRegion);
+            }
+
             var timeBefore = DateTime.Now;
 
             Parallel.For(0, numberOfSeries, (i) =>
             {
+                IOctree octree = new Octree(startRegion.MaxDepth(3 * maxF), startRegion);
+
                 var limitedArea = new SphereLimitedArea(areaX, areaY, areaZ, areaR, i)
-                { 
-                    Octree = octree, ProduceFullerene = CreateIcosaherdonFullerene,
+                {
+                    ProduceOctree = CreateOctree, ProduceFullerene = CreateIcosaherdonFullerene,
                     Random = random, Gamma = gamma
                 };
 

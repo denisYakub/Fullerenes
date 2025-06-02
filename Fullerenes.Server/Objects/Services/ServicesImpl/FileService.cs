@@ -3,13 +3,13 @@ using Fullerenes.Server.Objects.CustomStructures;
 using Fullerenes.Server.Objects.Enums;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
-using Fullerenes.Server.Services.IServices;
+using Fullerenes.Server.Objects.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Globalization;
 using System.Numerics;
-using static Fullerenes.Server.Services.Services.FileService.AreaMainInfo;
+using static Fullerenes.Server.Objects.Services.ServicesImpl.FileService.AreaMainInfo;
 
-namespace Fullerenes.Server.Services.Services
+namespace Fullerenes.Server.Objects.Services.ServicesImpl
 {
     public class FileService : IFileService
     {

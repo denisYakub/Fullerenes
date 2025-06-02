@@ -6,6 +6,6 @@ namespace Fullerenes.Server.Objects.CustomStructures.Octree
 {
     public interface IOctree
     {
-        bool Add(Fullerene fullerene, int thread);
+        bool Add(Fullerene fullerene);
     }
 }

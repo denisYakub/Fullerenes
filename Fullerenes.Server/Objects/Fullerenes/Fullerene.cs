@@ -5,31 +5,30 @@ using Fullerenes.Server.Objects.CustomStructures;
 
 namespace Fullerenes.Server.Objects.Fullerenes
 {
-    public abstract class Fullerene
+    public abstract class Fullerene(
+        float x, float y, float z,
+        float praecessioAngle, float nutatioAngle, float properRotationAngle, 
+        float size)
     {
-        public float Size { get; init; }
-        public Vector3 Center { get; init; }
-        public EulerAngles EulerAngles { get; init; }
-        public abstract ICollection<Vector3> Vertices { get; }
+        public float Size { get; } = size;
+        public Vector3 Center { get; } = new(x, y, z);
+        public EulerAngles EulerAngles { get; } = 
+            new(){
+                PraecessioAngle = praecessioAngle,
+                NutatioAngle = nutatioAngle,
+                ProperRotationAngle = properRotationAngle,
+            };
+        public abstract ReadOnlySpan<Vector3> Vertices { get; }
         public abstract IReadOnlyCollection<int[]> Faces { get; }
+
+        protected readonly Matrix4x4 rotationMatrix = 
+            Formulas
+            .CreateRotationMatrix(praecessioAngle, nutatioAngle, properRotationAngle);
 
         public abstract float OuterSphereRadius { get; }
         public abstract float InnerSphereRadius { get; }
         public abstract float GenerateVolume();
         public abstract float GetEdgeSize();
-
-        protected Fullerene(float x, float y, float z, 
-            float praecessioAngle, float nutatioAngle, float properRotationAngle, float size)
-        {
-            Size = size;
-            Center = new(x, y, z);
-            EulerAngles = new() 
-            { 
-                PraecessioAngle = praecessioAngle, 
-                NutatioAngle = nutatioAngle,
-                ProperRotationAngle = properRotationAngle,
-            };
-        }
 
         public virtual bool Intersect(Fullerene fullerene)
         {
@@ -48,9 +47,11 @@ namespace Fullerenes.Server.Objects.Fullerenes
             if (!FiguresCollision.SpheresIntersect(in centerF1, OuterSphereRadius, in centerF2, outerRadiusF2))
                 return false;
 
-            return
-                Vertices
-                .Any(fullerene.Contains);
+            foreach (var vertex in Vertices)
+                if(fullerene.Contains(vertex))
+                    return true;
+
+            return false;
         }
 
         public virtual bool Contains(Vector3 point)
@@ -63,13 +64,11 @@ namespace Fullerenes.Server.Objects.Fullerenes
             if (!FiguresCollision.Pointinside(in centerF, OuterSphereRadius, in point))
                 return false;
 
-            var vertices = Vertices;
-
             foreach (var face in Faces)
             {
-                Vector3 a = vertices.ElementAt(face[0]);
-                Vector3 b = vertices.ElementAt(face[1]);
-                Vector3 c = vertices.ElementAt(face[2]);
+                Vector3 a = Vertices[face[0]];
+                Vector3 b = Vertices[face[1]];
+                Vector3 c = Vertices[face[2]];
 
                 Vector3 normal = Vector3.Cross(b - a, c - a);
 

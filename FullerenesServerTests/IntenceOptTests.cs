@@ -1,6 +1,6 @@
 ﻿using Fullerenes.Server.Objects.LimitedAreas;
-using Fullerenes.Server.Services.IServices;
-using Fullerenes.Server.Services.Services;
+using Fullerenes.Server.Objects.Services;
+using Fullerenes.Server.Objects.Services.ServicesImpl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +30,12 @@ namespace FullerenesServerTests
             var folder = Path.Combine(_folder, _subFolder);
             var file = Path.Combine(folder, _fileName);
 
-            LimitedArea areas = _adapter.GetArea(file);
+            var service = new CreateService(null, _adapter);
+
+            var (q, I) = service.GenerateIntensOpt(file, 0.02f, 5, 150);
+
+            Assert.IsTrue(q.Any());
+            Assert.IsTrue(I.Any());
         }
     }
 }

@@ -2,14 +2,14 @@
 using Fullerenes.Server.Objects.CustomStructures.Octrees.Regions;
 using Fullerenes.Server.Objects.Dtos;
 using Fullerenes.Server.Objects.LimitedAreas;
-using Fullerenes.Server.Services.IServices;
-using Fullerenes.Server.Services.Services;
+using Fullerenes.Server.Objects.Services;
+using Fullerenes.Server.Objects.Services.ServicesImpl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Fullerenes.Server.Services.Services.FileService;
+using static Fullerenes.Server.Objects.Services.ServicesImpl.FileService;
 
 namespace FullerenesServerTests
 {
@@ -32,16 +32,16 @@ namespace FullerenesServerTests
         public void TestWriteMethod()
         {
             CreateFullerenesAndLimitedAreaRequest request = new(
-                0, 0, 0, new([100], null),
+                0, 0, 0, new([3000], null),
                 1, 5, 360, 360, 360,
-                3, 1.5f);
+                3, 2.5f);
 
             var factory = new SystemOSIFactoryCreator()
-                .CreateSystemFactory(request, 1, 100);
+                .CreateSystemFactory(request, 1_000);
 
             var octree = factory.GenerateOctree();
 
-            var area = factory.GenerateLimitedArea(0, octree);
+            var area = factory.GenerateLimitedArea(0);
 
             var path = _adapter.Write([ area ], _fileName, _subFolder);
 

@@ -1,7 +1,6 @@
 ﻿using Fullerenes.Server.DataBase;
-using Fullerenes.Server.Services.IServices;
 
-namespace Fullerenes.Server.Services.Services
+namespace Fullerenes.Server.Objects.Services.ServicesImpl
 {
     public class DataBaseService(ApplicationDbContext context) : IDataBaseService//, IDisposable
     {

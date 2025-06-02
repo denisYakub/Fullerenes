@@ -6,37 +6,35 @@ using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Objects.CustomStructures.Octree;
 using Fullerenes.Server.Objects.Fullerenes;
 using Fullerenes.Server.Objects.LimitedAreas;
-using Fullerenes.Server.Services.IServices;
 
-namespace Fullerenes.Server.Services.Services
+namespace Fullerenes.Server.Objects.Services.ServicesImpl
 {
     public class CreateService(IDataBaseService dataBaseService, IFileService fileService) : ICreateService
     {
-
-        public (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory)
+        public (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory, int series)
         {
-            long GenId = dataBaseService.GetGenerationId();
+            var GenId = dataBaseService.GetGenerationId();
 
-            List<long> superIds = new List<long>(factory.ThreadNumber);
+            var superIds = new List<long>(series);
 
             IOctree octree = factory.GenerateOctree();
 
-            Parallel.For(0, factory.ThreadNumber, async (thread, state) =>
+            Parallel.For(0, series, async (thread, state) =>
             {
-                LimitedArea limitedArea = factory.GenerateLimitedArea(thread, octree);
+                var limitedArea = factory.GenerateLimitedArea(thread);
 
-                string filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{GenId}");
+                var filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{GenId}");
 
-                SpData data = new(filePath);
-                dataBaseService.SaveData(data);
+                var spData = new SpData(filePath);
+                dataBaseService.SaveData(spData);
 
-                SpGen gen = new(factory.AreaType, factory.FullereneType, thread, GenId, data.Id)
+                var spGen = new SpGen(factory.AreaType, factory.FullereneType, thread, GenId, spData.Id)
                 {
                     Phi = GeneratePhis(filePath).Result.Average()
                 };
-                dataBaseService.SaveGen(gen);
+                dataBaseService.SaveGen(spGen);
 
-                superIds.Add(data.Id);
+                superIds.Add(spData.Id);
             });
 
             return (GenId, superIds);
@@ -69,7 +67,7 @@ namespace Fullerenes.Server.Services.Services
             {
                 var (dotsInFullerene, dotsInLayer) = task.Result;
 
-                float phi = ((float)dotsInFullerene) / ((float)dotsInLayer);
+                float phi = dotsInFullerene / (float)dotsInLayer;
 
                 phis.Add(phi);
             }
@@ -87,7 +85,7 @@ namespace Fullerenes.Server.Services.Services
 
             var nC = data.Fullerenes.Count;
 
-            var (q, I) = IntenceOpt(qs, eval.globalVolume, eval.tmpConst, eval.localVolume, data, nC);
+            var (q, I) = IntenceOpt(qs, eval.globalVolume, eval.tmpConst, eval.localVolume, data/*, nC*/);
 
             return (q.ToArray(), I.ToArray());
         }
@@ -98,81 +96,99 @@ namespace Fullerenes.Server.Services.Services
             IEnumerable<float> tmpConst
             ) Eval(LimitedArea area, IEnumerable<float> q)
         {
-            float vConst = 4 / 3 * MathF.PI;
+            var vConst = 4 / 3 * MathF.PI;
 
-            float globalVolume = vConst * MathF.Pow(area.OuterRadius, 3);
+            var outerSphereVolume = vConst * MathF.Pow(area.OuterRadius, 3);
 
             var localVolume = area.Fullerenes
                 .Select(fullerene => vConst * MathF.Pow(fullerene.OuterSphereRadius, 3));
 
-            var spGlobal = q.Select(qI => globalVolume * Factor(area.OuterRadius * qI));
+            var globalVolume = q.Select(qI => outerSphereVolume * Factor(area.OuterRadius * qI));
 
             var tmpConst = area.Fullerenes
                 .Select(fullerene => fullerene.Center.Length());
 
-            return (localVolume, spGlobal, tmpConst);
+            return (localVolume, globalVolume, tmpConst);
         }
-
+        
         private static (IEnumerable<float> q, IEnumerable<float> I) IntenceOpt(
             IEnumerable<float> qs, 
-            IEnumerable<float> spGlobal, 
+            IEnumerable<float> globalVolume, 
             IEnumerable<float> tmpConst,
             IEnumerable<float> localVolume,
-            LimitedArea area,
-            float nC)
+            LimitedArea area)
         {
             int qNum = qs.Count();
-            int realN = area.Fullerenes.Count;
+            int fullereneNum = area.Fullerenes.Count;
 
-            float[] spLocalVolumeSqr = localVolume.Select(v => v * v).ToArray();
-            var qr = new float[qNum, realN];
-            var spFactorConst = new float[qNum, realN];
-            var spFactorSqr = new float[qNum, realN];
+            Span<float> localVolumeSqr = localVolume.Select(v => MathF.Pow(v, 2)).ToArray();
 
-            for (int i = 0; i < qNum; i++)
-                for (int j = 0; j < realN; j++)
-                {
-                    qr[i, j] = qs.ElementAt(i) * area.Fullerenes.ElementAt(j).OuterSphereRadius;
-                    spFactorConst[i, j] = Factor(qr[i, j]);
-                    spFactorSqr[i, j] = spFactorConst[i, j] * spFactorConst[i, j];
-                }
-
-            float[] s2 = new float[qNum];
-            float[] spFirstSummand = new float[qNum];
+            var qR = new FloatMatrix(new float[qNum * fullereneNum], fullereneNum);
+            var factorConst = new FloatMatrix(new float[qNum * fullereneNum], fullereneNum);
+            var factorSqr = new FloatMatrix(new float[qNum * fullereneNum], fullereneNum);
 
             for (int i = 0; i < qNum; i++)
-                for (int j = 0; j < realN; j++)
+                for (int j = 0; j < fullereneNum; j++)
                 {
-                    s2[i] += spFactorSqr[i, j] * spLocalVolumeSqr[j];
-                    spFirstSummand[i] += localVolume.ElementAt(j) * spFactorConst[i, j] * Sinc(qs.ElementAt(i) * tmpConst.ElementAt(j));
+                    qR[i, j] = qs.ElementAt(i) * area.Fullerenes.ElementAt(j).OuterSphereRadius;
+                    factorConst[i, j] = Factor(qR[i, j]);
+                    factorSqr[i, j] = factorConst[i, j] * factorConst[i, j];
                 }
 
-            float[] spFactors = new float[qNum];
+            Span<float> s2 = new float[qNum];
+            Span<float> spFirstSummand = new float[qNum];
 
-            for (int i = 0; i < realN; i++)
-                for (int j = i + 1; j < realN; j++)
+            for (int i = 0; i < qNum; i++)
+                for (int j = 0; j < fullereneNum; j++)
                 {
-                    float dist = Vector3.Distance(area.Fullerenes.ElementAt(i).Center, area.Fullerenes.ElementAt(j).Center);
-                    float vol = localVolume.ElementAt(j) * localVolume.ElementAt(i);
+                    s2[i] += factorSqr[i, j] * localVolumeSqr[j];
+                    spFirstSummand[i] += localVolume.ElementAt(j) * factorConst[i, j] * Sinc(qs.ElementAt(i) * tmpConst.ElementAt(j));
+                }
+
+            Span<float> spFactors = new float[qNum];
+
+            for (int i = 0; i < fullereneNum; i++)
+                for (int j = i + 1; j < fullereneNum; j++)
+                {
+                    var dist = Vector3.Distance(area.Fullerenes.ElementAt(i).Center, area.Fullerenes.ElementAt(j).Center);
+                    var vol = localVolume.ElementAt(j) * localVolume.ElementAt(i);
 
                     for (int k = 0; k < qNum; k++) 
-                        spFactors[k] += spFactorConst[k, i] * spFactorConst[k, j] * Sinc(qs.ElementAt(k) * dist) * vol;
+                        spFactors[k] += factorConst[k, i] * factorConst[k, j] * Sinc(qs.ElementAt(k) * dist) * vol;
                 }
 
-            float[] spGlobalArray = spGlobal.ToArray(); // Преобразуем в массив один раз
+            Span<float> spGlobalArray = globalVolume.ToArray(); // Преобразуем в массив один раз
 
-            float[] I = new float[qNum];
+            var I = new float[qNum];
 
             for (int k = 0; k < qNum; k++)
             {
-                float spG = spGlobalArray[k];
+                var spG = spGlobalArray[k];
                 I[k] = s2[k]
                      + 2 * spFactors[k]
-                     + nC * nC * spG * spG
-                     - 2 * nC * spFirstSummand[k] * spG;
+                     + fullereneNum * fullereneNum * spG * spG
+                     - 2 * fullereneNum * spFirstSummand[k] * spG;
             }
 
             return (qs, I);
+        }
+
+        private ref struct FloatMatrix
+        {
+            private readonly Span<float> _data;
+            private readonly int _cols;
+
+            public FloatMatrix(Span<float> data, int cols)
+            {
+                _data = data;
+                _cols = cols;
+            }
+
+            public ref float this[int row, int col]
+                => ref _data[row * _cols + col];
+
+            public int Rows => _data.Length / _cols;
+            public int Columns => _cols;
         }
 
         private static float Factor(float x)

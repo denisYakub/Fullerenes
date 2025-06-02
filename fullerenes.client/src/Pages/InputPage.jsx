@@ -89,8 +89,10 @@ export default function InputPage() {
 
             const generation = await response.json();
 
-            const id = generation.item1;
-            const superIds = generation.item2;
+            console.log(generation.value)
+
+            const id = generation.value.genId;
+            const superIds = generation.value.superIds;
 
             const stored = JSON.parse(localStorage.getItem("generations") || "[]");
             stored.push({ id, superIds });

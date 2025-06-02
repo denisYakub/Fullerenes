@@ -16,7 +16,7 @@ export default function PhiDistributionChart({ phis, superId }) {
 
                 console.log(result)
                 // Преобразуем в формат, подходящий для Recharts
-                const chartData = result.map((value, index) => ({
+                const chartData = result.value.phis.map((value, index) => ({
                     index,
                     value
                 }));

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Label, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function IntenceOptPage({ qMin, qMax, qNum, superId }) {
     const [data, setData] = useState([]);
@@ -14,14 +14,16 @@ export default function IntenceOptPage({ qMin, qMax, qNum, superId }) {
                 );
 
                 const result = await response.json();
-                console.log(result);
+                console.log(result.value);
 
-                const chartData = result.map(([q, i]) => ({
-                    q,
-                    I: result.item2[i]
+                const { q, i } = result.value;
+
+                const combined = q.map((qValue, index) => ({
+                    q: qValue,
+                    I: i[index]
                 }));
 
-                setData(chartData);
+                setData(combined);
 
             } catch (error) {
                 console.error('Ошибка при загрузке данных:', error);
@@ -34,11 +36,11 @@ export default function IntenceOptPage({ qMin, qMax, qNum, superId }) {
     return (
         <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="index" label={{ value: 'q', position: 'insideBottom', offset: -5 }} />
-                <YAxis label={{ value: 'I', angle: -90, position: 'insideLeft' }} />
+                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                <XAxis dataKey="q" />
+                <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="I" stroke="#8884d8" name="Интенсивность I(q)" dot={false} />
             </LineChart>
         </ResponsiveContainer>
     );
