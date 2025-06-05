@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Fullerenes.Server.DataBase;
 using Fullerenes.Server.Factories.AbstractFactories;
 using Fullerenes.Server.Factories.Factories;
-using Fullerenes.Server.Mappers;
 using Fullerenes.Server.Middlewares;
 using Fullerenes.Server.Objects.Services;
 using Fullerenes.Server.Objects.Services.ServicesImpl;
@@ -30,8 +29,6 @@ builder.Services.AddScoped<IFileService>(provider =>
 
     return new FileService(folderPath);
 });
-
-builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddRazorPages();
 

@@ -10,8 +10,8 @@ namespace Fullerenes.Server.Factories.AbstractFactories
         public abstract AreaTypes AreaType { get; init; }
         public abstract FullereneTypes FullereneType { get; init; }
         public abstract required int FullerenesNumber { get; set; }
-        public abstract IOctree GenerateOctree();
-        public abstract Fullerene GenerateFullerene(
+        protected abstract IOctree GenerateOctree();
+        protected abstract Fullerene GenerateFullerene(
             float x, float y, float z,
             float praecessioAngle, float nutatioAngle, float properRotationAngle,
             float size);

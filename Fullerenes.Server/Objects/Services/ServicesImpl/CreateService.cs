@@ -10,34 +10,39 @@ using Fullerenes.Server.Objects.LimitedAreas;
 namespace Fullerenes.Server.Objects.Services.ServicesImpl
 {
     public class CreateService(IDataBaseService dataBaseService, IFileService fileService) : ICreateService
-    {
+    { 
         public (long id, List<long> superIds) GenerateArea(SystemAbstractFactory factory, int series)
         {
-            var GenId = dataBaseService.GetGenerationId();
-
-            var superIds = new List<long>(series);
-
-            IOctree octree = factory.GenerateOctree();
-
-            Parallel.For(0, series, async (thread, state) =>
+            try
             {
-                var limitedArea = factory.GenerateLimitedArea(thread);
+                var GenId = dataBaseService.GetGenerationId();
 
-                var filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{GenId}");
+                var superIds = new List<long>(series);
 
-                var spData = new SpData(filePath);
-                dataBaseService.SaveData(spData);
-
-                var spGen = new SpGen(factory.AreaType, factory.FullereneType, thread, GenId, spData.Id)
+                Parallel.For(0, series, async (thread, state) =>
                 {
-                    Phi = GeneratePhis(filePath).Result.Average()
-                };
-                dataBaseService.SaveGen(spGen);
+                    var limitedArea = factory.GenerateLimitedArea(thread);
 
-                superIds.Add(spData.Id);
-            });
+                    var filePath = fileService.Write([limitedArea], $"Series_{limitedArea.Series}", $"Gen_{GenId}");
 
-            return (GenId, superIds);
+                    var spData = new SpData(filePath);
+                    dataBaseService.SaveData(spData);
+
+                    var spGen = new SpGen(factory.AreaType, factory.FullereneType, thread, GenId, spData.Id)
+                    {
+                        Phi = GeneratePhis(filePath).Result.Average()
+                    };
+                    dataBaseService.SaveGen(spGen);
+
+                    superIds.Add(spData.Id);
+                });
+
+                return (GenId, superIds);
+            }
+            catch (AggregateException aggregateEx)
+            {
+                throw;
+            }
         }
         
         public async Task<List<float>> GeneratePhis(string dataPath, int numberOfLayers = 5, int numberOfPoints = 100_000)

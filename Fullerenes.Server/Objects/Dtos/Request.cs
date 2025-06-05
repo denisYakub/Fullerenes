@@ -10,33 +10,19 @@ namespace Fullerenes.Server.Objects.Dtos
     {
         public bool IsCorrectRequest()
         {
-            return true;
+            return
+                AreaAdditionalParams.IsCorrectRequest()
+                && MinSizeF <= MaxSizeF
+                && MaxAlphaF <= 360 && MaxAlphaF >= 0
+                && MaxBetaF <= 360 && MaxBetaF >= 0
+                && MaxGammaF <= 360 && MaxGammaF >= 0;
         }
     }
     public record struct AreaAdditionalParamsRequest(float[]? AreaParams, float? Nc) : IRequest
     {
         public bool IsCorrectRequest()
         {
-            return true;
+            return Nc.HasValue || (AreaParams?.Any() ?? false);
         }
     }
-    public record struct LimitedAreaWithFullerenesRequest(
-        Vector3 Center,
-        float[] Parameters, IReadOnlyCollection<FullereneRequest> Fullerenes) : IRequest
-    {
-        public bool IsCorrectRequest()
-        {
-            return true;
-        }
-    }
-
-    public record struct FullereneRequest(
-        Vector3 Center, EulerAngles EulerAngles, float Size) : IRequest
-    {
-        public bool IsCorrectRequest()
-        {
-            return true;
-        }
-    }
-
 }

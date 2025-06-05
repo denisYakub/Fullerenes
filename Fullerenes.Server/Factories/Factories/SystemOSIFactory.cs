@@ -25,12 +25,12 @@ namespace Fullerenes.Server.Factories.Factories
         public required (float shape, float scale) FullereneSizeDistribution { get; set; }
         public override required int FullerenesNumber { get; set; }
 
-        public override IOctree GenerateOctree()
+        protected override IOctree GenerateOctree()
         {
             return new Octree(StartRegion.MaxDepth(3 * FullereneSize.max), StartRegion);
         }
 
-        public override Fullerene GenerateFullerene(
+        protected override Fullerene GenerateFullerene(
             float x, float y, float z,
             float praecessioAngle, float nutatioAngle, float properRotationAngle, 
             float size)
